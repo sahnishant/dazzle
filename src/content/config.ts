@@ -10,7 +10,6 @@ const articlesCollection = defineCollection({
     author: z.string().default('Our Team'),
     image: z.string().optional(), // Optional hero image for the article
     tags: z.array(z.string()).default([]),
-    // Add other frontmatter fields as needed, e.g., category
   }),
 });
 

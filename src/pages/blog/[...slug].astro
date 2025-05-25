@@ -1,7 +1,7 @@
 ---
 // src/pages/blog/[...slug].astro
 import { getCollection } from 'astro:content';
-import BaseLayout from '../../layouts/BaseLayout.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro'; // Adjust path if needed based on your structure
 
 export async function getStaticPaths() {
   const articles = await getCollection('articles');
@@ -38,6 +38,7 @@ const { Content } = await article.render();
 </BaseLayout>
 
 <style>
+  /* Ensure these styles are consistent with your global.css or are added here */
   .article-page {
     background-color: #fff;
     padding: 3rem 2rem;
@@ -81,7 +82,7 @@ const { Content } = await article.render();
   }
   .article-hero-image-container {
     margin: 2rem auto;
-    max-width: 900px; /* Adjust max width as needed */
+    max-width: 900px;
   }
   .article-hero-image {
     width: 100%;
@@ -98,5 +99,19 @@ const { Content } = await article.render();
   }
   .article-content li {
     margin-bottom: 0.5rem;
+  }
+  .section-divider {
+    border: 0;
+    border-top: 1px dashed #ddd;
+    margin: 2rem 0;
+  }
+  .btn-outline {
+    background-color: transparent;
+    color: #B0A08C;
+    border: 2px solid #B0A08C;
+  }
+  .btn-outline:hover {
+    background-color: #B0A08C;
+    color: white;
   }
 </style>
