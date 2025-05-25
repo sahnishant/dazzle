@@ -1,0 +1,91 @@
+<svg width="400" height="450" viewBox="0 0 400 450" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Background Radial Gradient for subtle depth -->
+    <radialGradient id="backgroundGradient" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
+      <stop offset="0%" stop-color="#1A2837"/>
+      <stop offset="100%" stop-color="#0F1B25"/>
+    </radialGradient>
+
+    <!-- Diamond Facet Gradients -->
+    <linearGradient id="diamondBright" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="100%" stop-color="#F0F8FF"/>
+    </linearGradient>
+    <linearGradient id="diamondLightBlue" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#E0F0FF"/>
+      <stop offset="100%" stop-color="#B0DFFF"/>
+    </linearGradient>
+    <linearGradient id="diamondDarkBlue" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#80A0C0"/>
+      <stop offset="100%" stop-color="#406080"/>
+    </linearGradient>
+    <linearGradient id="diamondGreyShadow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#D0D0D0"/>
+      <stop offset="100%" stop-color="#A0A0A0"/>
+    </linearGradient>
+    <linearGradient id="diamondCentralHighlight" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="100%" stop-color="#E0E0E0"/>
+    </linearGradient>
+
+    <!-- Text Gradient for "DAZZLE" -->
+    <linearGradient id="textGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#E0E0E0"/>
+      <stop offset="20%" stop-color="#F5F5F5"/>
+      <stop offset="40%" stop-color="#B0C4DE"/>
+      <stop offset="60%" stop-color="#DCDCDC"/>
+      <stop offset="80%" stop-color="#A9A9A9"/>
+      <stop offset="100%" stop-color="#C0C0C0"/>
+    </linearGradient>
+
+  </defs>
+
+  <!-- Background -->
+  <rect x="0" y="0" width="400" height="450" fill="url(#backgroundGradient)"/>
+
+  <!-- Diamond Structure (Manually estimated coordinates to match the image's appearance) -->
+  <g>
+    <!-- Central bright 'table' area (looks like a slightly distorted square/pentagon) -->
+    <polygon points="200,90 225,120 200,130 175,120" fill="url(#diamondCentralHighlight)"/>
+
+    <!-- Top-left large bright facet -->
+    <polygon points="175,120 130,160 160,160 200,130" fill="url(#diamondBright)"/>
+    <!-- Top-right large bright facet -->
+    <polygon points="225,120 270,160 240,160 200,130" fill="url(#diamondBright)"/>
+
+    <!-- Top-left dark reflection facet (above the bright large facet) -->
+    <polygon points="200,90 175,120 200,130" fill="url(#diamondGreyShadow)"/>
+    <!-- Top-right dark reflection facet -->
+    <polygon points="200,90 225,120 200,130" fill="url(#diamondGreyShadow)"/>
+
+    <!-- Girdle-level 'shadow' band (horizontal dark strips) -->
+    <polygon points="130,160 160,160 160,170 130,170" fill="url(#diamondDarkBlue)"/>
+    <polygon points="270,160 240,160 240,170 270,170" fill="url(#diamondDarkBlue)"/>
+
+    <!-- Lower central bright V-shape (the main internal reflection) -->
+    <polygon points="160,170 200,220 240,170" fill="url(#diamondBright)"/>
+    
+    <!-- Lower side facets (flanking the V-shape) -->
+    <polygon points="130,170 160,170 160,190 130,190" fill="url(#diamondLightBlue)"/>
+    <polygon points="270,170 240,170 240,190 270,190" fill="url(#diamondLightBlue)"/>
+
+    <!-- Bottom outer facets leading to the point -->
+    <polygon points="130,190 200,220 150,210" fill="url(#diamondGreyShadow)"/>
+    <polygon points="270,190 200,220 250,210" fill="url(#diamondGreyShadow)"/>
+
+    <!-- Some deeper internal dark areas for contrast -->
+    <polygon points="160,190 200,220 180,200" fill="url(#diamondDarkBlue)"/>
+    <polygon points="240,190 200,220 220,200" fill="url(#diamondDarkBlue)"/>
+
+    <!-- Sparkle (placed on the upper-right section of the diamond) -->
+    <g transform="translate(250, 120) scale(0.6)">
+      <polygon points="0,0 5,-10 15,-10 10,0 15,10 5,10 0,0 -5,10 -15,10 -10,0 -15,-10 -5,-10" fill="white"/>
+    </g>
+  </g>
+
+  <!-- Text "DAZZLE" -->
+  <text x="50%" y="380" font-family="Arial, sans-serif" font-size="60" font-weight="bold" text-anchor="middle" fill="url(#textGradient)">
+    DAZZLE
+  </text>
+
+</svg>
