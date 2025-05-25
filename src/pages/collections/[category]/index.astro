@@ -1,0 +1,120 @@
+---
+// src/pages/collections/[category]/index.astro
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { jewelryItems } from '../../../data/jewelry.js'; // Import your jewelry data
+
+// This function tells Astro what category pages to generate
+export async function getStaticPaths() {
+  // Get all unique categories from your jewelry data
+  const categories = [...new Set(jewelryItems.map(item => item.category))];
+
+  return categories.map(category => ({
+    params: { category: category }, // This will be the category name in the URL (e.g., 'rings', 'bracelets')
+  }));
+}
+
+// Get the current category from the URL parameters
+const { category } = Astro.params;
+
+// Filter jewelry items for the current category
+const currentCategoryItems = jewelryItems.filter(item => item.category === category);
+
+// Format the category name for display (e.g., "rings" -> "Rings")
+const displayCategoryName = category.replace(/-/g, ' ').replace(/\b\w/g, char => char.toUpperCase());
+---
+
+<BaseLayout title={`${displayCategoryName} Collection`} description={`Browse our exquisite collection of ${displayCategoryName.toLowerCase()} diamond jewelry.`}>
+  <section class="container page-section category-page">
+    <h1 class="text-center mb-4">{displayCategoryName} Collection</h1>
+
+    {currentCategoryItems.length > 0 ? (
+      <div class="product-grid">
+        {currentCategoryItems.map(item => (
+          <a href={`/collections/${item.category}/${item.id}/`} class="product-card">
+            <img src={item.mainImage} alt={item.name} loading="lazy" />
+            <div class="card-content">
+              <h3>{item.name}</h3>
+              <p class="price">{item.price}</p>
+            </div>
+          </a>
+        ))}
+      </div>
+    ) : (
+      <p class="text-center text-gray-600">No items found in the {displayCategoryName} collection yet. Please check back soon!</p>
+    )}
+
+    <div class="text-center mt-8">
+      <a href="/collections/" class="btn btn-outline">← Back to All Collections</a>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  /* Ensure these styles are consistent with your global.css or are added here */
+  .page-section {
+    padding: 2rem 1rem;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+  }
+  .page-section h1 {
+    color: #B0A08C; /* Theme color for headings */
+    margin-bottom: 1.5rem;
+  }
+  .product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+  }
+  .product-card {
+    background-color: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    text-align: center;
+    text-decoration: none;
+    color: #333;
+    display: flex;
+    flex-direction: column;
+  }
+  .product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0,0,0,0.12);
+  }
+  .product-card img {
+    width: 100%;
+    height: 250px; /* Consistent height for product images */
+    object-fit: cover;
+    margin-bottom: 1rem;
+  }
+  .product-card .card-content {
+    padding: 0 1.5rem 1.5rem;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Pushes price to bottom */
+  }
+  .product-card h3 {
+    font-size: 1.4rem;
+    margin-bottom: 0.5rem;
+    color: #555;
+  }
+  .product-card .price {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #B0A08C;
+    margin-top: 1rem; /* Spacing from title */
+  }
+  .btn-outline {
+    background-color: transparent;
+    color: #B0A08C;
+    border: 2px solid #B0A08C;
+  }
+  .btn-outline:hover {
+    background-color: #B0A08C;
+    color: white;
+  }
+</style>

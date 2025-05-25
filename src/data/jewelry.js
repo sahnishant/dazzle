@@ -38,6 +38,24 @@ export const jewelryItems = [
       certification: 'IGI Certified'
     },
     price: 'Upon Request'
+  },  {
+    id: 'bracelet-large-diamonds',
+    name: 'Diamond Bracelet',
+    category: 'bracelets',
+    mainImage: '/images/products/bracelet1.png',
+    additionalImages: [
+      // '/images/products/emerald-pendant-2.jpg',
+    ],
+    description: 'An elegant emerald-cut diamond bracelet suspended in 18K white gold chain. Sophisticated and striking.',
+    details: {
+      metal: '18K White Gold',
+      mainStone: '0.75 Carat Emerald Cut Diamond',
+      cut: 'Very Good',
+      color: 'F',
+      clarity: 'VVS2',
+      certification: 'IGI Certified'
+    },
+    price: 'Upon Request'
   },
   // Add more items here!
 ];
