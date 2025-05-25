@@ -3,7 +3,7 @@ title: "Understanding Diamond Grading & Brilliance"
 description: "Explore how diamonds glitter through internal reflection. Learn about jeweler's loupes and the visual aspects of diamond quality."
 pubDate: 2024-07-24T12:00:00Z
 author: "Our Gem Experts"
-image: "/images/blog/diamond-grading-hero.jpg" # Ensure you place an image here
+image: "/images/blog/diamond-grading-hero.png" # Ensure you place an image here
 tags: ["diamond-grading", "brilliance", "loupe", "4Cs", "education"]
 ---
 <p>Beyond the "4 Cs" of Cut, Color, Clarity, and Carat (which are covered in detail in our <a href="/blog/diamond-buyers-guide/">Diamond Buyer's Guide</a>), understanding diamond grading also involves appreciating how light interacts with a diamond to create its stunning sparkle. It's a dance of light and precision that makes each diamond unique.</p>

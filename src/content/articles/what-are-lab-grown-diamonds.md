@@ -3,7 +3,7 @@ title: "What Are Lab-Grown Diamonds?"
 description: "Discover lab-grown diamonds: how they're made (HPHT, CVD), why they're real, and their advantages in affordability, sustainability, and ethics."
 pubDate: 2024-07-25T10:00:00Z # Use actual date
 author: "MagicGems Team" # Replace with your brand name
-image: "/images/blog/lab-grown-hero.jpg" # Make sure this image exists in public/images/blog/
+image: "/images/blog/lab-grown-hero.png" # Make sure this image exists in public/images/blog/
 tags: ["lab-grown", "diamonds", "sustainability", "education"]
 ---
 # What Are Lab-Grown Diamonds?

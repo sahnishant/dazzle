@@ -3,7 +3,6 @@
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import { jewelryItems } from '../../../data/jewelry.js';
 
-// This function tells Astro what pages to generate
 export async function getStaticPaths() {
   return jewelryItems.map(item => ({
     params: { category: item.category, id: item.id },
@@ -12,6 +11,8 @@ export async function getStaticPaths() {
 }
 
 const { item } = Astro.props;
+// Combine mainImage and additionalImages for the gallery
+const allImages = [item.mainImage, ...item.additionalImages];
 ---
 <BaseLayout title={item.name} description={item.description}>
   <section class="product-detail container mt-4 mb-4">
@@ -21,10 +22,17 @@ const { item } = Astro.props;
     </div>
 
     <div class="product-images">
-      <img src={item.mainImage} alt={item.name} loading="eager" />
+      <img id="mainProductImage" src={allImages[0]} alt={item.name} loading="eager" />
       <div class="thumbnail-gallery">
-        {item.additionalImages.map(img => (
-          <img src={img} alt={`${item.name} - additional view`} loading="lazy" class="thumbnail" />
+        {allImages.map((img, index) => (
+          <img
+            src={img}
+            alt={`${item.name} - view ${index + 1}`}
+            loading="lazy"
+            class="thumbnail"
+            data-image-index={index}
+            data-full-src={img}
+          />
         ))}
       </div>
     </div>
@@ -46,6 +54,30 @@ const { item } = Astro.props;
     </div>
   </section>
 </BaseLayout>
+
+
+<script is:inline>
+  document.addEventListener('DOMContentLoaded', () => {
+    const mainImage = document.getElementById('mainProductImage');
+    const thumbnails = document.querySelectorAll('.thumbnail-gallery .thumbnail');
+
+    if (mainImage && thumbnails.length > 0) {
+      thumbnails.forEach(thumbnail => {
+        thumbnail.addEventListener('click', () => {
+          // Remove 'active' class from all thumbnails
+          thumbnails.forEach(t => t.classList.remove('active'));
+          // Add 'active' class to the clicked thumbnail
+          thumbnail.classList.add('active');
+          // Change the main image source
+          mainImage.src = thumbnail.dataset.fullSrc;
+        });
+      });
+      // Set the first thumbnail as active initially
+      thumbnails[0].classList.add('active');
+    }
+  });
+</script>
+
 
 <style>
   .product-detail {

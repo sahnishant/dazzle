@@ -3,7 +3,7 @@ title: "Are Natural Diamonds Truly Rare?"
 description: "Explore the truth about natural diamond rarity, influenced by quality, size, and market dynamics. Learn about geological formation and ethical sourcing."
 pubDate: 2024-07-20T10:00:00Z
 author: "Our Team"
-image: "/images/blog/diamond-rarity-hero.jpg" # Ensure you place an image here
+image: "/images/blog/diamond-rarity-hero.png" # Ensure you place an image here
 tags: ["diamonds", "natural-diamonds", "rarity", "market-dynamics"]
 ---
 <p>The perception that <strong>natural diamonds are rare</strong> is a complex topic. While diamonds are not as scarce as once believed, their rarity is influenced by several factors, including quality, size, and market dynamics. Let’s break it down:</p>

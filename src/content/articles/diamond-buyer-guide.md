@@ -3,7 +3,7 @@ title: "Diamonds: A Buyer's Guide & Understanding the 4 Cs (Indian Perspective)"
 description: "A comprehensive guide for Indian buyers to understanding diamond purity, grading, and the 4 Cs: Cut, Color, Clarity, and Carat weight. Make informed decisions."
 pubDate: 2024-07-22T09:30:00Z
 author: "Our Gem Experts"
-image: "/images/blog/diamond-buyer-hero.jpg" # Ensure you place an image here
+image: "/images/blog/diamond-buyer-hero.png" # Ensure you place an image here
 tags: ["diamonds", "buyers-guide", "4Cs", "india", "grading"]
 ---
 <p>Whether you’re buying for a wedding, an investment, or a special occasion, this guide will help you navigate the complexities of diamond grading and make a confident choice. Remember, a diamond is not just a purchase—it’s a lifelong investment in beauty and value.</p>
