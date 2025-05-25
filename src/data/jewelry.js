@@ -4,10 +4,11 @@ export const jewelryItems = [
     id: 'solitaire-round-ring',
     name: 'Classic Solitaire Round Diamond Ring',
     category: 'rings',
-    mainImage: '/images/products/solitaire-round-1.jpg',
+    mainImage: '/images/products/solitaire-round-1.png',
     additionalImages: [
-      '/images/products/solitaire-round-2.jpg',
-      '/images/products/solitaire-round-3.jpg'
+      '/images/products/solitaire-round-2.png',
+      '/images/products/solitaire-round-3.png',
+      '/images/products/solitaire-round-4.png'
     ],
     description: 'A timeless solitaire ring featuring a brilliant round-cut diamond set in a classic four-prong platinum band. Perfect for an engagement or a cherished gift.',
     details: {
@@ -24,9 +25,9 @@ export const jewelryItems = [
     id: 'emerald-cut-pendant',
     name: 'Emerald Cut Diamond Pendant Necklace',
     category: 'necklaces',
-    mainImage: '/images/products/emerald-pendant-1.jpg',
+    mainImage: '/images/products/emerald-pendant-1.png',
     additionalImages: [
-      '/images/products/emerald-pendant-2.jpg',
+      '/images/products/emerald-pendant-2.png',
     ],
     description: 'An elegant emerald-cut diamond pendant suspended from a delicate 18K white gold chain. Sophisticated and striking.',
     details: {
