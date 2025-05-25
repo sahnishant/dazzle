@@ -1,0 +1,137 @@
+---
+// src/pages/contact.astro
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+// Get item ID from URL if redirected from a product page
+const urlParams = Astro.url.searchParams;
+const inquiredItemId = urlParams.get('item') || '';
+---
+<BaseLayout title="Contact Us" description="Get in touch with our diamond experts for inquiries, consultations, or custom designs.">
+  <section class="contact-hero container">
+    <h1 class="text-center mb-4">Connect With Our Diamond Experts</h1>
+    <p class="text-center">Whether you have a question about a specific piece, wish to book a private consultation, or want to discuss a custom design, we're here to help.</p>
+  </section>
+
+  <section class="contact-details container mt-4 mb-4">
+    <div class="contact-info">
+      <h2>Our Contact Information</h2>
+      <p><strong>Phone:</strong> <a href="tel:+1234567890">+1 (234) 567-890</a></p>
+      <p><strong>Email:</strong> <a href="mailto:info@yourdomain.com">info@yourdomain.com</a></p>
+      <p><strong>Address:</strong> 123 Diamond St, Jewel City, JS 12345</p>
+      <p><strong>Business Hours:</strong> Mon-Fri: 10 AM - 6 PM, Sat: 11 AM - 4 PM, Sun: Closed</p>
+      <div class="social-links mt-4">
+        <a href="https://instagram.com/yourbusiness" target="_blank" rel="noopener noreferrer">Instagram</a>
+        <a href="https://facebook.com/yourbusiness" target="_blank" rel="noopener noreferrer">Facebook</a>
+        <!-- Add more social links -->
+      </div>
+    </div>
+
+    <div class="contact-form-section">
+      <h2>Send Us a Message</h2>
+      <form name="contact" method="POST" data-netlify="true" data-netlify-honeypot="bot-field" action="/thank-you/">
+        <input type="hidden" name="form-name" value="contact" />
+        <p class="hidden">
+          <label>Don’t fill this out if you’re human: <input name="bot-field" /></label>
+        </p>
+        
+        <div class="form-group">
+          <label for="name">Your Name:</label>
+          <input type="text" id="name" name="name" required />
+        </div>
+        
+        <div class="form-group">
+          <label for="email">Your Email:</label>
+          <input type="email" id="email" name="email" required />
+        </div>
+        
+        <div class="form-group">
+          <label for="subject">Subject:</label>
+          <input type="text" id="subject" name="subject" value={inquiredItemId ? `Inquiry about ${inquiredItemId}` : ''} required />
+        </div>
+        
+        <div class="form-group">
+          <label for="message">Message:</label>
+          <textarea id="message" name="message" rows="5" required>{inquiredItemId ? `I am interested in the "${inquiredItemId}" piece.` : ''}</textarea>
+        </div>
+        
+        <button type="submit" class="btn">Send Message</button>
+      </form>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .contact-hero {
+    padding: 3rem 1rem;
+    background-color: #f0f0f0;
+  }
+  .contact-details {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 3rem;
+    background-color: #fff;
+    padding: 3rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  }
+  .contact-info h2, .contact-form-section h2 {
+    color: #B0A08C;
+    margin-bottom: 1.5rem;
+  }
+  .contact-info p {
+    margin-bottom: 0.8rem;
+    font-size: 1.1rem;
+  }
+  .contact-info a {
+    font-weight: bold;
+  }
+  .social-links a {
+    display: inline-block;
+    margin-right: 1rem;
+    font-size: 1.2rem;
+    color: #555;
+    transition: color 0.3s ease;
+  }
+  .social-links a:hover {
+    color: #B0A08C;
+  }
+
+  .form-group {
+    margin-bottom: 1.5rem;
+  }
+  .form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+    color: #555;
+  }
+  .form-group input[type="text"],
+  .form-group input[type="email"],
+  .form-group textarea {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1rem;
+    font-family: 'Georgia', serif;
+  }
+  .form-group textarea {
+    resize: vertical;
+    min-height: 100px;
+  }
+  .form-group input:focus,
+  .form-group textarea:focus {
+    outline: none;
+    border-color: #B0A08C;
+    box-shadow: 0 0 0 2px rgba(176, 160, 140, 0.2);
+  }
+  .hidden {
+    display: none; /* Netlify honeypot field */
+  }
+
+  @media (min-width: 768px) {
+    .contact-details {
+      grid-template-columns: 1fr 2fr; /* Info on left, form on right */
+    }
+  }
+</style>

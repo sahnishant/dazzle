@@ -1,0 +1,52 @@
+---
+// src/components/CollectionGrid.astro
+interface CollectionItem {
+  name: string;
+  image: string;
+  link: string;
+}
+
+interface Props {
+  collections: CollectionItem[];
+}
+
+const { collections } = Astro.props;
+---
+<div class="collection-grid">
+  {collections.map(item => (
+    <a href={item.link} class="collection-card">
+      <img src={item.image} alt={item.name} loading="lazy" />
+      <h3>{item.name}</h3>
+    </a>
+  ))}
+</div>
+
+<style>
+  .collection-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+  }
+  .collection-card {
+    background-color: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    text-align: center;
+  }
+  .collection-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0,0,0,0.12);
+  }
+  .collection-card img {
+    width: 100%;
+    height: 250px; /* Consistent height for images */
+    object-fit: cover;
+    margin-bottom: 1rem;
+  }
+  .collection-card h3 {
+    padding: 0 1rem 1.5rem;
+    font-size: 1.5rem;
+  }
+</style>

@@ -1,0 +1,61 @@
+---
+// src/pages/about.astro
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+<BaseLayout title="About Us" description="Learn about our commitment to craftsmanship, ethical sourcing, and personalized service.">
+  <section class="about-us-hero container">
+    <h1 class="text-center mb-4">Our Story: Where Passion Meets Brilliance</h1>
+    <img src="/images/about-hero.jpg" alt="Jeweler at work" class="about-hero-image" loading="eager" />
+  </section>
+
+  <section class="about-content container mt-4 mb-4">
+    <div class="text-block">
+      <h2>Crafted with Legacy, Inspired by You</h2>
+      <p>For over [X] generations, Your Diamond Business Name has been synonymous with exquisite diamond jewelry. Founded on a passion for timeless beauty and unparalleled craftsmanship, we believe every piece tells a story. From the initial design sketch to the final polish, our master jewelers pour their expertise and artistry into every detail, ensuring each creation is a masterpiece.</p>
+    </div>
+
+    <div class="text-block">
+      <h2>Ethical Sourcing & Transparency</h2>
+      <p>We are deeply committed to responsible and ethical sourcing practices. Every diamond in our collection is meticulously selected from reputable suppliers who adhere to the highest industry standards, including the Kimberley Process Certification Scheme. We prioritize transparency, ensuring our diamonds are conflict-free and traceable, so you can wear your jewelry with pride and peace of mind.</p>
+    </div>
+
+    <div class="text-block">
+      <h2>Personalized Experience</h2>
+      <p>At Your Diamond Business Name, we understand that choosing a diamond is a deeply personal journey. Our dedicated team of gemologists and design consultants offers a bespoke experience, guiding you through our curated collections or helping you bring your custom design dreams to life. Your vision, our expertise – together, we create extraordinary.</p>
+    </div>
+    <!-- Add more sections like Team, Certifications etc. -->
+  </section>
+</BaseLayout>
+
+<style>
+  .about-us-hero {
+    padding: 3rem 1rem;
+    background-color: #f0f0f0;
+    text-align: center;
+  }
+  .about-hero-image {
+    max-width: 800px;
+    margin: 0 auto;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  }
+  .about-content {
+    padding: 3rem 1rem;
+  }
+  .text-block {
+    background-color: white;
+    padding: 2.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    margin-bottom: 2rem;
+  }
+  .text-block h2 {
+    font-size: 2rem;
+    color: #B0A08C;
+    margin-bottom: 1rem;
+  }
+  .text-block p {
+    font-size: 1.1rem;
+    line-height: 1.8;
+  }
+</style>

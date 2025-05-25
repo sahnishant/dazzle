@@ -1,0 +1,75 @@
+---
+// src/components/Header.astro
+---
+<header class="site-header">
+  <div class="container header-content">
+    <div class="logo">
+      <a href="/">
+        <img src="/your-logo.svg" alt="Your Diamond Business Name Logo" width="150" height="50" />
+        <!-- Or just text if no logo yet: Your Diamonds -->
+      </a>
+    </div>
+    <nav class="main-nav">
+      <ul>
+        <li><a href="/collections/">Collections</a></li>
+        <li><a href="/about/">About Us</a></li>
+        <li><a href="/contact/">Contact Us</a></li>
+        <li><a href="/what-are-lab-grown-diamonds/">Lab Diamonds</a></li>
+        <li><a href="/diamond-rarity/">Diamond Rarity</a></li>
+        <li><a href="/diamond-prices-fall/">Price Trends</a></li>
+        <li><a href="/diamond-buyer-guide/">Buyer's Guide</a></li>
+        <li><a href="/diamond-grading/">Diamond Grading</a></li>
+        <li><a href="/blog/">Blog & Insights</a></li> {/* NEW: Central blog link */}
+        <li><a href="/policies/">Our Policies</a></li> {/* NEW: Policies page link */}
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    background-color: #fff;
+    border-bottom: 1px solid #eee;
+    padding: 1rem 0;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  }
+  .header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .logo img {
+    height: 50px; /* Adjust as needed */
+    width: auto;
+  }
+  .main-nav ul {
+    list-style: none;
+    display: flex;
+    gap: 1.5rem; /* Reduced gap slightly for more items */
+    flex-wrap: wrap; /* Allow wrapping on smaller screens */
+    justify-content: center; /* Center items if they wrap */
+  }
+  .main-nav a {
+    font-weight: bold;
+    font-size: 1.1rem;
+    color: #555;
+    transition: color 0.3s ease;
+  }
+  .main-nav a:hover {
+    color: #B0A08C; /* Highlight on hover */
+  }
+
+  /* Responsive adjustments for mobile */
+  @media (max-width: 768px) {
+    .header-content {
+      flex-direction: column;
+      gap: 0.5rem;
+      text-align: center;
+    }
+    .main-nav ul {
+      flex-direction: column;
+      gap: 0.5rem;
+      text-align: center;
+    }
+  }
+</style>

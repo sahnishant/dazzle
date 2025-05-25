@@ -1,0 +1,102 @@
+---
+// src/pages/blog/[...slug].astro
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+export async function getStaticPaths() {
+  const articles = await getCollection('articles');
+  return articles.map(article => ({
+    params: { slug: article.slug },
+    props: { article },
+  }));
+}
+
+const { article } = Astro.props;
+const { Content } = await article.render();
+---
+<BaseLayout title={article.data.title} description={article.data.description}>
+  <section class="container page-section article-page">
+    <h1 class="text-center mb-2">{article.data.title}</h1>
+    <p class="article-meta text-center">
+      By {article.data.author} on {article.data.pubDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+      {article.data.tags.length > 0 && (
+        <span> | Tags: {article.data.tags.map(tag => <span class="tag">{tag}</span>).join(', ')}</span>
+      )}
+    </p>
+    {article.data.image && (
+      <div class="article-hero-image-container">
+        <img src={article.data.image} alt={article.data.title} loading="eager" class="article-hero-image" />
+      </div>
+    )}
+    <div class="article-content">
+      <Content />
+    </div>
+    <div class="article-back-link text-center mt-4">
+      <a href="/blog/" class="btn btn-outline">← Back to Blog</a>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .article-page {
+    background-color: #fff;
+    padding: 3rem 2rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+    line-height: 1.8;
+    font-size: 1.1rem;
+  }
+  .article-page h1 {
+    font-size: 2.8rem;
+    color: #555;
+  }
+  .article-page h2 {
+    font-size: 2.2rem;
+    color: #B0A08C;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+  }
+  .article-page h3 {
+    font-size: 1.8rem;
+    color: #777;
+    margin-top: 1.5rem;
+    margin-bottom: 0.8rem;
+  }
+  .article-meta {
+    font-size: 0.9rem;
+    color: #888;
+    margin-bottom: 2rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .tag {
+    background-color: #eee;
+    padding: 0.2em 0.5em;
+    border-radius: 4px;
+    font-size: 0.8em;
+    margin-left: 0.5em;
+    color: #666;
+  }
+  .article-hero-image-container {
+    margin: 2rem auto;
+    max-width: 900px; /* Adjust max width as needed */
+  }
+  .article-hero-image {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  }
+  .article-content p {
+    margin-bottom: 1.2rem;
+  }
+  .article-content ul, .article-content ol {
+    margin-left: 2rem;
+    margin-bottom: 1.2rem;
+  }
+  .article-content li {
+    margin-bottom: 0.5rem;
+  }
+</style>

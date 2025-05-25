@@ -1,0 +1,73 @@
+---
+// src/layouts/BaseLayout.astro
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+interface Props {
+  title: string;
+  description: string;
+}
+
+const { title, description } = Astro.props;
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content={description} />
+  <title>{title} | Your Diamond Business Name</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <!-- Link to your global CSS -->
+  <link rel="stylesheet" href="/styles/global.css" />
+</head>
+<body>
+  <Header />
+  <main>
+    <slot /> {/* This is where page content will be injected */}
+  </main>
+  <Footer />
+</body>
+</html>
+
+<style is:global>
+  /* Basic reset for better consistency */
+  html {
+    box-sizing: border-box;
+    font-size: 16px;
+  }
+  *, *::before, *::after {
+    box-sizing: inherit;
+    margin: 0;
+    padding: 0;
+  }
+  body {
+    font-family: 'Georgia', serif; /* Or your chosen elegant font */
+    color: #333;
+    line-height: 1.6;
+    background-color: #f8f8f8;
+  }
+  img {
+    max-width: 100%;
+    height: auto;
+    display: block; /* Removes extra space below images */
+  }
+  a {
+    color: #B0A08C; /* Example: a soft gold/bronze color */
+    text-decoration: none;
+  }
+  a:hover {
+    text-decoration: underline;
+  }
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1rem;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Playfair Display', serif; /* Example: another elegant font */
+    margin-bottom: 0.5em;
+    color: #555;
+  }
+  /* More global styles will go in src/styles/global.css */
+</style>

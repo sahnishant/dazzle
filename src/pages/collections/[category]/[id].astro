@@ -1,0 +1,143 @@
+---
+// src/pages/collections/[category]/[id].astro
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { jewelryItems } from '../../../data/jewelry.js';
+
+// This function tells Astro what pages to generate
+export async function getStaticPaths() {
+  return jewelryItems.map(item => ({
+    params: { category: item.category, id: item.id },
+    props: { item },
+  }));
+}
+
+const { item } = Astro.props;
+---
+<BaseLayout title={item.name} description={item.description}>
+  <section class="product-detail container mt-4 mb-4">
+    <div class="product-header">
+      <h1>{item.name}</h1>
+      <p class="category-link">Category: <a href={`/collections/${item.category}/`}>{item.category.replace(/-/g, ' ').replace(/\b\w/g, char => char.toUpperCase())}</a></p>
+    </div>
+
+    <div class="product-images">
+      <img src={item.mainImage} alt={item.name} loading="eager" />
+      <div class="thumbnail-gallery">
+        {item.additionalImages.map(img => (
+          <img src={img} alt={`${item.name} - additional view`} loading="lazy" class="thumbnail" />
+        ))}
+      </div>
+    </div>
+
+    <div class="product-info">
+      <h2>Product Details</h2>
+      <p class="description">{item.description}</p>
+      <ul class="details-list">
+        {Object.entries(item.details).map(([key, value]) => (
+          <li><strong>{key.replace(/\b\w/g, char => char.toUpperCase())}:</strong> {value}</li>
+        ))}
+      </ul>
+
+      <div class="price">
+        <strong>Price:</strong> {item.price}
+      </div>
+
+      <a href={`/contact/?item=${item.id}`} class="btn mt-4">Inquire About This Piece</a>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .product-detail {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .product-header {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+  .product-header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+  }
+  .category-link {
+    font-size: 1rem;
+    color: #777;
+  }
+
+  .product-images {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .product-images > img {
+    max-width: 100%;
+    height: auto;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+  }
+  .thumbnail-gallery {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .thumbnail {
+    width: 100px; /* Smaller size for thumbnails */
+    height: 100px;
+    object-fit: cover;
+    cursor: pointer;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    transition: border-color 0.2s ease;
+  }
+  .thumbnail:hover {
+    border-color: #B0A08C;
+  }
+
+  .product-info {
+    background-color: #fff;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  }
+  .product-info h2 {
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+  }
+  .product-info .description {
+    margin-bottom: 1.5rem;
+    font-size: 1.1rem;
+  }
+  .details-list {
+    list-style: none;
+    margin-bottom: 1.5rem;
+  }
+  .details-list li {
+    margin-bottom: 0.5rem;
+    font-size: 1rem;
+  }
+  .details-list strong {
+    color: #555;
+  }
+  .price {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #B0A08C;
+    margin-top: 1.5rem;
+  }
+
+  @media (min-width: 768px) {
+    .product-detail {
+      grid-template-columns: 1fr 1fr; /* Two columns on larger screens */
+      align-items: start;
+    }
+    .product-images {
+      position: sticky; /* Keep images in view */
+      top: 2rem; /* Adjust as needed for sticky header */
+    }
+  }
+</style>

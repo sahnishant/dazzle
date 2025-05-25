@@ -1,0 +1,20 @@
+---
+// src/pages/collections/index.astro
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import CollectionGrid from '../../components/CollectionGrid.astro'; // Will create this
+
+const collections = [
+  { name: 'Rings', image: '/images/collection-rings.jpg', link: '/collections/rings/' },
+  { name: 'Necklaces', image: '/images/collection-necklaces.jpg', link: '/collections/necklaces/' },
+  { name: 'Earrings', image: '/images/collection-earrings.jpg', link: '/collections/earrings/' },
+  { name: 'Bracelets', image: '/images/collection-bracelets.jpg', link: '/collections/bracelets/' },
+  { name: 'Custom Designs', image: '/images/collection-custom.jpg', link: '/collections/custom/' },
+  // Add more categories as needed
+];
+---
+<BaseLayout title="Collections" description="Browse our exquisite diamond jewelry collections by type.">
+  <section class="container mt-4 mb-4">
+    <h1 class="text-center mb-4">Our Jewelry Collections</h1>
+    <CollectionGrid collections={collections} />
+  </section>
+</BaseLayout>

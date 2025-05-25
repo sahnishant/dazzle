@@ -1,0 +1,93 @@
+---
+// src/components/Footer.astro
+---
+<footer class="site-footer">
+  <div class="container footer-content">
+    <div class="footer-section">
+      <h3>Your Diamond Business Name</h3>
+      <p>© {new Date().getFullYear()} All rights reserved.</p>
+    </div>
+    <div class="footer-section">
+      <h4>Quick Links</h4>
+      <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/collections/">Collections</a></li>
+        <li><a href="/about/">About Us</a></li>
+        <li><a href="/contact/">Contact Us</a></li>
+        <li><a href="/blog/">Blog & Insights</a></li> {/* New */}
+        <li><a href="/policies/">Our Policies</a></li> {/* New */}
+        <li><a href="/privacy-policy/">Privacy Policy</a></li>
+      </ul>
+    </div>
+    <div class="footer-section">
+      <h4>Contact Us</h4>
+      <p>Email: <a href="mailto:info@yourdomain.com">info@yourdomain.com</a></p>
+      <p>Phone: <a href="tel:+1234567890">+1 (234) 567-890</a></p>
+      <p>Address: 123 Diamond St, Jewel City, JS 12345</p>
+    </div>
+    <div class="footer-section social-media">
+      <h4>Follow Us</h4>
+      <a href="https://instagram.com/yourbusiness" target="_blank" rel="noopener noreferrer">Instagram</a>
+      <a href="https://facebook.com/yourbusiness" target="_blank" rel="noopener noreferrer">Facebook</a>
+      <!-- Add more social links as needed -->
+    </div>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    background-color: #333;
+    color: #f8f8f8;
+    padding: 2rem 0;
+    margin-top: 3rem;
+  }
+  .footer-content {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 2rem;
+  }
+  .footer-section {
+    flex: 1;
+    min-width: 200px;
+  }
+  .footer-section h3, .footer-section h4 {
+    color: #B0A08C;
+    margin-bottom: 1rem;
+  }
+  .footer-section p {
+    font-size: 0.9rem;
+    line-height: 1.5;
+  }
+  .footer-section ul {
+    list-style: none;
+  }
+  .footer-section ul li {
+    margin-bottom: 0.5rem;
+  }
+  .footer-section a {
+    color: #f8f8f8;
+    font-size: 0.9rem;
+    transition: color 0.3s ease;
+  }
+  .footer-section a:hover {
+    color: #B0A08C;
+  }
+  .social-media a {
+    display: inline-block;
+    margin-right: 1rem;
+    margin-top: 0.5rem;
+    font-size: 1rem;
+  }
+
+  @media (max-width: 768px) {
+    .footer-content {
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+    .footer-section {
+      width: 100%;
+    }
+  }
+</style>

@@ -1,0 +1,177 @@
+---
+// src/pages/diamond-grading.astro
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+<BaseLayout
+  title="Understanding Diamond Grading & Brilliance"
+  description="Explore how diamonds glitter through internal reflection. Learn about jeweler's loupes and the visual aspects of diamond quality."
+>
+  <section class="container page-section">
+    <h1 class="text-center mb-4">Understanding Diamond Grading & Brilliance</h1>
+    <p>Beyond the "4 Cs" of Cut, Color, Clarity, and Carat (which are covered in detail in our <a href="/diamond-buyer-guide/">Diamond Buyer's Guide</a>), understanding diamond grading also involves appreciating how light interacts with a diamond to create its stunning sparkle. It's a dance of light and precision that makes each diamond unique.</p>
+
+    <hr class="section-divider" />
+
+    <h2>The Jeweler's Loupe: A Closer Look at Quality</h2>
+    <p>To truly appreciate and assess a diamond's quality, gemologists and jewelers use a specialized tool called a **jeweler's loupe**. This small, powerful magnifying glass allows for a detailed inspection of the diamond's internal and external characteristics.</p>
+    <ul>
+      <li><strong>Magnification</strong>: Loupes typically offer 10x magnification, which is the industry standard for diamond grading.</li>
+      <li><strong>Purpose</strong>: They help identify minute inclusions (internal flaws) and blemishes (surface imperfections), which are key factors in determining a diamond's clarity grade.</li>
+      <li><strong>Clarity Assessment</strong>: While the 4 Cs provide a framework, using a loupe allows for a hands-on verification of a diamond's clarity, revealing details not visible to the naked eye.</li>
+    </ul>
+    <p>Remember: While a loupe is a valuable tool for inspection, a professional certification from a reputable gemological laboratory (like GIA or IGI) remains the most authoritative assessment of a diamond's quality.</p>
+
+    <hr class="section-divider" />
+
+    <h2>Visual Concept: How a Diamond Glitters Due to Internal Reflection</h2>
+    <p>The dazzling sparkle of a diamond isn't magic; it's pure physics. A diamond's incredible brilliance, fire, and scintillation are a result of its unique crystalline structure and, most importantly, its precise cut. When light enters a well-cut diamond, it behaves in extraordinary ways:</p>
+
+    <div class="diamond-glitter-visual">
+      <div class="light-source">Light Source 💡</div>
+      <div class="light-path-arrow">↓</div>
+      <div class="diamond-drawing">
+        <div class="crown">Crown</div>
+        <div class="table">Table</div>
+        <div class="girdle"></div>
+        <div class="pavilion">Pavilion</div>
+        <div class="culet"></div>
+        <!-- Arrows representing light paths (conceptual) -->
+        <div class="light-ray light-ray-in-1"></div>
+        <div class="light-ray light-ray-in-2"></div>
+        <div class="light-ray light-ray-reflect-1"></div>
+        <div class="light-ray light-ray-reflect-2"></div>
+        <div class="light-ray light-ray-out-1"></div>
+        <div class="light-ray light-ray-out-2"></div>
+      </div>
+      <p class="caption">
+        <strong>The Path of Light:</strong> Light enters the diamond (usually through the top facets, the Crown and Table). Due to the diamond's high refractive index, the light bends.
+      </p>
+      <p class="caption">
+        <strong>Internal Reflection:</strong> Inside the diamond, if the facets (especially on the Pavilion) are cut at optimal angles, the light rays strike these facets and reflect internally, bouncing off multiple times like mirrors. This is called **Total Internal Reflection**.
+      </p>
+      <p class="caption">
+        <strong>Sparkle & Return:</strong> The light then exits back through the top of the diamond, creating the breathtaking sparkle, brilliance (white light reflection), and fire (rainbow colors). A poorly cut diamond will "leak" light from the bottom or sides, appearing dull.
+      </p>
+      <p class="caption">
+        <em>(Imagine an illustrative diagram here showing light rays entering, bouncing off internal facets, and exiting from the top.)</em>
+      </p>
+      <img src="/images/diamond-light-diagram.jpg" alt="Diagram showing light reflection within a brilliant cut diamond" loading="eager" class="responsive-image" />
+    </div>
+
+    <p class="mt-4">It's this masterful interplay of light, achieved through precise cutting, that makes a diamond truly come alive and glitter.</p>
+  </section>
+</BaseLayout>
+
+<style>
+  /* Reusing general page-section styles */
+  .page-section {
+    padding: 2rem 1rem;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+  }
+  .page-section h1, .page-section h2, .page-section h3 {
+    color: #B0A08C; /* Theme color for headings */
+    margin-top: 1.5rem;
+    margin-bottom: 1rem;
+  }
+  .page-section p {
+    margin-bottom: 1rem;
+  }
+  .page-section ul {
+    list-style: disc;
+    margin-left: 1.5rem;
+    margin-bottom: 1rem;
+  }
+  .page-section li {
+    margin-bottom: 0.5rem;
+  }
+  .section-divider {
+    border: 0;
+    border-top: 1px dashed #ddd;
+    margin: 2rem 0;
+  }
+
+  /* Styles for the conceptual diamond glitter visual */
+  .diamond-glitter-visual {
+    background-color: #f9f9f9;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    padding: 2rem;
+    margin: 2.5rem auto;
+    max-width: 700px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Basic representation of diamond shape */
+  .diamond-drawing {
+    width: 200px;
+    height: 200px;
+    position: relative;
+    margin: 2rem auto;
+    /* Using CSS shapes for a rough diamond look */
+    background: linear-gradient(to bottom right, #fff 0%, #eee 50%, #ddd 100%);
+    clip-path: polygon(
+      50% 0%, 
+      70% 20%, 
+      100% 20%, 
+      100% 80%, 
+      70% 100%, 
+      30% 100%, 
+      0% 80%, 
+      0% 20%, 
+      30% 20%
+    ); /* This is a complex polygon, simplify if needed */
+    border: 1px solid #ccc;
+  }
+
+  .diamond-drawing .crown,
+  .diamond-drawing .table,
+  .diamond-drawing .girdle,
+  .diamond-drawing .pavilion,
+  .diamond-drawing .culet {
+    position: absolute;
+    font-size: 0.8rem;
+    color: #666;
+    white-space: nowrap;
+  }
+
+  .diamond-drawing .crown { top: 10px; left: 50%; transform: translateX(-50%); }
+  .diamond-drawing .table { top: 40px; left: 50%; transform: translateX(-50%); }
+  .diamond-drawing .girdle { top: 50%; left: -30px; transform: translateY(-50%); } /* Placeholder for visual aid */
+  .diamond-drawing .pavilion { bottom: 10px; left: 50%; transform: translateX(-50%); }
+  .diamond-drawing .culet { bottom: 0; left: 50%; transform: translateX(-50%); }
+
+  .light-source {
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+  }
+  .light-path-arrow {
+    font-size: 1.5rem;
+    color: #B0A08C;
+    margin-bottom: 0.5rem;
+  }
+
+  .caption {
+    margin-top: 1.5rem;
+    font-style: italic;
+    color: #666;
+    line-height: 1.4;
+  }
+  .caption strong {
+    color: #B0A08C;
+    font-weight: bold;
+  }
+
+  .responsive-image {
+    max-width: 100%;
+    height: auto;
+    margin-top: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  }
+</style>
