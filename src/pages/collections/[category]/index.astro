@@ -3,51 +3,346 @@
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import { jewelryItems } from '../../../data/jewelry.js'; // Import your jewelry data
 
-// This function tells Astro what category pages to generate
 export async function getStaticPaths() {
-  // Get all unique categories from your jewelry data
-  const categories = [...new Set(jewelryItems.map(item => item.category))];
+  if (!Array.isArray(jewelryItems) || jewelryItems.length === 0) {
+    console.warn("jewelryItems is empty or not an array. No category pages will be generated.");
+    return [];
+  }
+
+  const categories = [...new Set(
+    jewelryItems
+      .map(item => item && item.category)
+      .filter(category => typeof category === 'string' && category.length > 0)
+  )];
+
+  console.log("Generated categories for collection pages:", categories);
 
   return categories.map(category => ({
-    params: { category: category }, // This will be the category name in the URL (e.g., 'rings', 'bracelets')
+    params: { category: category },
   }));
 }
 
-// Get the current category from the URL parameters
 const { category } = Astro.params;
 
-// Filter jewelry items for the current category
-const currentCategoryItems = jewelryItems.filter(item => item.category === category);
+const displayCategoryName = category
+  ? category.replace(/-/g, ' ').replace(/\b\w/g, char => char.toUpperCase())
+  : 'Unknown Category';
 
-// Format the category name for display (e.g., "rings" -> "Rings")
-const displayCategoryName = category.replace(/-/g, ' ').replace(/\b\w/g, char => char.toUpperCase());
+const rawCategoryItems = Array.isArray(jewelryItems) ? jewelryItems.filter(item => item.category === category) : [];
+
+// Sort initial items by 'newest' by default (descending date)
+rawCategoryItems.sort((a, b) => {
+  const dateA = a.dateAdded instanceof Date ? a.dateAdded.getTime() : 0;
+  const dateB = b.dateAdded instanceof Date ? b.dateAdded.getTime() : 0;
+  return dateB - dateA;
+});
+
 ---
 
 <BaseLayout title={`${displayCategoryName} Collection`} description={`Browse our exquisite collection of ${displayCategoryName.toLowerCase()} diamond jewelry.`}>
-  <section class="container page-section category-page">
+  <section class="container page-section category-page"  data-category-slug={category}>
     <h1 class="text-center mb-4">{displayCategoryName} Collection</h1>
 
-    {currentCategoryItems.length > 0 ? (
-      <div class="product-grid">
-        {currentCategoryItems.map(item => (
-          <a href={`/collections/${item.category}/${item.id}/`} class="product-card">
-            <img src={item.mainImage} alt={item.name} loading="lazy" />
-            <div class="card-content">
-              <h3>{item.name}</h3>
-              <p class="price">{item.price}</p>
-            </div>
-          </a>
-        ))}
+    <!-- NEW: Hidden div to pass data to client-side JavaScript -->
+    <div id="category-products-data" data-products={JSON.stringify(rawCategoryItems)} style="display: none;"></div>
+
+    <div class="filters-sort-section">
+      <div class="filters">
+        <h3>Filter By:</h3>
+        <button id="clearFilters" class="btn btn-outline small-btn mb-2">Clear Filters</button>
+
+        <div class="filter-group">
+          <h4>Material</h4>
+          <label><input type="checkbox" data-filter-type="material" value="Yellow Gold" /> Yellow Gold</label>
+          <label><input type="checkbox" data-filter-type="material" value="White Gold" /> White Gold</label>
+          <label><input type="checkbox" data-filter-type="material" value="Rose Gold" /> Rose Gold</label>
+          <label><input type="checkbox" data-filter-type="material" value="Platinum" /> Platinum</label>
+          <label><input type="checkbox" data-filter-type="material" value="Silver" /> Silver</label>
+          <label><input type="checkbox" data-filter-type="material" value="Customizable" /> Customizable</label>
+        </div>
+        <div class="filter-group">
+          <h4>Stone Type</h4>
+          <label><input type="checkbox" data-filter-type="stoneType" value="Diamond" /> Diamond</label>
+          <label><input type="checkbox" data-filter-type="stoneType" value="Emerald" /> Emerald</label>
+          <label><input type="checkbox" data-filter-type="stoneType" value="Ruby" /> Ruby</label>
+          <label><input type="checkbox" data-filter-type="stoneType" value="Sapphire" /> Sapphire</label>
+        </div>
+        <div class="filter-group">
+          <h4>Style</h4>
+          {category === 'rings' && (
+            <>
+              <label><input type="checkbox" data-filter-type="style" value="Solitaire" /> Solitaire</label>
+              <label><input type="checkbox" data-filter-type="style" value="Halo" /> Halo</label>
+              <label><input type="checkbox" data-filter-type="style" value="Pave" /> Pave</label>
+              <label><input type="checkbox" data-filter-type="style" value="Cluster" /> Cluster</label>
+              <label><input type="checkbox" data-filter-type="style" value="Cocktail" /> Cocktail</label>
+            </>
+          )}
+          {category === 'earrings' && (
+            <>
+              <label><input type="checkbox" data-filter-type="style" value="Stud" /> Stud</label>
+              <label><input type="checkbox" data-filter-type="style" value="Hoop" /> Hoop</label>
+              <label><input type="checkbox" data-filter-type="style" value="Dangle" /> Dangle</label>
+            </>
+          )}
+          {category === 'necklaces' && (
+            <>
+              <label><input type="checkbox" data-filter-type="style" value="Pendant" /> Pendant</label>
+              <label><input type="checkbox" data-filter-type="style" value="Choker" /> Choker</label>
+            </>
+          )}
+          {category === 'bracelets' && (
+            <>
+              <label><input type="checkbox" data-filter-type="style" value="Tennis" /> Tennis</label>
+              <label><input type="checkbox" data-filter-type="style" value="Bangle" /> Bangle</label>
+              <label><input type="checkbox" data-filter-type="style" value="Cuff" /> Cuff</label>
+              <label><input type="checkbox" data-filter-type="style" value="Chain" /> Chain</label>
+            </>
+          )}
+          {category === 'custom' && (
+            <label><input type="checkbox" data-filter-type="style" value="Custom" /> Custom</label>
+          )}
+        </div>
+        <div class="filter-group">
+          <h4>Price Range</h4>
+          <label><input type="checkbox" data-filter-type="priceRange" value="0-100000" /> Under ₹1 Lakh</label>
+          <label><input type="checkbox" data-filter-type="priceRange" value="100001-300000" /> ₹1 Lakh - ₹3 Lakh</label>
+          <label><input type="checkbox" data-filter-type="priceRange" value="300001-700000" /> ₹3 Lakh - ₹7 Lakh</label>
+          <label><input type="checkbox" data-filter-type="priceRange" value="700001-999999999" /> ₹7 Lakh +</label>
+        </div>
       </div>
-    ) : (
-      <p class="text-center text-gray-600">No items found in the {displayCategoryName} collection yet. Please check back soon!</p>
-    )}
+
+      <div class="sort-options">
+        <label for="sortOrder">Sort By:</label>
+        <select id="sortOrder">
+          <option value="newest">Newest</option>
+          <option value="price-asc">Price: Low to High</option>
+          <option value="price-desc">Price: High to Low</option>
+          <option value="popularity-desc">Popularity</option>
+        </select>
+      </div>
+    </div>
+
+    <div id="productGrid" class="product-grid">
+      {/* Products will be rendered here by JavaScript */}
+    </div>
 
     <div class="text-center mt-8">
       <a href="/collections/" class="btn btn-outline">← Back to All Collections</a>
     </div>
   </section>
+
+  <!-- Quick View Modal Structure -->
+  <div id="quickViewModal" class="modal">
+    <div class="modal-content quick-view-content">
+      <span class="close-btn">×</span>
+      <div class="modal-body">
+        <div class="modal-image">
+          <img src="" alt="" id="quickViewImage" />
+        </div>
+        <div class="modal-details">
+          <h3 id="quickViewName"></h3>
+          <p class="modal-price" id="quickViewPrice"></p>
+          <p id="quickViewDescription"></p>
+          <a href="#" id="quickViewLink" class="btn mt-4">View Full Details</a>
+          <a href="#" id="quickViewContactLink" class="btn btn-outline mt-2">Inquire About This Piece</a>
+        </div>
+      </div>
+    </div>
+  </div>
 </BaseLayout>
+
+<script is:inline>
+  document.addEventListener('DOMContentLoaded', () => {
+    // Function to revive Date objects from JSON string
+    function reviveDates(key, value) {
+        const isoDateRegex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{3})?Z$/;
+        if (typeof value === 'string' && isoDateRegex.test(value)) {
+            return new Date(value);
+        }
+        return value;
+    }
+
+    // CRITICAL FIX: Retrieve data from the hidden div's data attribute
+    const dataElement = document.getElementById('category-products-data');
+    const rawItems = JSON.parse(dataElement.dataset.products, reviveDates);
+
+    const currentCategorySlug = document.querySelector('[data-category-slug]').getAttribute('data-category-slug');
+    console.log(currentCategorySlug);
+    let displayedItems = [...rawItems]; // Start with all items for the category
+
+    const productGrid = document.getElementById('productGrid');
+    const sortOrderSelect = document.getElementById('sortOrder');
+    const filterCheckboxes = document.querySelectorAll('.filters input[type="checkbox"]');
+    const clearFiltersBtn = document.getElementById('clearFilters');
+
+    const quickViewModal = document.getElementById('quickViewModal');
+    const closeBtn = quickViewModal.querySelector('.close-btn');
+    const quickViewImage = document.getElementById('quickViewImage');
+    const quickViewName = document.getElementById('quickViewName');
+    const quickViewPrice = document.getElementById('quickViewPrice');
+    const quickViewDescription = document.getElementById('quickViewDescription');
+    const quickViewLink = document.getElementById('quickViewLink');
+    const quickViewContactLink = document.getElementById('quickViewContactLink');
+    
+    // --- Filtering and Sorting Logic ---
+    function applyFiltersAndSort() {
+      let filtered = [...rawItems];
+
+      const activeFilters = {};
+      filterCheckboxes.forEach(checkbox => {
+        if (checkbox.checked) {
+          const type = checkbox.dataset.filterType;
+          if (!activeFilters[type]) {
+            activeFilters[type] = new Set();
+          }
+          activeFilters[type].add(checkbox.value);
+        }
+      });
+
+      Object.keys(activeFilters).forEach(type => {
+        if (activeFilters[type].size > 0) {
+          filtered = filtered.filter(item => {
+            if (type === 'priceRange') {
+              let matchesPriceRange = false;
+              activeFilters[type].forEach(range => {
+                const [min, max] = range.split('-').map(Number);
+                const itemPrice = item.priceValue || 0;
+                if (itemPrice >= min && itemPrice <= max) {
+                  matchesPriceRange = true;
+                }
+              });
+              return matchesPriceRange;
+            } else if (item.hasOwnProperty(type) && typeof item[type] === 'string') {
+                return activeFilters[type].has(item[type]);
+            }
+            return true;
+          });
+        }
+      });
+
+      const sortValue = sortOrderSelect.value;
+      if (sortValue === 'price-asc') {
+        filtered.sort((a, b) => (a.priceValue || 0) - (b.priceValue || 0));
+      } else if (sortValue === 'price-desc') {
+        filtered.sort((a, b) => (b.priceValue || 0) - (a.priceValue || 0));
+      } else if (sortValue === 'newest') {
+          filtered.sort((a, b) => {
+              const dateA = a.dateAdded instanceof Date ? a.dateAdded.getTime() : 0;
+              const dateB = b.dateAdded instanceof Date ? b.dateAdded.getTime() : 0;
+              return dateB - dateA;
+          });
+      } else if (sortValue === 'popularity-desc') {
+          filtered.sort((a, b) => (b.popularityScore || 0) - (a.popularityScore || 0));
+      }
+
+      displayedItems = filtered;
+      renderProducts();
+    }
+
+    function renderProducts() {
+      if (!productGrid) return;
+
+      productGrid.innerHTML = '';
+      if (displayedItems.length === 0) {
+        productGrid.innerHTML = '<p class="text-center text-gray-600 col-span-full">No items match your criteria.</p>';
+        return;
+      }
+
+      displayedItems.forEach(item => {
+        const productCardWrapper = document.createElement('div');
+        productCardWrapper.classList.add('product-card-wrapper');
+
+        const productCardLink = document.createElement('a');
+        productCardLink.href = `/collections/${currentCategorySlug}/${item.id}/`;
+        productCardLink.classList.add('product-card');
+
+        const img = document.createElement('img');
+        img.src = item.mainImage;
+        img.alt = item.name;
+        img.loading = 'lazy';
+        productCardLink.appendChild(img);
+
+        const cardContent = document.createElement('div');
+        cardContent.classList.add('card-content');
+        
+        const h3 = document.createElement('h3');
+        h3.textContent = item.name;
+        cardContent.appendChild(h3);
+
+        const priceP = document.createElement('p');
+        priceP.classList.add('price');
+        priceP.textContent = item.price;
+        cardContent.appendChild(priceP);
+
+        productCardLink.appendChild(cardContent);
+        productCardWrapper.appendChild(productCardLink);
+
+        const quickViewButton = document.createElement('button');
+        quickViewButton.classList.add('quick-view-btn');
+        quickViewButton.textContent = 'Quick View';
+        quickViewButton.dataset.productId = item.id;
+        productCardWrapper.appendChild(quickViewButton);
+
+        productGrid.appendChild(productCardWrapper);
+      });
+      attachQuickViewListeners();
+    }
+
+    sortOrderSelect.addEventListener('change', applyFiltersAndSort);
+    filterCheckboxes.forEach(checkbox => {
+      checkbox.addEventListener('change', applyFiltersAndSort);
+    });
+    clearFiltersBtn.addEventListener('click', () => {
+      filterCheckboxes.forEach(checkbox => checkbox.checked = false);
+      applyFiltersAndSort();
+      sortOrderSelect.value = 'newest';
+    });
+
+    function openQuickViewModal(productId) {
+      const product = rawItems.find(item => item.id === productId);
+      if (product) {
+        quickViewImage.src = product.mainImage;
+        quickViewImage.alt = product.name;
+        quickViewName.textContent = product.name;
+        quickViewPrice.textContent = product.price;
+        quickViewDescription.textContent = product.description;
+        quickViewLink.href = `/collections/${product.category}/${product.id}/`;
+        quickViewContactLink.href = `/contact/?item=${product.id}`;
+        quickViewModal.style.display = 'flex';
+        document.body.classList.add('modal-open');
+      }
+    }
+
+    function closeQuickViewModal() {
+      quickViewModal.style.display = 'none';
+      document.body.classList.remove('modal-open');
+    }
+
+    function attachQuickViewListeners() {
+        const currentQuickViewButtons = productGrid.querySelectorAll('.quick-view-btn');
+        currentQuickViewButtons.forEach(button => {
+            button.removeEventListener('click', handleQuickViewClick);
+            button.addEventListener('click', handleQuickViewClick);
+        });
+    }
+
+    function handleQuickViewClick(event) {
+        openQuickViewModal(event.target.dataset.productId);
+    }
+
+    closeBtn.addEventListener('click', closeQuickViewModal);
+    window.addEventListener('click', (event) => {
+      if (event.target === quickViewModal) {
+        closeQuickViewModal();
+      }
+    });
+
+    // Initial render when page loads, triggering filters/sort
+    applyFiltersAndSort();
+  });
+</script>
+
 
 <style>
   /* Ensure these styles are consistent with your global.css or are added here */

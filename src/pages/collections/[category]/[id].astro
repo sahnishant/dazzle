@@ -1,7 +1,7 @@
 ---
 // src/pages/collections/[category]/[id].astro
 import BaseLayout from '../../../layouts/BaseLayout.astro';
-import { jewelryItems } from '../../../data/jewelry.js';
+import { jewelryItems } from '../../../data/jewelry.js'; // Import your jewelry data
 
 export async function getStaticPaths() {
   return jewelryItems.map(item => ({
@@ -12,141 +12,265 @@ export async function getStaticPaths() {
 
 const { item } = Astro.props;
 // Combine mainImage and additionalImages for the gallery
-const allImages = [item.mainImage, ...item.additionalImages];
+const allImages = [item.mainImage, ...(item.additionalImages || [])]; // Ensure additionalImages exists and is an array
+
+// Breadcrumbs for navigation
+const breadcrumbs = [
+  { name: 'Home', path: '/' },
+  { name: 'Collections', path: '/collections/' },
+  { name: item.category.replace(/-/g, ' ').replace(/\b\w/g, char => char.toUpperCase()), path: `/collections/${item.category}/` },
+  { name: item.name, path: null } // Current page, no link
+];
 ---
+
 <BaseLayout title={item.name} description={item.description}>
-  <section class="product-detail container mt-4 mb-4">
-    <div class="product-header">
-      <h1>{item.name}</h1>
-      <p class="category-link">Category: <a href={`/collections/${item.category}/`}>{item.category.replace(/-/g, ' ').replace(/\b\w/g, char => char.toUpperCase())}</a></p>
-    </div>
-
-    <div class="product-images">
-      <img id="mainProductImage" src={allImages[0]} alt={item.name} loading="eager" />
-      <div class="thumbnail-gallery">
-        {allImages.map((img, index) => (
-          <img
-            src={img}
-            alt={`${item.name} - view ${index + 1}`}
-            loading="lazy"
-            class="thumbnail"
-            data-image-index={index}
-            data-full-src={img}
-          />
+  <section class="container product-detail-page">
+    {/* Breadcrumbs Component */}
+    <nav class="breadcrumbs">
+      <ol>
+        {breadcrumbs.map((crumb, index) => (
+          <li>
+            {crumb.path ? (
+              <a href={crumb.path}>{crumb.name}</a>
+            ) : (
+              <span>{crumb.name}</span>
+            )}
+            {index < breadcrumbs.length - 1 && <span class="separator">/</span>}
+          </li>
         ))}
+      </ol>
+    </nav>
+
+    <div class="product-layout">
+      <div class="product-images">
+        {/* Main Product Image (Clickable for Zoom) */}
+        <img id="mainProductImage" src={allImages[0]} alt={item.name} loading="eager" class="main-product-image" />
+        
+        {/* Thumbnail Gallery */}
+        <div class="thumbnail-gallery">
+          {allImages.map((img, index) => (
+            <img
+              src={img}
+              alt={`${item.name} - view ${index + 1}`}
+              loading="lazy"
+              class={`thumbnail ${index === 0 ? 'active' : ''}`} {/* Set first as active initially */}
+              data-full-src={img}
+            />
+          ))}
+        </div>
       </div>
-    </div>
 
-    <div class="product-info">
-      <h2>Product Details</h2>
-      <p class="description">{item.description}</p>
-      <ul class="details-list">
-        {Object.entries(item.details).map(([key, value]) => (
-          <li><strong>{key.replace(/\b\w/g, char => char.toUpperCase())}:</strong> {value}</li>
-        ))}
-      </ul>
+      <div class="product-info">
+        <h1 class="product-name">{item.name}</h1>
+        <p class="product-price">{item.price}</p>
 
-      <div class="price">
-        <strong>Price:</strong> {item.price}
+        <h2 class="section-title">Description</h2>
+        <p class="product-description">{item.description}</p>
+
+        <h2 class="section-title">Diamond Details</h2>
+        <ul class="details-list">
+          {Object.entries(item.details).map(([key, value]) => (
+            <li><strong>{key.replace(/\b\w/g, char => char.toUpperCase())}:</strong> {value}</li>
+          ))}
+        </ul>
+
+        {item.material && (
+          <>
+            <h2 class="section-title">Materials Used</h2>
+            <p>{item.material}</p>
+          </>
+        )}
+        {item.dimensions && (
+          <>
+            <h2 class="section-title">Dimensions</h2>
+            <p>{item.dimensions}</p>
+          </>
+        )}
+        {item.uniqueFeatures && (
+          <>
+            <h2 class="section-title">Unique Features</h2>
+            <p>{item.uniqueFeatures}</p>
+          </>
+        )}
+        {item.careInstructions && (
+          <>
+            <h2 class="section-title">Care Instructions</h2>
+            <p>{item.careInstructions}</p>
+          </>
+        )}
+
+        <a href={`/contact/?item=${item.id}`} class="btn add-to-cart-btn">Inquire About This Piece</a>
       </div>
-
-      <a href={`/contact/?item=${item.id}`} class="btn mt-4">Inquire About This Piece</a>
     </div>
   </section>
-</BaseLayout>
 
+  {/* Image Zoom Modal */}
+  <div id="imageZoomModal" class="modal zoom-modal">
+    <div class="modal-content zoom-content">
+      <span class="close-btn zoom-close">×</span>
+      <img src="" alt="" id="zoomImage" />
+    </div>
+  </div>
+</BaseLayout>
 
 <script is:inline>
   document.addEventListener('DOMContentLoaded', () => {
+    // --- Image Gallery & Switcher Logic ---
     const mainImage = document.getElementById('mainProductImage');
     const thumbnails = document.querySelectorAll('.thumbnail-gallery .thumbnail');
 
     if (mainImage && thumbnails.length > 0) {
       thumbnails.forEach(thumbnail => {
         thumbnail.addEventListener('click', () => {
-          // Remove 'active' class from all thumbnails
-          thumbnails.forEach(t => t.classList.remove('active'));
-          // Add 'active' class to the clicked thumbnail
-          thumbnail.classList.add('active');
-          // Change the main image source
-          mainImage.src = thumbnail.dataset.fullSrc;
+          thumbnails.forEach(t => t.classList.remove('active')); // Deactivate all thumbnails
+          thumbnail.classList.add('active'); // Activate clicked thumbnail
+          mainImage.src = thumbnail.dataset.fullSrc; // Update main image source
         });
       });
-      // Set the first thumbnail as active initially
-      thumbnails[0].classList.add('active');
     }
+
+    // --- Image Zoom Logic ---
+    const zoomModal = document.getElementById('imageZoomModal');
+    const zoomImage = document.getElementById('zoomImage');
+    const zoomCloseBtn = zoomModal.querySelector('.close-btn');
+
+    mainImage.addEventListener('click', () => {
+      zoomImage.src = mainImage.src; // Set zoom image to current main image
+      zoomModal.style.display = 'flex'; // Use flex to center modal
+      document.body.classList.add('modal-open'); // Prevent scrolling behind modal
+    });
+
+    zoomCloseBtn.addEventListener('click', () => {
+      zoomModal.style.display = 'none';
+      document.body.classList.remove('modal-open');
+    });
+
+    window.addEventListener('click', (event) => {
+      if (event.target === zoomModal) { // Close if clicked outside the zoom image
+        zoomModal.style.display = 'none';
+        document.body.classList.remove('modal-open');
+      }
+    });
   });
 </script>
 
-
 <style>
-  .product-detail {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 2rem;
-  }
-
-  .product-header {
-    text-align: center;
+  /* Base page section styling - should ideally be in global.css */
+  .product-detail-page {
+    padding: 2rem 1rem;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    margin-top: 2rem;
     margin-bottom: 2rem;
   }
-  .product-header h1 {
-    font-size: 2.5rem;
-    margin-bottom: 0.5rem;
+
+  /* Breadcrumbs */
+  .breadcrumbs {
+    font-size: 0.9rem;
+    color: #888;
+    margin-bottom: 1.5rem;
+    padding-left: 1rem; /* Align with container */
   }
-  .category-link {
-    font-size: 1rem;
-    color: #777;
+  .breadcrumbs ol {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap; /* Allow wrapping */
+  }
+  .breadcrumbs li {
+    display: flex;
+    align-items: center;
+    margin-right: 0.5rem;
+  }
+  .breadcrumbs a {
+    color: #B0A08C;
+    text-decoration: none;
+  }
+  .breadcrumbs a:hover {
+    text-decoration: underline;
+  }
+  .breadcrumbs .separator {
+    margin: 0 0.5rem;
+    color: #ccc;
+  }
+
+  /* Product Layout (Grid for larger screens) */
+  .product-layout {
+    display: grid;
+    grid-template-columns: 1fr; /* Single column by default */
+    gap: 2rem;
+    align-items: start; /* Align content to the top */
   }
 
   .product-images {
     display: flex;
     flex-direction: column;
     align-items: center;
+    position: sticky; /* Keep images in view on scroll */
+    top: 2rem; /* Adjust to stay below header (if header is fixed) */
   }
-  .product-images > img {
+  .main-product-image {
     max-width: 100%;
-    height: auto;
+    height: auto; /* Maintain aspect ratio */
     border: 1px solid #eee;
     border-radius: 8px;
     margin-bottom: 1rem;
+    cursor: zoom-in; /* Indicate zoomability */
   }
   .thumbnail-gallery {
     display: flex;
-    gap: 0.5rem;
     flex-wrap: wrap;
     justify-content: center;
+    gap: 0.5rem;
   }
   .thumbnail {
-    width: 100px; /* Smaller size for thumbnails */
-    height: 100px;
-    object-fit: cover;
+    width: 80px; /* Smaller size for thumbnails */
+    height: 80px;
+    object-fit: cover; /* Crop to fit, maintain aspect ratio */
     cursor: pointer;
     border: 1px solid #ccc;
     border-radius: 4px;
-    transition: border-color 0.2s ease;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
   }
-  .thumbnail:hover {
+  .thumbnail:hover, .thumbnail.active {
     border-color: #B0A08C;
+    box-shadow: 0 0 0 2px rgba(176, 160, 140, 0.5); /* Highlight active/hovered */
   }
 
   .product-info {
-    background-color: #fff;
+    background-color: #fff; /* White background for info box */
     padding: 2rem;
     border-radius: 8px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.05);
   }
-  .product-info h2 {
+  .product-name {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+    color: #555;
+  }
+  .product-price {
     font-size: 1.8rem;
+    font-weight: bold;
+    color: #B0A08C;
+    margin-bottom: 1.5rem;
+  }
+  .section-title {
+    font-size: 1.5rem;
+    color: #777;
+    margin-top: 1.5rem;
+    margin-bottom: 0.8rem;
+    border-bottom: 1px solid #eee; /* Subtle separator */
+    padding-bottom: 0.4rem;
+  }
+  .product-description, .product-info p, .product-info ul {
+    font-size: 1.05rem;
+    line-height: 1.7;
     margin-bottom: 1rem;
   }
-  .product-info .description {
-    margin-bottom: 1.5rem;
-    font-size: 1.1rem;
-  }
   .details-list {
-    list-style: none;
+    list-style: none; /* Removed default list style */
     margin-bottom: 1.5rem;
+    padding-left: 0; /* Remove default padding */
   }
   .details-list li {
     margin-bottom: 0.5rem;
@@ -155,21 +279,52 @@ const allImages = [item.mainImage, ...item.additionalImages];
   .details-list strong {
     color: #555;
   }
-  .price {
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: #B0A08C;
-    margin-top: 1.5rem;
+  .add-to-cart-btn { /* This is your "Inquire" button */
+    margin-top: 2rem;
+    width: 100%; /* Make button full width */
+    text-align: center;
+    font-size: 1.2rem;
+    padding: 1rem 2rem;
   }
 
+  /* --- Image Zoom Modal (reusing .modal from quick view but with specific overrides) --- */
+  .modal.zoom-modal {
+    background-color: rgba(0,0,0,0.8); /* Darker overlay for zoom */
+  }
+  .modal-content.zoom-content {
+    background-color: transparent; /* No background for image */
+    border: none;
+    padding: 0;
+    max-width: 90%; /* Max width for the image */
+    width: auto; /* Adjusts to image content */
+    height: auto; /* Adjusts to image content */
+    display: block; /* So image inside can scale naturally */
+  }
+  .modal-content.zoom-content img {
+    max-width: 100%;
+    max-height: 90vh; /* Limit height to viewport height */
+    display: block;
+    margin: auto; /* Center image within modal content */
+    border-radius: 0; /* Remove rounded corners for full image */
+  }
+  .zoom-close { /* Close button for zoom modal */
+    color: white;
+    top: 20px;
+    right: 30px;
+    font-size: 40px;
+    text-shadow: 0 0 5px rgba(0,0,0,0.5); /* For better visibility */
+  }
+  .zoom-close:hover {
+    color: #eee;
+  }
+
+  /* Responsive Adjustments for Product Detail Page */
   @media (min-width: 768px) {
-    .product-detail {
-      grid-template-columns: 1fr 1fr; /* Two columns on larger screens */
-      align-items: start;
+    .product-layout {
+      grid-template-columns: 1.2fr 1fr; /* Two columns on larger screens */
     }
     .product-images {
-      position: sticky; /* Keep images in view */
-      top: 2rem; /* Adjust as needed for sticky header */
+      top: 3rem; /* Adjust sticky top for bigger screens if header is fixed */
     }
   }
 </style>
