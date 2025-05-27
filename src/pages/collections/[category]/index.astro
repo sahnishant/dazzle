@@ -1,7 +1,7 @@
 ---
 // src/pages/collections/[category]/index.astro
 import BaseLayout from '../../../layouts/BaseLayout.astro';
-import { jewelryItems } from '../../../data/jewelry.js'; // Import your jewelry data
+import { jewelryItems } from '../../../data/jewelry.js';
 
 export async function getStaticPaths() {
   if (!Array.isArray(jewelryItems) || jewelryItems.length === 0) {
@@ -40,16 +40,32 @@ rawCategoryItems.sort((a, b) => {
 ---
 
 <BaseLayout title={`${displayCategoryName} Collection`} description={`Browse our exquisite collection of ${displayCategoryName.toLowerCase()} diamond jewelry.`}>
-  <section class="container page-section category-page"  data-category-slug={category}>
+  <section class="container page-section category-page" data-category-slug={category}>
     <h1 class="text-center mb-4">{displayCategoryName} Collection</h1>
-
-    <!-- NEW: Hidden div to pass data to client-side JavaScript -->
     <div id="category-products-data" data-products={JSON.stringify(rawCategoryItems)} style="display: none;"></div>
 
-    <div class="filters-sort-section">
-      <div class="filters">
-        <h3>Filter By:</h3>
-        <button id="clearFilters" class="btn btn-outline small-btn mb-2">Clear Filters</button>
+    {/* Mobile Filter & Sort Toggles */}
+    <div class="mobile-filter-sort-toggles">
+      <button id="mobileFilterBtn" class="btn btn-outline mobile-toggle-btn">Filter</button>
+      <div class="sort-options mobile-sort-inline"> {/* Inline sort for mobile */}
+        <label for="sortOrderMobile">Sort By:</label>
+        <select id="sortOrderMobile">
+          <option value="newest">Newest</option>
+          <option value="price-asc">Price: Low to High</option>
+          <option value="price-desc">Price: High to Low</option>
+          <option value="popularity-desc">Popularity</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="collection-layout">
+      {/* Filters Sidebar (will be modal on mobile) */}
+      <aside id="filtersSidebar" class="filters-sidebar">
+        <div class="sidebar-header">
+          <h3>Filter By:</h3>
+          <button id="closeFilterSidebar" class="close-btn">×</button>
+        </div>
+        <button id="clearFilters" class="btn btn-outline small-btn mb-4 w-full">Clear Filters</button>
 
         <div class="filter-group">
           <h4>Material</h4>
@@ -110,21 +126,26 @@ rawCategoryItems.sort((a, b) => {
           <label><input type="checkbox" data-filter-type="priceRange" value="300001-700000" /> ₹3 Lakh - ₹7 Lakh</label>
           <label><input type="checkbox" data-filter-type="priceRange" value="700001-999999999" /> ₹7 Lakh +</label>
         </div>
-      </div>
+        {/* Only for mobile: Apply Filters button */}
+        <button id="applyFiltersBtn" class="btn w-full mt-4 mobile-only">Apply Filters</button>
+      </aside>
 
-      <div class="sort-options">
-        <label for="sortOrder">Sort By:</label>
-        <select id="sortOrder">
-          <option value="newest">Newest</option>
-          <option value="price-asc">Price: Low to High</option>
-          <option value="price-desc">Price: High to Low</option>
-          <option value="popularity-desc">Popularity</option>
-        </select>
-      </div>
-    </div>
+      {/* Main Content Area (Sort & Products) */}
+      <div class="main-collection-content">
+        <div class="sort-options desktop-sort-inline"> {/* Desktop inline sort */}
+          <label for="sortOrderDesktop">Sort By:</label>
+          <select id="sortOrderDesktop">
+            <option value="newest">Newest</option>
+            <option value="price-asc">Price: Low to High</option>
+            <option value="price-desc">Price: High to Low</option>
+            <option value="popularity-desc">Popularity</option>
+          </select>
+        </div>
 
-    <div id="productGrid" class="product-grid">
-      {/* Products will be rendered here by JavaScript */}
+        <div id="productGrid" class="product-grid">
+          {/* Products will be rendered here by JavaScript */}
+        </div>
+      </div>
     </div>
 
     <div class="text-center mt-8">
@@ -132,7 +153,7 @@ rawCategoryItems.sort((a, b) => {
     </div>
   </section>
 
-  <!-- Quick View Modal Structure -->
+  <!-- Quick View Modal Structure (unchanged) -->
   <div id="quickViewModal" class="modal">
     <div class="modal-content quick-view-content">
       <span class="close-btn">×</span>
@@ -154,7 +175,6 @@ rawCategoryItems.sort((a, b) => {
 
 <script is:inline>
   document.addEventListener('DOMContentLoaded', () => {
-    // Function to revive Date objects from JSON string
     function reviveDates(key, value) {
         const isoDateRegex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{3})?Z$/;
         if (typeof value === 'string' && isoDateRegex.test(value)) {
@@ -163,21 +183,53 @@ rawCategoryItems.sort((a, b) => {
         return value;
     }
 
-    // CRITICAL FIX: Retrieve data from the hidden div's data attribute
+
+
     const dataElement = document.getElementById('category-products-data');
+    // Add null check for dataElement, though it should be present
+    if (!dataElement) {
+        console.error("Error: #category-products-data element not found. Filtering/sorting will not work.");
+        return; // Exit script if critical element not found
+    }
     const rawItems = JSON.parse(dataElement.dataset.products, reviveDates);
 
-    const currentCategorySlug = document.querySelector('[data-category-slug]').getAttribute('data-category-slug');
-    console.log(currentCategorySlug);
-    let displayedItems = [...rawItems]; // Start with all items for the category
+    const pageSection = document.querySelector('.category-page');
+
+    let currentCategorySlug;
+    if (pageSection) {
+        currentCategorySlug = pageSection.dataset.categorySlug;
+    } else {
+        // Fallback: If for some reason .category-page isn't found, try to extract from URL path
+        // This is a last resort and should ideally not be hit if HTML is correct
+        const pathSegments = window.location.pathname.split('/').filter(Boolean); // Remove empty strings
+        // Expects URL like /collections/rings/
+        if (pathSegments.length >= 2 && pathSegments[0] === 'collections') {
+            currentCategorySlug = pathSegments[1];
+            console.warn("Fallback: currentCategorySlug derived from URL path. .category-page element not found.");
+        } else {
+            currentCategorySlug = 'unknown-category'; // Default if all else fails
+            console.error("Critical Error: Cannot determine currentCategorySlug from DOM or URL.");
+        }
+    }
+``
+
+    let displayedItems = [...rawItems];
 
     const productGrid = document.getElementById('productGrid');
-    const sortOrderSelect = document.getElementById('sortOrder');
+    const sortOrderSelectDesktop = document.getElementById('sortOrderDesktop'); // Desktop sort
+    const sortOrderSelectMobile = document.getElementById('sortOrderMobile');   // Mobile sort
     const filterCheckboxes = document.querySelectorAll('.filters input[type="checkbox"]');
     const clearFiltersBtn = document.getElementById('clearFilters');
 
+    // Mobile filter sidebar elements
+    const mobileFilterBtn = document.getElementById('mobileFilterBtn');
+    const filtersSidebar = document.getElementById('filtersSidebar');
+    const closeFilterSidebar = document.getElementById('closeFilterSidebar');
+    const applyFiltersBtn = document.getElementById('applyFiltersBtn');
+
+    // Quick View Modal elements
     const quickViewModal = document.getElementById('quickViewModal');
-    const closeBtn = quickViewModal.querySelector('.close-btn');
+    const closeBtn = quickViewModal.querySelector('.close-btn'); // Renamed from closeQuickViewModal to avoid conflict
     const quickViewImage = document.getElementById('quickViewImage');
     const quickViewName = document.getElementById('quickViewName');
     const quickViewPrice = document.getElementById('quickViewPrice');
@@ -213,15 +265,19 @@ rawCategoryItems.sort((a, b) => {
                 }
               });
               return matchesPriceRange;
-            } else if (item.hasOwnProperty(type) && typeof item[type] === 'string') {
-                return activeFilters[type].has(item[type]);
+            } else { // For material, stoneType, style filters
+              if (!item.hasOwnProperty(type) || typeof item[type] !== 'string') {
+                return false;
+              }
+              return activeFilters[type].has(item[type]);
             }
-            return true;
           });
         }
       });
 
-      const sortValue = sortOrderSelect.value;
+      // Determine which sort dropdown is currently active/visible
+      const sortValue = window.innerWidth >= 768 ? sortOrderSelectDesktop.value : sortOrderSelectMobile.value;
+
       if (sortValue === 'price-asc') {
         filtered.sort((a, b) => (a.priceValue || 0) - (b.priceValue || 0));
       } else if (sortValue === 'price-desc') {
@@ -289,16 +345,38 @@ rawCategoryItems.sort((a, b) => {
       attachQuickViewListeners();
     }
 
-    sortOrderSelect.addEventListener('change', applyFiltersAndSort);
+    // --- Event Listeners for Filtering and Sorting ---
+    sortOrderSelectDesktop.addEventListener('change', applyFiltersAndSort); // Desktop sort
+    sortOrderSelectMobile.addEventListener('change', applyFiltersAndSort);   // Mobile sort
     filterCheckboxes.forEach(checkbox => {
       checkbox.addEventListener('change', applyFiltersAndSort);
     });
     clearFiltersBtn.addEventListener('click', () => {
       filterCheckboxes.forEach(checkbox => checkbox.checked = false);
+      // Reset both sort selects to 'newest'
+      sortOrderSelectDesktop.value = 'newest';
+      sortOrderSelectMobile.value = 'newest';
       applyFiltersAndSort();
-      sortOrderSelect.value = 'newest';
     });
 
+    // --- Mobile Filter Sidebar Logic ---
+    mobileFilterBtn.addEventListener('click', () => {
+      filtersSidebar.classList.add('active');
+      document.body.classList.add('modal-open'); // Prevent scrolling behind
+    });
+
+    closeFilterSidebar.addEventListener('click', () => {
+      filtersSidebar.classList.remove('active');
+      document.body.classList.remove('modal-open');
+    });
+
+    applyFiltersBtn.addEventListener('click', () => {
+      applyFiltersAndSort(); // Apply filters from mobile sidebar
+      filtersSidebar.classList.remove('active');
+      document.body.classList.remove('modal-open');
+    });
+
+    // --- Quick View Modal Logic ---
     function openQuickViewModal(productId) {
       const product = rawItems.find(item => item.id === productId);
       if (product) {
@@ -331,21 +409,21 @@ rawCategoryItems.sort((a, b) => {
         openQuickViewModal(event.target.dataset.productId);
     }
 
-    closeBtn.addEventListener('click', closeQuickViewModal);
+    closeBtn.addEventListener('click', closeQuickViewModal); // This close button is for Quick View Modal
     window.addEventListener('click', (event) => {
       if (event.target === quickViewModal) {
         closeQuickViewModal();
       }
     });
 
-    // Initial render when page loads, triggering filters/sort
+    // Initial render when page loads
     applyFiltersAndSort();
   });
 </script>
 
-
 <style>
-  /* Ensure these styles are consistent with your global.css or are added here */
+  /* Base section styling - should ideally be in global.css */
+  /* If these are already in global.css, you can remove them from here to avoid duplication */
   .page-section {
     padding: 2rem 1rem;
     background-color: #fff;
@@ -355,33 +433,182 @@ rawCategoryItems.sort((a, b) => {
     margin-bottom: 2rem;
   }
   .page-section h1 {
-    color: #B0A08C; /* Theme color for headings */
+    color: #B0A08C;
     margin-bottom: 1.5rem;
   }
+  .small-btn {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+  }
+  .btn-outline {
+    background-color: transparent;
+    color: #B0A08C;
+    border: 2px solid #B0A08C;
+  }
+  .btn-outline:hover {
+    background-color: #B0A08C;
+    color: white;
+  }
+
+  /* --- NEW Layout for Filters and Products --- */
+  .mobile-filter-sort-toggles {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    padding: 0.5rem;
+    background-color: #fcf8f3;
+    border-radius: 8px;
+    box-shadow: 0 1px 5px rgba(0,0,0,0.05);
+  }
+  .mobile-toggle-btn {
+    flex: 1; /* Take equal space */
+    margin: 0 0.5rem;
+  }
+  .mobile-sort-inline {
+    flex: 1;
+    margin: 0 0.5rem;
+  }
+  .mobile-sort-inline select {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1rem;
+    font-family: 'Georgia', serif;
+    background-color: white;
+    cursor: pointer;
+  }
+  .desktop-sort-inline {
+    display: none; /* Hidden by default, shown on desktop */
+    text-align: right;
+    margin-bottom: 1.5rem; /* Spacing above product grid */
+  }
+  .desktop-sort-inline select {
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1rem;
+    font-family: 'Georgia', serif;
+    background-color: white;
+    cursor: pointer;
+    min-width: 150px;
+  }
+
+  .collection-layout {
+    display: grid;
+    grid-template-columns: 1fr; /* Single column by default for mobile */
+    gap: 2rem;
+  }
+
+  /* Filters Sidebar (Mobile Drawer) */
+  .filters-sidebar {
+    background-color: #fcf8f3;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+    position: fixed; /* For mobile drawer */
+    top: 0;
+    left: 0;
+    width: 80%; /* Takes 80% of screen width */
+    max-width: 300px; /* Max width for consistency */
+    height: 100%;
+    overflow-y: auto; /* Scroll if filters are long */
+    z-index: 1001; /* Above everything else */
+    transform: translateX(-100%); /* Hidden by default */
+    transition: transform 0.3s ease-out;
+    display: flex; /* Flex container for content */
+    flex-direction: column;
+  }
+  .filters-sidebar.active {
+    transform: translateX(0); /* Slide in */
+  }
+  .sidebar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 0.5rem;
+  }
+  .sidebar-header h3 {
+    font-size: 1.3rem;
+    color: #555;
+    margin: 0;
+  }
+  .filters-sidebar .close-btn {
+    position: static; /* Override modal close button position */
+    font-size: 28px;
+    line-height: 1;
+    padding: 0;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #aaa;
+  }
+  .filters-sidebar .close-btn:hover {
+    color: black;
+  }
+
+  .filter-group {
+    margin-bottom: 1.5rem;
+  }
+  .filter-group h4 {
+    font-size: 1rem;
+    color: #777;
+    margin-bottom: 0.8rem;
+    font-weight: bold;
+  }
+  .filter-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-size: 0.95rem;
+    cursor: pointer;
+  }
+  .filter-group input[type="checkbox"] {
+    margin-right: 0.5rem;
+  }
+  .w-full { /* Utility for full width button */
+    width: 100%;
+  }
+  .mobile-only {
+    display: block; /* Shown on mobile, hidden on desktop */
+  }
+
+  .main-collection-content {
+    flex: 1; /* Main content takes remaining space */
+  }
+
+
+  /* Product Grid and Card styles (mostly unchanged from previous steps) */
   .product-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 2rem;
   }
-  .product-card {
-    background-color: white;
+  .product-card-wrapper {
+    position: relative;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
     border-radius: 8px;
     overflow: hidden;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  .product-card-wrapper:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0,0,0,0.12);
+  }
+  .product-card {
+    background-color: white;
     text-align: center;
     text-decoration: none;
     color: #333;
     display: flex;
     flex-direction: column;
-  }
-  .product-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 16px rgba(0,0,0,0.12);
+    height: 100%;
   }
   .product-card img {
     width: 100%;
-    height: 250px; /* Consistent height for product images */
+    height: 250px;
     object-fit: cover;
     margin-bottom: 1rem;
   }
@@ -390,7 +617,7 @@ rawCategoryItems.sort((a, b) => {
     flex-grow: 1;
     display: flex;
     flex-direction: column;
-    justify-content: space-between; /* Pushes price to bottom */
+    justify-content: space-between;
   }
   .product-card h3 {
     font-size: 1.4rem;
@@ -401,15 +628,103 @@ rawCategoryItems.sort((a, b) => {
     font-size: 1.2rem;
     font-weight: bold;
     color: #B0A08C;
-    margin-top: 1rem; /* Spacing from title */
+    margin-top: 1rem;
   }
-  .btn-outline {
-    background-color: transparent;
-    color: #B0A08C;
-    border: 2px solid #B0A08C;
-  }
-  .btn-outline:hover {
-    background-color: #B0A08C;
+
+  /* Quick View Button on Card Hover */
+  .quick-view-btn {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: rgba(176, 160, 140, 0.9);
     color: white;
+    border: none;
+    padding: 0.8rem 1rem;
+    font-size: 1rem;
+    cursor: pointer;
+    opacity: 0;
+    transform: translateY(100%);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+  }
+  .product-card-wrapper:hover .quick-view-btn {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* --- Quick View Modal Styles (unchanged from previous steps) --- */
+  .modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.6);
+    justify-content: center;
+    align-items: center;
+  }
+  .modal-content.quick-view-content { /* ... styles ... */ }
+  .modal-body { /* ... styles ... */ }
+  .modal-image { /* ... styles ... */ }
+  .modal-image img { /* ... styles ... */ }
+  .modal-details { /* ... styles ... */ }
+  .modal-details h3 { /* ... styles ... */ }
+  .modal-details .modal-price { /* ... styles ... */ }
+  .modal-details p { /* ... styles ... */ }
+  .modal-details .btn { /* ... styles ... */ }
+  .close-btn { /* for quick view modal (position is static) */
+    color: #aaa;
+    position: absolute; /* Default for modals */
+    top: 10px;
+    right: 20px;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  .close-btn:hover,
+  .close-btn:focus {
+    color: black;
+    text-decoration: none;
+  }
+  /* Body class to prevent scrolling behind modal */
+  body.modal-open {
+    overflow: hidden;
+  }
+
+  /* --- Responsive Design for Filters/Sort --- */
+  @media (min-width: 768px) { /* Desktop styles */
+    .mobile-filter-sort-toggles {
+      display: none; /* Hide mobile toggles on desktop */
+    }
+    .desktop-sort-inline {
+      display: block; /* Show desktop sort */
+    }
+    .collection-layout {
+      grid-template-columns: 250px 1fr; /* Sidebar (250px) + Main Content (rest) */
+    }
+    .filters-sidebar {
+      position: static; /* No longer fixed/modal */
+      transform: translateX(0); /* Always visible */
+      height: auto; /* Content-driven height */
+      max-width: unset; /* Remove max-width constraint */
+      box-shadow: none; /* Remove shadow */
+      border-right: 1px solid #eee; /* Visual separator */
+      padding-right: 2rem;
+      border-radius: 0; /* No rounded corners on left side */
+      background-color: transparent; /* Match page background */
+    }
+    .filters-sidebar .sidebar-header {
+      display: block; /* Remove flex, just show header */
+      text-align: left;
+    }
+    .filters-sidebar .close-btn {
+      display: none; /* Hide close button on desktop */
+    }
+    .filters-sidebar .mobile-only {
+      display: none; /* Hide mobile-only apply button */
+    }
   }
 </style>

@@ -123,6 +123,7 @@ export const jewelryItems = [
     mainImage: '/images/products/cocktail-ring-1.png',
     additionalImages: [
       '/images/products/cocktail-ring-2.png',
+      '/images/products/cocktail-ring-3.png',
     ],
     description: 'An exquisite cocktail ring featuring a captivating floral design adorned with brilliant diamonds, perfect for making a statement.',
     details: {
