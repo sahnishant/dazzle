@@ -2,15 +2,17 @@
 // src/pages/index.astro
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Hero from '../components/Hero.astro';
-import TrustBar from '../components/TrustBar.astro'; // NEW IMPORT
+import TrustBar from '../components/TrustBar.astro';
 import FeaturedCollections from '../components/FeaturedCollections.astro';
 import WhyChooseUs from '../components/WhyChooseUs.astro';
+import ClientStories from '../components/ClientStories.astro';
 ---
 <BaseLayout title="Home" description="Exquisite diamond jewelry for every occasion. Discover rings, necklaces, earrings, and more.">
   <Hero />
-  <TrustBar /> {/* NEW COMPONENT */}
+  <TrustBar />
   <FeaturedCollections />
   <WhyChooseUs />
+  <ClientStories />
 
   <section class="call-to-action text-center container mt-4 mb-4">
     <h2>Ready to Find Your Perfect Piece?</h2>
