@@ -3,6 +3,7 @@
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import CustomInquiryForm from '../../../components/CustomInquiryForm.astro';
 import ProductContactActions from '../../../components/ProductContactActions.astro';
+import ProductStructuredData from '../../../components/ProductStructuredData.astro';
 import TrustSnippet from '../../../components/TrustSnippet.astro';
 import { jewelryItems } from '../../../data/jewelry.js'; // Import your jewelry data
 
@@ -28,6 +29,7 @@ const breadcrumbs = [
 ---
 
 <BaseLayout title={item.name} description={item.description}>
+  <ProductStructuredData product={item} />
   <section class="container product-detail-page">
     {/* Breadcrumbs Component */}
     <nav class="breadcrumbs">
