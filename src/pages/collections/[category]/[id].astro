@@ -1,6 +1,7 @@
 ---
 // src/pages/collections/[category]/[id].astro
 import BaseLayout from '../../../layouts/BaseLayout.astro';
+import CustomInquiryForm from '../../../components/CustomInquiryForm.astro';
 import TrustSnippet from '../../../components/TrustSnippet.astro';
 import { jewelryItems } from '../../../data/jewelry.js'; // Import your jewelry data
 
@@ -12,6 +13,7 @@ export async function getStaticPaths() {
 }
 
 const { item } = Astro.props;
+const isCustomProduct = item.category === 'custom';
 // Combine mainImage and additionalImages for the gallery
 const allImages = [item.mainImage, ...(item.additionalImages || [])]; // Ensure additionalImages exists and is an array
 
@@ -101,7 +103,11 @@ const breadcrumbs = [
           </>
         )}
 
-        <a href={`/contact/?item=${item.id}`} class="btn add-to-cart-btn">Inquire About This Piece</a>
+        {isCustomProduct ? (
+          <CustomInquiryForm productTitle={item.name} productId={item.id} />
+        ) : (
+          <a href={`/contact/?item=${item.id}`} class="btn add-to-cart-btn">Inquire About This Piece</a>
+        )}
       </div>
     </div>
   </section>

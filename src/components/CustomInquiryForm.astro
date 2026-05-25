@@ -1,0 +1,121 @@
+---
+interface Props {
+  productTitle: string;
+  productId: string;
+}
+
+const { productTitle, productId } = Astro.props;
+---
+
+<section class="custom-inquiry" aria-labelledby="custom-inquiry-title">
+  <p class="custom-inquiry-kicker">Custom design</p>
+  <h2 id="custom-inquiry-title">Start a custom ring inquiry</h2>
+  <p class="custom-inquiry-copy">
+    Share the design direction and contact details for this piece. The selected design is included with your request.
+  </p>
+
+  <form class="custom-inquiry-form" method="POST" action="/thank-you/">
+    <input type="hidden" name="productTitle" value={productTitle} />
+    <input type="hidden" name="productId" value={productId} />
+
+    <label>
+      <span>Name</span>
+      <input name="name" type="text" autocomplete="name" required />
+    </label>
+
+    <label>
+      <span>Phone</span>
+      <input name="phone" type="tel" autocomplete="tel" required />
+    </label>
+
+    <label class="wide-field">
+      <span>What are you looking for?</span>
+      <textarea name="message" rows="5" required></textarea>
+    </label>
+
+    <button class="btn wide-field" type="submit">Request Consultation</button>
+  </form>
+</section>
+
+<style>
+  .custom-inquiry {
+    margin-top: 2rem;
+    padding: 1.5rem;
+    border: 1px solid rgba(176, 160, 140, 0.35);
+    border-radius: 12px;
+    background: #fffaf4;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+  }
+
+  .custom-inquiry-kicker {
+    margin: 0 0 0.35rem;
+    color: #A0907C;
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .custom-inquiry h2 {
+    margin: 0 0 0.75rem;
+    color: #555;
+    font-size: 1.55rem;
+  }
+
+  .custom-inquiry-copy {
+    margin: 0 0 1.25rem;
+    color: #666;
+    line-height: 1.6;
+  }
+
+  .custom-inquiry-form {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .custom-inquiry-form label {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    color: #555;
+    font-weight: 700;
+  }
+
+  .custom-inquiry-form input,
+  .custom-inquiry-form textarea {
+    width: 100%;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 0.8rem 0.9rem;
+    font: inherit;
+    color: #333;
+    background: #fff;
+  }
+
+  .custom-inquiry-form input:focus,
+  .custom-inquiry-form textarea:focus {
+    outline: 2px solid rgba(176, 160, 140, 0.35);
+    border-color: #B0A08C;
+  }
+
+  .custom-inquiry-form textarea {
+    resize: vertical;
+  }
+
+  .custom-inquiry-form .btn {
+    width: 100%;
+    padding: 1rem 1.25rem;
+    font-size: 1.05rem;
+  }
+
+  @media (min-width: 720px) {
+    .custom-inquiry-form {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .wide-field {
+      grid-column: 1 / -1;
+    }
+  }
+</style>
