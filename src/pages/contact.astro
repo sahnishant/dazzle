@@ -1,6 +1,7 @@
 ---
 // src/pages/contact.astro
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { businessContact } from '../data/businessContact.js';
 
 // Get item ID from URL if redirected from a product page
 const urlParams = Astro.url.searchParams;
@@ -15,15 +16,18 @@ const inquiredItemId = urlParams.get('item') || '';
   <section class="contact-details container mt-4 mb-4">
     <div class="contact-info">
       <h2>Our Contact Information</h2>
-      <p><strong>Phone:</strong> <a href="tel:+1234567890">+1 (234) 567-890</a></p>
-      <p><strong>Email:</strong> <a href="mailto:info@yourdomain.com">info@yourdomain.com</a></p>
-      <p><strong>Address:</strong> 123 Diamond St, Jewel City, JS 12345</p>
-      <p><strong>Business Hours:</strong> Mon-Fri: 10 AM - 6 PM, Sat: 11 AM - 4 PM, Sun: Closed</p>
-      <div class="social-links mt-4">
-        <a href="https://instagram.com/yourbusiness" target="_blank" rel="noopener noreferrer">Instagram</a>
-        <a href="https://facebook.com/yourbusiness" target="_blank" rel="noopener noreferrer">Facebook</a>
-        <!-- Add more social links -->
-      </div>
+      <p><strong>Phone:</strong> <a href={`tel:${businessContact.telHref}`}>{businessContact.displayPhone}</a></p>
+      <p><strong>Email:</strong> <a href={`mailto:${businessContact.email}`}>{businessContact.email}</a></p>
+      <p><strong>Address:</strong> {businessContact.address}</p>
+      <p><strong>Business Hours:</strong> {businessContact.businessHours}</p>
+      {businessContact.socials?.length > 0 && (
+        <div class="social-links mt-4">
+          {businessContact.socials.map((social) => (
+            <a href={social.href} target="_blank" rel="noopener noreferrer">{social.label}</a>
+          ))}
+        </div>
+      )}
+      <p class="contact-note">Update these details in <code>src/data/businessContact.js</code> before production launch.</p>
     </div>
 
     <div class="contact-form-section">
@@ -84,6 +88,20 @@ const inquiredItemId = urlParams.get('item') || '';
   }
   .contact-info a {
     font-weight: bold;
+  }
+  .contact-note {
+    margin-top: 1.5rem;
+    padding: 0.85rem;
+    border: 1px dashed rgba(176, 160, 140, 0.45);
+    border-radius: 8px;
+    color: #777;
+    font-size: 0.9rem !important;
+    line-height: 1.5;
+    background: #fffaf4;
+  }
+  .contact-note code {
+    color: #555;
+    font-size: 0.86em;
   }
   .social-links a {
     display: inline-block;
