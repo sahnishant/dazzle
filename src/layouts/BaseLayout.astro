@@ -7,9 +7,22 @@ import '../styles/global.css';
 interface Props {
   title: string;
   description: string;
+  image?: string;
+  type?: string;
 }
 
-const { title, description } = Astro.props;
+const {
+  title,
+  description,
+  image = '/images/logo-diamond.png',
+  type = 'website',
+} = Astro.props;
+
+const siteName = 'Dazzle';
+const pageTitle = `${title} | ${siteName}`;
+const baseUrl = Astro.site || Astro.url;
+const canonicalUrl = new URL(Astro.url.pathname, baseUrl).toString();
+const imageUrl = new URL(image, baseUrl).toString();
 ---
 <!DOCTYPE html>
 <html lang="en">
@@ -17,14 +30,27 @@ const { title, description } = Astro.props;
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content={description} />
-  <title>{title} | Your Diamond Business Name</title>
-  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="canonical" href={canonicalUrl} />
 
+  <meta property="og:site_name" content={siteName} />
+  <meta property="og:title" content={pageTitle} />
+  <meta property="og:description" content={description} />
+  <meta property="og:type" content={type} />
+  <meta property="og:url" content={canonicalUrl} />
+  <meta property="og:image" content={imageUrl} />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content={pageTitle} />
+  <meta name="twitter:description" content={description} />
+  <meta name="twitter:image" content={imageUrl} />
+
+  <title>{pageTitle}</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 </head>
 <body>
   <Header />
   <main>
-    <slot /> {/* This is where page content will be injected */}
+    <slot />
   </main>
   <Footer />
 </body>
