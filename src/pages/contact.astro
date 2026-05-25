@@ -2,10 +2,23 @@
 // src/pages/contact.astro
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { businessContact } from '../data/businessContact.js';
+import { jewelryItems } from '../data/jewelry.js';
 
 // Get item ID from URL if redirected from a product page
 const urlParams = Astro.url.searchParams;
 const inquiredItemId = urlParams.get('item') || '';
+const inquiredItem = jewelryItems.find((item) => item.id === inquiredItemId);
+const productPath = inquiredItem ? `/collections/${inquiredItem.category}/${inquiredItem.id}/` : '';
+const inquirySubject = inquiredItem
+  ? `Inquiry about ${inquiredItem.name}`
+  : inquiredItemId
+    ? `Inquiry about ${inquiredItemId}`
+    : '';
+const inquiryMessage = inquiredItem
+  ? `I am interested in ${inquiredItem.name}.\n\nPrice shown: ${inquiredItem.price}\nProduct link: ${productPath}\n\nPlease share details, availability, and consultation options.`
+  : inquiredItemId
+    ? `I am interested in the "${inquiredItemId}" piece.`
+    : '';
 ---
 <BaseLayout title="Contact Us" description="Get in touch with our diamond experts for inquiries, consultations, or custom designs.">
   <section class="contact-hero container">
@@ -32,8 +45,23 @@ const inquiredItemId = urlParams.get('item') || '';
 
     <div class="contact-form-section">
       <h2>Send Us a Message</h2>
+      {inquiredItem && (
+        <aside class="inquiry-context" aria-label="Selected product inquiry">
+          <p class="inquiry-kicker">Selected piece</p>
+          <h3>{inquiredItem.name}</h3>
+          <p>{inquiredItem.price} · {inquiredItem.material}</p>
+          <a href={productPath}>View product details</a>
+        </aside>
+      )}
       <form name="contact" method="POST" data-netlify="true" data-netlify-honeypot="bot-field" action="/thank-you/">
         <input type="hidden" name="form-name" value="contact" />
+        {inquiredItem && (
+          <>
+            <input type="hidden" name="productId" value={inquiredItem.id} />
+            <input type="hidden" name="productName" value={inquiredItem.name} />
+            <input type="hidden" name="productPath" value={productPath} />
+          </>
+        )}
         <p class="hidden">
           <label>Don’t fill this out if you’re human: <input name="bot-field" /></label>
         </p>
@@ -50,12 +78,12 @@ const inquiredItemId = urlParams.get('item') || '';
         
         <div class="form-group">
           <label for="subject">Subject:</label>
-          <input type="text" id="subject" name="subject" value={inquiredItemId ? `Inquiry about ${inquiredItemId}` : ''} required />
+          <input type="text" id="subject" name="subject" value={inquirySubject} required />
         </div>
         
         <div class="form-group">
           <label for="message">Message:</label>
-          <textarea id="message" name="message" rows="5" required>{inquiredItemId ? `I am interested in the "${inquiredItemId}" piece.` : ''}</textarea>
+          <textarea id="message" name="message" rows="5" required>{inquiryMessage}</textarea>
         </div>
         
         <button type="submit" class="btn">Send Message</button>
@@ -112,6 +140,35 @@ const inquiredItemId = urlParams.get('item') || '';
   }
   .social-links a:hover {
     color: #B0A08C;
+  }
+
+  .inquiry-context {
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    border: 1px solid rgba(176, 160, 140, 0.35);
+    border-radius: 10px;
+    background: #fffaf4;
+  }
+  .inquiry-kicker {
+    margin: 0 0 0.35rem;
+    color: #A0907C;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+  .inquiry-context h3 {
+    margin: 0 0 0.35rem;
+    color: #555;
+    font-size: 1.2rem;
+  }
+  .inquiry-context p {
+    margin: 0 0 0.55rem;
+    color: #666;
+  }
+  .inquiry-context a {
+    color: #A0907C;
+    font-weight: 700;
   }
 
   .form-group {
