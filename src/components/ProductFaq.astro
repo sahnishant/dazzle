@@ -40,7 +40,22 @@ const faqs = [
     answer: 'Timelines depend on stone sourcing, design complexity, and finishing requirements. We confirm the expected timeline during consultation before you proceed.',
   },
 ];
+
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map((faq) => ({
+    '@type': 'Question',
+    name: faq.question,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: faq.answer,
+    },
+  })),
+};
 ---
+
+<script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
 
 <section class="product-faq" aria-labelledby="product-faq-title">
   <p class="faq-kicker">Before you inquire</p>
