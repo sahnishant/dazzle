@@ -1,0 +1,76 @@
+---
+// src/components/ProductContactActions.astro
+import { businessContact } from '../data/businessContact.js';
+
+interface Props {
+  product: {
+    id: string;
+    name: string;
+    category: string;
+    price?: string;
+  };
+  showContactLink?: boolean;
+}
+
+const { product, showContactLink = true } = Astro.props;
+const productPath = `/collections/${product.category}/${product.id}/`;
+const message = [
+  `Hi, I am interested in ${product.name}.`,
+  product.price ? `Price shown: ${product.price}.` : '',
+  `Product link: ${productPath}`,
+  'Can you share details and availability?',
+].filter(Boolean).join('\n');
+const directMessageUrl = `https://wa.me/${businessContact.directMessageNumber}?text=${encodeURIComponent(message)}`;
+---
+
+<div class="product-contact-actions" aria-label="Product contact options">
+  <a href={directMessageUrl} class="btn direct-message-btn" target="_blank" rel="noopener noreferrer">
+    WhatsApp About This Piece
+  </a>
+  {showContactLink && (
+    <a href={`/contact/?item=${product.id}`} class="btn secondary-contact-btn">
+      Send Detailed Inquiry
+    </a>
+  )}
+</div>
+
+<style>
+  .product-contact-actions {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.8rem;
+    margin-top: 2rem;
+  }
+
+  .product-contact-actions .btn {
+    width: 100%;
+    text-align: center;
+    font-size: 1.08rem;
+    padding: 1rem 1.25rem;
+  }
+
+  .direct-message-btn {
+    background: #1f8f56;
+  }
+
+  .direct-message-btn:hover {
+    background: #177547;
+  }
+
+  .secondary-contact-btn {
+    background: transparent;
+    border: 2px solid #B0A08C;
+    color: #B0A08C;
+  }
+
+  .secondary-contact-btn:hover {
+    background: #B0A08C;
+    color: #fff;
+  }
+
+  @media (min-width: 640px) {
+    .product-contact-actions {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+</style>
