@@ -1,0 +1,109 @@
+---
+// src/components/ConsultationConfidence.astro
+const confidencePoints = [
+  {
+    title: 'Stone guidance before commitment',
+    copy: 'We explain cut, clarity, certification, budget fit, and design trade-offs before you decide on a piece.',
+  },
+  {
+    title: 'Design conversation, not pressure',
+    copy: 'For bespoke or high-value jewelry, the path starts with a consultation so the final piece matches the occasion and wearer.',
+  },
+  {
+    title: 'Clear next steps after inquiry',
+    copy: 'Every inquiry can move into availability checks, design discussion, timeline confirmation, and care guidance.',
+  },
+];
+---
+
+<section class="consultation-confidence container" aria-labelledby="consultation-confidence-title">
+  <div class="confidence-heading">
+    <p class="confidence-kicker">Consultation-first buying</p>
+    <h2 id="consultation-confidence-title">Built for considered jewelry decisions</h2>
+    <p>Fine jewelry is not a commodity purchase. Dazzle is structured around guided selection, transparent product details, and direct conversation before commitment.</p>
+  </div>
+
+  <div class="confidence-grid">
+    {confidencePoints.map((point, index) => (
+      <article class="confidence-card">
+        <span class="confidence-index">0{index + 1}</span>
+        <h3>{point.title}</h3>
+        <p>{point.copy}</p>
+      </article>
+    ))}
+  </div>
+</section>
+
+<style>
+  .consultation-confidence {
+    padding: 4rem 1rem;
+  }
+
+  .confidence-heading {
+    max-width: 780px;
+    margin: 0 auto 2rem;
+    text-align: center;
+  }
+
+  .confidence-kicker {
+    margin: 0 0 0.35rem;
+    color: #A0907C;
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .confidence-heading h2 {
+    margin: 0 0 0.75rem;
+    color: #555;
+    font-size: clamp(2rem, 4vw, 3rem);
+  }
+
+  .confidence-heading p:last-child {
+    margin: 0;
+    color: #666;
+    line-height: 1.7;
+  }
+
+  .confidence-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.25rem;
+  }
+
+  .confidence-card {
+    min-height: 250px;
+    padding: 1.5rem;
+    border: 1px solid rgba(176, 160, 140, 0.3);
+    border-radius: 14px;
+    background: linear-gradient(135deg, #fffaf4 0%, #ffffff 100%);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+  }
+
+  .confidence-index {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.2rem;
+    height: 2.2rem;
+    margin-bottom: 1rem;
+    border-radius: 999px;
+    background: #2b2624;
+    color: #f4dfbd;
+    font-size: 0.8rem;
+    font-weight: 700;
+  }
+
+  .confidence-card h3 {
+    margin: 0 0 0.75rem;
+    color: #555;
+    font-size: 1.25rem;
+  }
+
+  .confidence-card p {
+    margin: 0;
+    color: #666;
+    line-height: 1.7;
+  }
+</style>
