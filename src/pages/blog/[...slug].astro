@@ -44,7 +44,12 @@ const getShopTheLookProductIds = (articleData, slug) => {
 
 const shopTheLookProductIds = getShopTheLookProductIds(article.data, article.slug);
 ---
-<BaseLayout title={article.data.title} description={article.data.description}>
+<BaseLayout
+  title={article.data.title}
+  description={article.data.description}
+  image={article.data.image}
+  type="article"
+>
   <section class="container page-section article-page">
     <h1 class="text-center mb-2">{article.data.title}</h1>
     <p class="article-meta text-center">
