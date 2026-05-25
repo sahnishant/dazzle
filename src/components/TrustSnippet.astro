@@ -1,0 +1,90 @@
+---
+// src/components/TrustSnippet.astro
+interface Props {
+  certification?: string;
+}
+
+const { certification } = Astro.props;
+const certificationCopy = certification
+  ? `This piece lists ${certification} grading details where provided.`
+  : 'Grading and certification details are surfaced clearly where provided.';
+---
+
+<aside class="trust-snippet" aria-label="Diamond trust and grading guidance">
+  <div class="trust-icon" aria-hidden="true">◆</div>
+  <div class="trust-content">
+    <p>
+      <strong>Buy with grading confidence.</strong>
+      {certificationCopy} Learn how cut, clarity, certification, and brilliance affect long-term value before you inquire.
+    </p>
+    <div class="trust-links" aria-label="Diamond education links">
+      <a href="/diamond-grading/">Diamond grading guide</a>
+      <span aria-hidden="true">•</span>
+      <a href="/diamond-buyer-guide/">Buyer guide</a>
+    </div>
+  </div>
+</aside>
+
+<style>
+  .trust-snippet {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0.85rem;
+    align-items: start;
+    padding: 1rem 1.1rem;
+    margin: -0.4rem 0 1.5rem;
+    border: 1px solid rgba(176, 160, 140, 0.35);
+    border-radius: 10px;
+    background: linear-gradient(135deg, #fffaf4 0%, #ffffff 100%);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.04);
+  }
+
+  .trust-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 999px;
+    color: #B0A08C;
+    border: 1px solid rgba(176, 160, 140, 0.45);
+    background: #fff;
+    font-size: 0.9rem;
+    line-height: 1;
+  }
+
+  .trust-content p {
+    margin: 0;
+    color: #555;
+    font-size: 0.98rem;
+    line-height: 1.55;
+  }
+
+  .trust-content strong {
+    color: #444;
+  }
+
+  .trust-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+    align-items: center;
+    margin-top: 0.55rem;
+    font-size: 0.92rem;
+  }
+
+  .trust-links a {
+    color: #A0907C;
+    font-weight: 700;
+  }
+
+  .trust-links span {
+    color: #c9bba9;
+  }
+
+  @media (max-width: 520px) {
+    .trust-snippet {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
