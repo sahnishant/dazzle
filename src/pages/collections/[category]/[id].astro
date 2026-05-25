@@ -1,6 +1,7 @@
 ---
 // src/pages/collections/[category]/[id].astro
 import BaseLayout from '../../../layouts/BaseLayout.astro';
+import BreadcrumbStructuredData from '../../../components/BreadcrumbStructuredData.astro';
 import CustomInquiryForm from '../../../components/CustomInquiryForm.astro';
 import ProductContactActions from '../../../components/ProductContactActions.astro';
 import ProductFaq from '../../../components/ProductFaq.astro';
@@ -25,19 +26,20 @@ const breadcrumbs = [
   { name: 'Home', path: '/' },
   { name: 'Collections', path: '/collections/' },
   { name: item.category.replace(/-/g, ' ').replace(/\b\w/g, char => char.toUpperCase()), path: `/collections/${item.category}/` },
-  { name: item.name, path: null } // Current page, no link
+  { name: item.name, path: `/collections/${item.category}/${item.id}/` } // Current page
 ];
 ---
 
 <BaseLayout title={item.name} description={item.description} image={item.mainImage} type="product">
   <ProductStructuredData product={item} />
+  <BreadcrumbStructuredData items={breadcrumbs} />
   <section class="container product-detail-page">
     {/* Breadcrumbs Component */}
     <nav class="breadcrumbs">
       <ol>
         {breadcrumbs.map((crumb, index) => (
           <li>
-            {crumb.path ? (
+            {index < breadcrumbs.length - 1 ? (
               <a href={crumb.path}>{crumb.name}</a>
             ) : (
               <span>{crumb.name}</span>

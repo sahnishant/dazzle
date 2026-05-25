@@ -2,6 +2,7 @@
 // src/pages/blog/[...slug].astro
 import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro'; // Adjust path if needed based on your structure
+import BreadcrumbStructuredData from '../../components/BreadcrumbStructuredData.astro';
 import ShopTheLook from '../../components/ShopTheLook.astro';
 
 export async function getStaticPaths() {
@@ -43,6 +44,11 @@ const getShopTheLookProductIds = (articleData, slug) => {
 };
 
 const shopTheLookProductIds = getShopTheLookProductIds(article.data, article.slug);
+const breadcrumbs = [
+  { name: 'Home', path: '/' },
+  { name: 'Blog', path: '/blog/' },
+  { name: article.data.title, path: `/blog/${article.slug}/` },
+];
 ---
 <BaseLayout
   title={article.data.title}
@@ -50,6 +56,7 @@ const shopTheLookProductIds = getShopTheLookProductIds(article.data, article.slu
   image={article.data.image}
   type="article"
 >
+  <BreadcrumbStructuredData items={breadcrumbs} />
   <section class="container page-section article-page">
     <h1 class="text-center mb-2">{article.data.title}</h1>
     <p class="article-meta text-center">
