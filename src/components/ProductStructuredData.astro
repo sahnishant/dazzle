@@ -1,0 +1,93 @@
+---
+// src/components/ProductStructuredData.astro
+interface ProductDetails {
+  metal?: string;
+  mainStone?: string;
+  cut?: string;
+  color?: string;
+  clarity?: string;
+  certification?: string;
+}
+
+interface Product {
+  id: string;
+  name: string;
+  category: string;
+  description: string;
+  mainImage: string;
+  additionalImages?: string[];
+  price: string;
+  priceValue?: number;
+  material?: string;
+  stoneType?: string;
+  details?: ProductDetails;
+}
+
+interface Props {
+  product: Product;
+}
+
+const { product } = Astro.props;
+const productUrl = new URL(`/collections/${product.category}/${product.id}/`, Astro.site || Astro.url).toString();
+const productImages = [product.mainImage, ...(product.additionalImages || [])]
+  .filter(Boolean)
+  .map((image) => new URL(image, Astro.site || Astro.url).toString());
+const hasNumericPrice = Number.isFinite(product.priceValue) && product.priceValue > 0;
+
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'Product',
+  name: product.name,
+  description: product.description,
+  image: productImages,
+  url: productUrl,
+  sku: product.id,
+  category: product.category,
+  brand: {
+    '@type': 'Brand',
+    name: 'Dazzle',
+  },
+  material: product.material || product.details?.metal,
+  additionalProperty: [
+    product.stoneType && {
+      '@type': 'PropertyValue',
+      name: 'Stone Type',
+      value: product.stoneType,
+    },
+    product.details?.mainStone && {
+      '@type': 'PropertyValue',
+      name: 'Main Stone',
+      value: product.details.mainStone,
+    },
+    product.details?.cut && {
+      '@type': 'PropertyValue',
+      name: 'Cut',
+      value: product.details.cut,
+    },
+    product.details?.color && {
+      '@type': 'PropertyValue',
+      name: 'Color',
+      value: product.details.color,
+    },
+    product.details?.clarity && {
+      '@type': 'PropertyValue',
+      name: 'Clarity',
+      value: product.details.clarity,
+    },
+    product.details?.certification && {
+      '@type': 'PropertyValue',
+      name: 'Certification',
+      value: product.details.certification,
+    },
+  ].filter(Boolean),
+  offers: {
+    '@type': 'Offer',
+    url: productUrl,
+    priceCurrency: 'INR',
+    ...(hasNumericPrice ? { price: product.priceValue } : {}),
+    availability: 'https://schema.org/InStock',
+  },
+};
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
