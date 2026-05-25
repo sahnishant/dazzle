@@ -1,6 +1,7 @@
 ---
 // src/pages/collections/[category]/[id].astro
 import BaseLayout from '../../../layouts/BaseLayout.astro';
+import TrustSnippet from '../../../components/TrustSnippet.astro';
 import { jewelryItems } from '../../../data/jewelry.js'; // Import your jewelry data
 
 export async function getStaticPaths() {
@@ -63,6 +64,7 @@ const breadcrumbs = [
       <div class="product-info">
         <h1 class="product-name">{item.name}</h1>
         <p class="product-price">{item.price}</p>
+        <TrustSnippet certification={item.details?.certification} />
 
         <h2 class="section-title">Description</h2>
         <p class="product-description">{item.description}</p>
