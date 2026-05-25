@@ -1,66 +1,181 @@
 ---
 // src/components/Hero.astro
+import { Image } from 'astro:assets';
+import { jewelryItems } from '../data/jewelry.js';
+
+const featuredProduct = [...jewelryItems].sort((a, b) => (b.popularityScore || 0) - (a.popularityScore || 0))[0];
+const featuredProductUrl = `/collections/${featuredProduct.category}/${featuredProduct.id}/`;
 ---
-<section class="hero-section">
+<section class="hero-section" aria-labelledby="homepage-hero-title">
   <div class="hero-content container">
-    <h1>Timeless Brilliance, Unforgettable Moments</h1>
-    <p>Discover our exquisite collection of handcrafted diamond jewelry.</p>
-    <a href="/collections/" class="btn">Explore Collections</a>
+    <div class="hero-copy">
+      <p class="hero-kicker">Featured boutique piece</p>
+      <h1 id="homepage-hero-title">{featuredProduct.name}</h1>
+      <p>{featuredProduct.description}</p>
+
+      <div class="hero-product-meta" aria-label="Featured product details">
+        <span>{featuredProduct.price}</span>
+        <span>{featuredProduct.material}</span>
+        <span>{featuredProduct.details?.certification}</span>
+      </div>
+
+      <div class="hero-actions">
+        <a href={featuredProductUrl} class="btn">View This Piece</a>
+        <a href="/collections/" class="btn btn-secondary">Explore Collections</a>
+      </div>
+    </div>
+
+    <a href={featuredProductUrl} class="hero-image-card" aria-label={`View ${featuredProduct.name}`}>
+      <Image
+        src={featuredProduct.mainImage}
+        alt={featuredProduct.name}
+        width={920}
+        height={760}
+        format="webp"
+        loading="eager"
+        decoding="async"
+        class="hero-product-image"
+      />
+    </a>
   </div>
 </section>
 
 <style>
   .hero-section {
-    background: url('/images/hero-diamond.png') no-repeat center center/cover;
-    min-height: 600px; /* Adjust height as needed */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    text-align: center;
-    position: relative; /* For overlay */
+    position: relative;
+    overflow: hidden;
+    background:
+      radial-gradient(circle at 20% 20%, rgba(176, 160, 140, 0.24), transparent 32%),
+      linear-gradient(135deg, #221f1f 0%, #3a3431 48%, #f7efe5 48%, #fffaf4 100%);
+    color: #fff;
   }
+
   .hero-section::before {
     content: '';
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0,0,0,0.3); /* Dark overlay for readability */
-    z-index: 1;
-  }
-  .hero-content {
-    position: relative;
-    z-index: 2;
-    padding: 2rem;
-    background: rgba(0,0,0,0.4); /* Slightly darker background for text */
-    border-radius: 8px;
-    max-width: 800px;
-  }
-  .hero-content h1 {
-    font-size: 3.5rem;
-    margin-bottom: 1rem;
-    color: white;
-  }
-  .hero-content p {
-    font-size: 1.5rem;
-    margin-bottom: 2rem;
-  }
-  .hero-content .btn {
-    font-size: 1.2rem;
-    padding: 1rem 2rem;
+    inset: 0;
+    background-image: linear-gradient(90deg, rgba(0, 0, 0, 0.26), rgba(0, 0, 0, 0));
+    pointer-events: none;
   }
 
-  @media (max-width: 768px) {
-    .hero-section {
-      min-height: 400px;
+  .hero-content {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2.5rem;
+    align-items: center;
+    min-height: 640px;
+    padding-top: 4rem;
+    padding-bottom: 4rem;
+  }
+
+  .hero-copy {
+    max-width: 700px;
+  }
+
+  .hero-kicker {
+    margin: 0 0 0.85rem;
+    color: #d7c4aa;
+    font-size: 0.86rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+
+  .hero-copy h1 {
+    margin: 0 0 1rem;
+    color: #fff;
+    font-size: clamp(2.7rem, 7vw, 5.4rem);
+    line-height: 0.96;
+  }
+
+  .hero-copy > p:not(.hero-kicker) {
+    max-width: 620px;
+    margin: 0 0 1.4rem;
+    color: rgba(255, 255, 255, 0.88);
+    font-size: clamp(1.05rem, 2vw, 1.3rem);
+    line-height: 1.7;
+  }
+
+  .hero-product-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.65rem;
+    margin-bottom: 1.8rem;
+  }
+
+  .hero-product-meta span {
+    border: 1px solid rgba(255, 255, 255, 0.24);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    font-size: 0.92rem;
+    padding: 0.45rem 0.8rem;
+    backdrop-filter: blur(8px);
+  }
+
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.9rem;
+  }
+
+  .hero-actions .btn {
+    padding: 1rem 1.35rem;
+  }
+
+  .btn-secondary {
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.34);
+    color: #fff;
+  }
+
+  .btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.22);
+  }
+
+  .hero-image-card {
+    display: block;
+    overflow: hidden;
+    border: 1px solid rgba(176, 160, 140, 0.45);
+    border-radius: 24px;
+    background: #fff;
+    box-shadow: 0 30px 70px rgba(0, 0, 0, 0.28);
+  }
+
+  .hero-product-image {
+    display: block;
+    width: 100%;
+    height: min(72vw, 560px);
+    object-fit: cover;
+    transition: transform 0.45s ease;
+  }
+
+  .hero-image-card:hover .hero-product-image {
+    transform: scale(1.035);
+  }
+
+  @media (min-width: 900px) {
+    .hero-content {
+      grid-template-columns: minmax(0, 1.05fr) minmax(360px, 0.8fr);
     }
-    .hero-content h1 {
-      font-size: 2.5rem;
+  }
+
+  @media (max-width: 640px) {
+    .hero-content {
+      min-height: auto;
+      padding-top: 3rem;
+      padding-bottom: 3rem;
     }
-    .hero-content p {
-      font-size: 1.2rem;
+
+    .hero-actions {
+      flex-direction: column;
+    }
+
+    .hero-actions .btn {
+      width: 100%;
+      text-align: center;
     }
   }
 </style>
