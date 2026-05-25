@@ -2,6 +2,7 @@
 // src/pages/collections/[category]/[id].astro
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import CustomInquiryForm from '../../../components/CustomInquiryForm.astro';
+import ProductContactActions from '../../../components/ProductContactActions.astro';
 import TrustSnippet from '../../../components/TrustSnippet.astro';
 import { jewelryItems } from '../../../data/jewelry.js'; // Import your jewelry data
 
@@ -103,11 +104,8 @@ const breadcrumbs = [
           </>
         )}
 
-        {isCustomProduct ? (
-          <CustomInquiryForm productTitle={item.name} productId={item.id} />
-        ) : (
-          <a href={`/contact/?item=${item.id}`} class="btn add-to-cart-btn">Inquire About This Piece</a>
-        )}
+        <ProductContactActions product={item} showContactLink={!isCustomProduct} />
+        {isCustomProduct && <CustomInquiryForm productTitle={item.name} productId={item.id} />}
       </div>
     </div>
   </section>
@@ -286,13 +284,6 @@ const breadcrumbs = [
   }
   .details-list strong {
     color: #555;
-  }
-  .add-to-cart-btn { /* This is your "Inquire" button */
-    margin-top: 2rem;
-    width: 100%; /* Make button full width */
-    text-align: center;
-    font-size: 1.2rem;
-    padding: 1rem 2rem;
   }
 
   /* --- Image Zoom Modal (reusing .modal from quick view but with specific overrides) --- */
