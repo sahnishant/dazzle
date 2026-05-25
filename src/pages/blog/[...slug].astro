@@ -2,6 +2,7 @@
 // src/pages/blog/[...slug].astro
 import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro'; // Adjust path if needed based on your structure
+import ShopTheLook from '../../components/ShopTheLook.astro';
 
 export async function getStaticPaths() {
   const articles = await getCollection('articles');
@@ -13,6 +14,35 @@ export async function getStaticPaths() {
 
 const { article } = Astro.props;
 const { Content } = await article.render();
+
+const getShopTheLookProductIds = (articleData, slug) => {
+  const searchableText = [
+    articleData.title,
+    articleData.description,
+    slug,
+    ...(articleData.tags || []),
+  ].join(' ').toLowerCase();
+
+  if (searchableText.includes('bridal') || searchableText.includes('engagement') || searchableText.includes('wedding')) {
+    return ['solitaire-round-ring', 'custom-engagement-ring', 'diamond-stud-earrings'];
+  }
+
+  if (searchableText.includes('mangalsutra') || searchableText.includes('pendant') || searchableText.includes('necklace')) {
+    return ['emerald-cut-pendant', 'simple-silver-necklace', 'diamond-stud-earrings'];
+  }
+
+  if (searchableText.includes('heirloom') || searchableText.includes('occasion') || searchableText.includes('statement')) {
+    return ['cocktail-ring-floral', 'bracelet-large-diamonds', 'emerald-cut-pendant'];
+  }
+
+  if (searchableText.includes('lab-grown') || searchableText.includes('grading') || searchableText.includes('4cs') || searchableText.includes('buyer') || searchableText.includes('diamond')) {
+    return ['solitaire-round-ring', 'emerald-cut-pendant', 'diamond-stud-earrings'];
+  }
+
+  return ['solitaire-round-ring', 'diamond-stud-earrings', 'emerald-cut-pendant'];
+};
+
+const shopTheLookProductIds = getShopTheLookProductIds(article.data, article.slug);
 ---
 <BaseLayout title={article.data.title} description={article.data.description}>
   <section class="container page-section article-page">
@@ -31,6 +61,7 @@ const { Content } = await article.render();
     <div class="article-content">
       <Content />
     </div>
+    <ShopTheLook productIds={shopTheLookProductIds} />
     <div class="article-back-link text-center mt-4">
       <a href="/blog/" class="btn btn-outline">← Back to Blog</a>
     </div>
