@@ -1,0 +1,41 @@
+---
+// src/components/BusinessStructuredData.astro
+import { businessContact } from '../data/businessContact.js';
+import { siteConfig } from '../data/siteConfig.js';
+
+const siteUrl = siteConfig.url.replace(/\/$/, '');
+const logoUrl = `${siteUrl}/images/logo-diamond.png`;
+
+const isUsableValue = (value) => {
+  if (!value || typeof value !== 'string') return false;
+  const normalized = value.toLowerCase();
+  return ![
+    'yourdomain.com',
+    '123 diamond st',
+    'jewel city',
+    'yourbusiness',
+  ].some((placeholder) => normalized.includes(placeholder));
+};
+
+const socials = (businessContact.socials || [])
+  .map((social) => social.href)
+  .filter(isUsableValue);
+
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'JewelryStore',
+  '@id': `${siteUrl}/#business`,
+  name: siteConfig.name,
+  url: siteUrl,
+  logo: logoUrl,
+  image: logoUrl,
+  description: 'Consultation-first diamond jewelry guidance for considered purchases.',
+  ...(isUsableValue(businessContact.displayPhone) ? { telephone: businessContact.displayPhone } : {}),
+  ...(isUsableValue(businessContact.email) ? { email: businessContact.email } : {}),
+  ...(isUsableValue(businessContact.address) ? { address: businessContact.address } : {}),
+  ...(isUsableValue(businessContact.businessHours) ? { openingHours: businessContact.businessHours } : {}),
+  ...(socials.length > 0 ? { sameAs: socials } : {}),
+};
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
