@@ -1,0 +1,120 @@
+---
+// src/components/FilterSidebar.astro
+interface Props {
+  categories: string[];
+  materials: string[];
+}
+
+const { categories, materials } = Astro.props;
+const formatLabel = (value: string) => value.replace(/-/g, ' ').replace(/\b\w/g, (char) => char.toUpperCase());
+---
+
+<aside class="filter-sidebar" aria-label="Collection filters">
+  <div class="filter-header">
+    <div>
+      <p class="filter-kicker">Refine</p>
+      <h2>Find your piece</h2>
+    </div>
+    <button type="button" id="clearCollectionFilters" class="clear-filter-btn">Clear</button>
+  </div>
+
+  <fieldset class="filter-group">
+    <legend>Category</legend>
+    {categories.map((category) => (
+      <label>
+        <input type="checkbox" name="category" value={category} data-collection-filter="category" />
+        <span>{formatLabel(category)}</span>
+      </label>
+    ))}
+  </fieldset>
+
+  <fieldset class="filter-group">
+    <legend>Material</legend>
+    {materials.map((material) => (
+      <label>
+        <input type="checkbox" name="material" value={material} data-collection-filter="material" />
+        <span>{material}</span>
+      </label>
+    ))}
+  </fieldset>
+</aside>
+
+<style>
+  .filter-sidebar {
+    padding: 1.25rem;
+    border: 1px solid rgba(176, 160, 140, 0.28);
+    border-radius: 14px;
+    background: #fffaf4;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.04);
+  }
+
+  .filter-header {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 1.25rem;
+  }
+
+  .filter-kicker {
+    margin: 0 0 0.25rem;
+    color: #A0907C;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .filter-header h2 {
+    margin: 0;
+    color: #555;
+    font-size: 1.3rem;
+  }
+
+  .clear-filter-btn {
+    border: 1px solid rgba(176, 160, 140, 0.55);
+    border-radius: 999px;
+    background: #fff;
+    color: #A0907C;
+    cursor: pointer;
+    font: inherit;
+    font-size: 0.88rem;
+    font-weight: 700;
+    padding: 0.35rem 0.8rem;
+  }
+
+  .clear-filter-btn:hover {
+    background: #B0A08C;
+    color: #fff;
+  }
+
+  .filter-group {
+    border: 0;
+    margin: 0 0 1.35rem;
+    padding: 0;
+  }
+
+  .filter-group:last-child {
+    margin-bottom: 0;
+  }
+
+  .filter-group legend {
+    margin-bottom: 0.65rem;
+    color: #555;
+    font-weight: 700;
+  }
+
+  .filter-group label {
+    display: flex;
+    gap: 0.55rem;
+    align-items: center;
+    margin-bottom: 0.55rem;
+    color: #555;
+    cursor: pointer;
+    line-height: 1.35;
+  }
+
+  .filter-group input {
+    accent-color: #B0A08C;
+  }
+</style>
