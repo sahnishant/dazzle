@@ -1,5 +1,7 @@
 ---
 // src/components/CollectionGrid.astro
+import { Image } from 'astro:assets';
+
 interface CollectionItem {
   name: string;
   image: string;
@@ -15,7 +17,16 @@ const { collections } = Astro.props;
 <div class="collection-grid">
   {collections.map(item => (
     <a href={item.link} class="collection-card">
-      <img src={item.image} alt={item.name} loading="lazy" />
+      <Image
+        src={item.image}
+        alt={item.name}
+        width={900}
+        height={600}
+        format="webp"
+        loading="lazy"
+        decoding="async"
+        class="collection-card-image"
+      />
       <h3>{item.name}</h3>
     </a>
   ))}
@@ -39,7 +50,7 @@ const { collections } = Astro.props;
     transform: translateY(-5px);
     box-shadow: 0 8px 16px rgba(0,0,0,0.12);
   }
-  .collection-card img {
+  .collection-card-image {
     width: 100%;
     height: 250px; /* Consistent height for images */
     object-fit: cover;
