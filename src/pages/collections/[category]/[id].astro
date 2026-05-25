@@ -29,7 +29,7 @@ const breadcrumbs = [
 ];
 ---
 
-<BaseLayout title={item.name} description={item.description}>
+<BaseLayout title={item.name} description={item.description} image={item.mainImage} type="product">
   <ProductStructuredData product={item} />
   <section class="container product-detail-page">
     {/* Breadcrumbs Component */}
