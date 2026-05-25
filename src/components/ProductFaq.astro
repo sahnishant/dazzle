@@ -1,0 +1,112 @@
+---
+// src/components/ProductFaq.astro
+interface ProductDetails {
+  certification?: string;
+}
+
+interface Product {
+  name: string;
+  category: string;
+  material?: string;
+  details?: ProductDetails;
+}
+
+interface Props {
+  product: Product;
+}
+
+const { product } = Astro.props;
+const isCustomProduct = product.category === 'custom';
+const certification = product.details?.certification || 'available certification details';
+const material = product.material || 'the selected material';
+
+const faqs = [
+  {
+    question: 'Is this piece certified?',
+    answer: `Where applicable, this design includes ${certification}. We can also walk you through the grading details before you make a decision.`,
+  },
+  {
+    question: 'Can this design be customized?',
+    answer: isCustomProduct
+      ? 'Yes. This piece is intended for a custom consultation, so metal, stone shape, budget, and timeline can be discussed before production.'
+      : `Yes. Many pieces can be adapted in ${material}, stone size, or setting style depending on availability.`,
+  },
+  {
+    question: 'Can I schedule a video or in-person consultation?',
+    answer: 'Yes. Use the product inquiry options on this page and mention your preferred consultation mode and timing.',
+  },
+  {
+    question: 'How long does a custom or made-to-order piece take?',
+    answer: 'Timelines depend on stone sourcing, design complexity, and finishing requirements. We confirm the expected timeline during consultation before you proceed.',
+  },
+];
+---
+
+<section class="product-faq" aria-labelledby="product-faq-title">
+  <p class="faq-kicker">Before you inquire</p>
+  <h2 id="product-faq-title">Common questions</h2>
+
+  <div class="faq-list">
+    {faqs.map((faq) => (
+      <details>
+        <summary>{faq.question}</summary>
+        <p>{faq.answer}</p>
+      </details>
+    ))}
+  </div>
+</section>
+
+<style>
+  .product-faq {
+    margin-top: 2rem;
+    padding: 1.4rem;
+    border: 1px solid rgba(176, 160, 140, 0.3);
+    border-radius: 12px;
+    background: #fffaf4;
+  }
+
+  .faq-kicker {
+    margin: 0 0 0.35rem;
+    color: #A0907C;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .product-faq h2 {
+    margin: 0 0 1rem;
+    color: #555;
+    font-size: 1.45rem;
+  }
+
+  .faq-list {
+    display: grid;
+    gap: 0.75rem;
+  }
+
+  .faq-list details {
+    border: 1px solid rgba(176, 160, 140, 0.26);
+    border-radius: 10px;
+    background: #fff;
+    overflow: hidden;
+  }
+
+  .faq-list summary {
+    cursor: pointer;
+    color: #555;
+    font-weight: 700;
+    padding: 0.9rem 1rem;
+  }
+
+  .faq-list summary:hover {
+    color: #A0907C;
+  }
+
+  .faq-list p {
+    margin: 0;
+    padding: 0 1rem 1rem;
+    color: #666;
+    line-height: 1.65;
+  }
+</style>
