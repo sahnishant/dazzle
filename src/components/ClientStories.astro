@@ -1,0 +1,115 @@
+---
+// src/components/ClientStories.astro
+const stories = [
+  {
+    quote: 'The consultation helped us understand the stone, setting, and timeline clearly before committing. It felt personal, not transactional.',
+    name: 'A bespoke ring client',
+    context: 'Custom engagement design',
+  },
+  {
+    quote: 'The grading explanation made the buying decision much easier. Every detail was explained without pressure.',
+    name: 'A first-time diamond buyer',
+    context: 'Certified solitaire selection',
+  },
+  {
+    quote: 'We wanted a piece that felt meaningful for a family occasion. The guidance around design and care gave us confidence.',
+    name: 'A gifting client',
+    context: 'Occasion jewelry consultation',
+  },
+];
+---
+
+<section class="client-stories container" aria-labelledby="client-stories-title">
+  <div class="stories-heading">
+    <p class="stories-kicker">Client confidence</p>
+    <h2 id="client-stories-title">Guided, personal, and transparent</h2>
+    <p>High-value jewelry decisions need more than a product card. These stories reflect the kind of consultation-first experience Dazzle is designed around.</p>
+  </div>
+
+  <div class="stories-grid">
+    {stories.map((story) => (
+      <article class="story-card">
+        <p class="story-quote">“{story.quote}”</p>
+        <div class="story-meta">
+          <strong>{story.name}</strong>
+          <span>{story.context}</span>
+        </div>
+      </article>
+    ))}
+  </div>
+</section>
+
+<style>
+  .client-stories {
+    padding: 4rem 1rem;
+  }
+
+  .stories-heading {
+    max-width: 760px;
+    margin: 0 auto 2rem;
+    text-align: center;
+  }
+
+  .stories-kicker {
+    margin: 0 0 0.35rem;
+    color: #A0907C;
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .stories-heading h2 {
+    margin: 0 0 0.75rem;
+    color: #555;
+    font-size: clamp(2rem, 4vw, 3rem);
+  }
+
+  .stories-heading p:last-child {
+    margin: 0;
+    color: #666;
+    line-height: 1.7;
+  }
+
+  .stories-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.25rem;
+  }
+
+  .story-card {
+    display: flex;
+    min-height: 260px;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 1.5rem;
+    border: 1px solid rgba(176, 160, 140, 0.3);
+    border-radius: 14px;
+    background: linear-gradient(135deg, #fffaf4 0%, #ffffff 100%);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+  }
+
+  .story-quote {
+    margin: 0 0 1.4rem;
+    color: #555;
+    font-size: 1.05rem;
+    line-height: 1.75;
+  }
+
+  .story-meta {
+    display: grid;
+    gap: 0.2rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(176, 160, 140, 0.22);
+  }
+
+  .story-meta strong {
+    color: #555;
+  }
+
+  .story-meta span {
+    color: #A0907C;
+    font-size: 0.9rem;
+    font-weight: 700;
+  }
+</style>
