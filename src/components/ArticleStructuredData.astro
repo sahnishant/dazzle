@@ -1,0 +1,55 @@
+---
+// src/components/ArticleStructuredData.astro
+import { siteConfig } from '../data/siteConfig.js';
+
+interface ArticleData {
+  title: string;
+  description: string;
+  pubDate: Date;
+  author: string;
+  image?: string;
+  tags?: string[];
+}
+
+interface Props {
+  article: {
+    slug: string;
+    data: ArticleData;
+  };
+}
+
+const { article } = Astro.props;
+const siteUrl = siteConfig.url.replace(/\/$/, '');
+const articleUrl = `${siteUrl}/blog/${article.slug}/`;
+const logoUrl = `${siteUrl}/images/logo-diamond.png`;
+const imageUrl = article.data.image ? new URL(article.data.image, siteUrl).toString() : logoUrl;
+
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  headline: article.data.title,
+  description: article.data.description,
+  image: imageUrl,
+  datePublished: article.data.pubDate.toISOString(),
+  author: {
+    '@type': 'Person',
+    name: article.data.author,
+  },
+  publisher: {
+    '@type': 'Organization',
+    name: siteConfig.name,
+    logo: {
+      '@type': 'ImageObject',
+      url: logoUrl,
+    },
+  },
+  mainEntityOfPage: {
+    '@type': 'WebPage',
+    '@id': articleUrl,
+  },
+  url: articleUrl,
+  keywords: article.data.tags || [],
+};
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(structuredData)} />

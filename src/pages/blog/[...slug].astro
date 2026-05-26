@@ -1,6 +1,7 @@
 ---
 // src/pages/blog/[...slug].astro
 import { getCollection } from 'astro:content';
+import ArticleStructuredData from '../../components/ArticleStructuredData.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro'; // Adjust path if needed based on your structure
 import BreadcrumbStructuredData from '../../components/BreadcrumbStructuredData.astro';
 import ShopTheLook from '../../components/ShopTheLook.astro';
@@ -56,6 +57,7 @@ const breadcrumbs = [
   image={article.data.image}
   type="article"
 >
+  <ArticleStructuredData article={article} />
   <BreadcrumbStructuredData items={breadcrumbs} />
   <section class="container page-section article-page">
     <h1 class="text-center mb-2">{article.data.title}</h1>
