@@ -1,0 +1,74 @@
+---
+// src/components/ArticleConsultationCta.astro
+interface Props {
+  articleTitle: string;
+}
+
+const { articleTitle } = Astro.props;
+const inquirySubject = `Consultation after reading: ${articleTitle}`;
+const contactHref = `/contact/?subject=${encodeURIComponent(inquirySubject)}`;
+---
+
+<section class="article-consultation-cta" aria-labelledby="article-consultation-title">
+  <p class="cta-kicker">Need personal guidance?</p>
+  <h2 id="article-consultation-title">Turn this knowledge into the right jewelry decision</h2>
+  <p>
+    If this article raised questions about diamonds, design, certification, or budget fit, book a consultation and let us guide you through the next step.
+  </p>
+  <div class="cta-actions">
+    <a href={contactHref} class="btn">Book a Consultation</a>
+    <a href="/collections/" class="secondary-link">Browse collections</a>
+  </div>
+</section>
+
+<style>
+  .article-consultation-cta {
+    margin: 3rem auto 1.5rem;
+    padding: 2rem;
+    border: 1px solid rgba(176, 160, 140, 0.35);
+    border-radius: 16px;
+    background: linear-gradient(135deg, #2b2624 0%, #4a4038 100%);
+    color: #fffaf4;
+    text-align: center;
+  }
+
+  .cta-kicker {
+    margin: 0 0 0.4rem;
+    color: #f4dfbd;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .article-consultation-cta h2 {
+    margin: 0 auto 0.75rem;
+    max-width: 720px;
+    color: #fffaf4;
+    font-size: clamp(1.8rem, 4vw, 2.6rem);
+  }
+
+  .article-consultation-cta p:not(.cta-kicker) {
+    max-width: 680px;
+    margin: 0 auto 1.4rem;
+    color: rgba(255, 250, 244, 0.85);
+    line-height: 1.7;
+  }
+
+  .cta-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .secondary-link {
+    color: #f4dfbd;
+    font-weight: 700;
+  }
+
+  .secondary-link:hover {
+    color: #fff;
+  }
+</style>
