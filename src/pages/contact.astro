@@ -7,18 +7,21 @@ import { jewelryItems } from '../data/jewelry.js';
 // Get item ID from URL if redirected from a product page
 const urlParams = Astro.url.searchParams;
 const inquiredItemId = urlParams.get('item') || '';
+const requestedSubject = urlParams.get('subject') || '';
 const inquiredItem = jewelryItems.find((item) => item.id === inquiredItemId);
 const productPath = inquiredItem ? `/collections/${inquiredItem.category}/${inquiredItem.id}/` : '';
 const inquirySubject = inquiredItem
   ? `Inquiry about ${inquiredItem.name}`
   : inquiredItemId
     ? `Inquiry about ${inquiredItemId}`
-    : '';
+    : requestedSubject;
 const inquiryMessage = inquiredItem
   ? `I am interested in ${inquiredItem.name}.\n\nPrice shown: ${inquiredItem.price}\nProduct link: ${productPath}\n\nPlease share details, availability, and consultation options.`
   : inquiredItemId
     ? `I am interested in the "${inquiredItemId}" piece.`
-    : '';
+    : requestedSubject
+      ? 'I would like to book a consultation and discuss the next step.'
+      : '';
 ---
 <BaseLayout title="Contact Us" description="Get in touch with our diamond experts for inquiries, consultations, or custom designs.">
   <section class="contact-hero container">
@@ -52,6 +55,13 @@ const inquiryMessage = inquiredItem
           <a href={productPath}>View product details</a>
         </aside>
       )}
+      {!inquiredItem && requestedSubject && (
+        <aside class="inquiry-context" aria-label="Selected consultation topic">
+          <p class="inquiry-kicker">Consultation topic</p>
+          <h3>{requestedSubject}</h3>
+          <p>We will use this context to guide the conversation.</p>
+        </aside>
+      )}
       <form name="contact" method="POST" data-netlify="true" data-netlify-honeypot="bot-field" action="/thank-you/">
         <input type="hidden" name="form-name" value="contact" />
         {inquiredItem && (
@@ -60,6 +70,9 @@ const inquiryMessage = inquiredItem
             <input type="hidden" name="productName" value={inquiredItem.name} />
             <input type="hidden" name="productPath" value={productPath} />
           </>
+        )}
+        {!inquiredItem && requestedSubject && (
+          <input type="hidden" name="consultationTopic" value={requestedSubject} />
         )}
         <p class="hidden">
           <label>Don’t fill this out if you’re human: <input name="bot-field" /></label>
