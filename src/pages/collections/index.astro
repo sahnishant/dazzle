@@ -14,16 +14,28 @@ const collections = [
   { name: 'Custom Designs', image: '/images/collection-custom.webp', link: '/collections/custom/' },
 ];
 
-const categories = [...new Set(jewelryItems.map((item) => item.category).filter(Boolean))].sort();
-const materials = [...new Set(jewelryItems.map((item) => item.material).filter(Boolean))].sort();
 const formatLabel = (value) => value.replace(/-/g, ' ').replace(/\b\w/g, (char) => char.toUpperCase());
+const buildOptions = (key, formatter = formatLabel) => Object.entries(
+  jewelryItems.reduce((counts, item) => {
+    const value = item[key];
+    if (!value) return counts;
+    counts[value] = (counts[value] || 0) + 1;
+    return counts;
+  }, {})
+)
+  .sort(([a], [b]) => formatter(a).localeCompare(formatter(b)))
+  .map(([value, count]) => ({ value, label: formatter(value), count }));
+
+const categories = buildOptions('category');
+const materials = buildOptions('material', (value) => value);
+const styles = buildOptions('style', (value) => value);
 ---
 <BaseLayout title="Collections" description="Browse our exquisite diamond jewelry collections by type, material, and design style.">
   <section class="container mt-4 mb-4 collections-page">
     <div class="collections-heading">
       <p class="collections-kicker">Boutique catalogue</p>
       <h1>Our Jewelry Collections</h1>
-      <p>Browse by collection, or refine the full catalogue by category and material.</p>
+      <p>Browse by collection, or refine the full catalogue by category, material, and design style.</p>
     </div>
 
     <CollectionGrid collections={collections} />
@@ -35,8 +47,13 @@ const formatLabel = (value) => value.replace(/-/g, ' ').replace(/\b\w/g, (char) 
         <p id="collectionResultCount">Showing {jewelryItems.length} pieces</p>
       </div>
 
+      <div class="active-filter-row" id="activeFilterRow" hidden>
+        <span>Active filters</span>
+        <div id="activeFilterChips" class="active-filter-chips"></div>
+      </div>
+
       <div class="browse-layout">
-        <FilterSidebar categories={categories} materials={materials} />
+        <FilterSidebar categories={categories} materials={materials} styles={styles} />
 
         <div class="product-results" id="collectionProductGrid">
           {jewelryItems.map((item) => (
@@ -44,7 +61,11 @@ const formatLabel = (value) => value.replace(/-/g, ' ').replace(/\b\w/g, (char) 
               class="collection-product-card"
               data-product-card
               data-category={item.category}
+              data-category-label={formatLabel(item.category)}
               data-material={item.material}
+              data-material-label={item.material}
+              data-style={item.style}
+              data-style-label={item.style}
             >
               <a href={`/collections/${item.category}/${item.id}/`}>
                 <Image
@@ -58,7 +79,7 @@ const formatLabel = (value) => value.replace(/-/g, ' ').replace(/\b\w/g, (char) 
                   class="collection-product-image"
                 />
                 <div class="collection-product-copy">
-                  <p class="collection-product-meta">{formatLabel(item.category)} · {item.material}</p>
+                  <p class="collection-product-meta">{formatLabel(item.category)} · {item.material} · {item.style}</p>
                   <h3>{item.name}</h3>
                   <p class="collection-product-price">{item.price}</p>
                 </div>
@@ -68,7 +89,15 @@ const formatLabel = (value) => value.replace(/-/g, ' ').replace(/\b\w/g, (char) 
         </div>
       </div>
 
-      <p id="emptyCollectionState" class="empty-state" hidden>No pieces match the selected filters. Clear filters to see the full catalogue.</p>
+      <div id="emptyCollectionState" class="empty-state" hidden>
+        <p class="empty-kicker">No exact match</p>
+        <h3>No pieces match the selected filters</h3>
+        <p>Clear the filters to return to the full catalogue, or contact us for a custom recommendation based on your preference.</p>
+        <div class="empty-actions">
+          <button type="button" id="clearEmptyStateFilters" class="btn">Clear filters</button>
+          <a href="/contact/" class="empty-link">Request guidance</a>
+        </div>
+      </div>
     </div>
   </section>
 </BaseLayout>
@@ -78,8 +107,13 @@ const formatLabel = (value) => value.replace(/-/g, ' ').replace(/\b\w/g, (char) 
     const filterInputs = Array.from(document.querySelectorAll('[data-collection-filter]'));
     const cards = Array.from(document.querySelectorAll('[data-product-card]'));
     const clearButton = document.getElementById('clearCollectionFilters');
+    const emptyClearButton = document.getElementById('clearEmptyStateFilters');
     const resultCount = document.getElementById('collectionResultCount');
     const emptyState = document.getElementById('emptyCollectionState');
+    const activeFilterRow = document.getElementById('activeFilterRow');
+    const activeFilterChips = document.getElementById('activeFilterChips');
+
+    const filterTypes = ['category', 'material', 'style'];
 
     const getCheckedValues = (type) => new Set(
       filterInputs
@@ -87,15 +121,48 @@ const formatLabel = (value) => value.replace(/-/g, ' ').replace(/\b\w/g, (char) 
         .map((input) => input.value)
     );
 
+    const getActiveFilters = () => filterInputs
+      .filter((input) => input.checked)
+      .map((input) => ({
+        type: input.dataset.collectionFilter,
+        value: input.value,
+        label: input.nextElementSibling?.textContent || input.value,
+      }));
+
+    const updateActiveChips = () => {
+      const activeFilters = getActiveFilters();
+
+      if (!activeFilterRow || !activeFilterChips) return;
+
+      activeFilterRow.hidden = activeFilters.length === 0;
+      activeFilterChips.innerHTML = '';
+
+      activeFilters.forEach((filter) => {
+        const chip = document.createElement('button');
+        chip.type = 'button';
+        chip.className = 'active-filter-chip';
+        chip.textContent = `${filter.label} ×`;
+        chip.addEventListener('click', () => {
+          const input = filterInputs.find((candidate) => (
+            candidate.dataset.collectionFilter === filter.type && candidate.value === filter.value
+          ));
+          if (input) input.checked = false;
+          applyFilters();
+        });
+        activeFilterChips.appendChild(chip);
+      });
+    };
+
     const applyFilters = () => {
-      const selectedCategories = getCheckedValues('category');
-      const selectedMaterials = getCheckedValues('material');
+      const selectedValues = Object.fromEntries(
+        filterTypes.map((type) => [type, getCheckedValues(type)])
+      );
       let visibleCount = 0;
 
       cards.forEach((card) => {
-        const matchesCategory = selectedCategories.size === 0 || selectedCategories.has(card.dataset.category);
-        const matchesMaterial = selectedMaterials.size === 0 || selectedMaterials.has(card.dataset.material);
-        const isVisible = matchesCategory && matchesMaterial;
+        const isVisible = filterTypes.every((type) => (
+          selectedValues[type].size === 0 || selectedValues[type].has(card.dataset[type])
+        ));
 
         card.hidden = !isVisible;
         if (isVisible) visibleCount += 1;
@@ -108,15 +175,20 @@ const formatLabel = (value) => value.replace(/-/g, ' ').replace(/\b\w/g, (char) 
       if (emptyState) {
         emptyState.hidden = visibleCount > 0;
       }
+
+      updateActiveChips();
     };
 
-    filterInputs.forEach((input) => input.addEventListener('change', applyFilters));
-    clearButton?.addEventListener('click', () => {
+    const clearFilters = () => {
       filterInputs.forEach((input) => {
         input.checked = false;
       });
       applyFilters();
-    });
+    };
+
+    filterInputs.forEach((input) => input.addEventListener('change', applyFilters));
+    clearButton?.addEventListener('click', clearFilters);
+    emptyClearButton?.addEventListener('click', clearFilters);
 
     applyFilters();
   });
@@ -158,6 +230,43 @@ const formatLabel = (value) => value.replace(/-/g, ' ').replace(/\b\w/g, (char) 
 
   .browse-section {
     margin-top: 4rem;
+  }
+
+  .active-filter-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    align-items: center;
+    justify-content: center;
+    margin: -0.75rem auto 1.5rem;
+    color: #666;
+    font-size: 0.92rem;
+    font-weight: 700;
+  }
+
+  .active-filter-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    justify-content: center;
+  }
+
+  .active-filter-chip {
+    border: 1px solid rgba(176, 160, 140, 0.4);
+    border-radius: 999px;
+    background: #fffaf4;
+    color: #7d6d5b;
+    cursor: pointer;
+    font: inherit;
+    font-size: 0.85rem;
+    font-weight: 700;
+    padding: 0.35rem 0.75rem;
+  }
+
+  .active-filter-chip:hover,
+  .active-filter-chip:focus-visible {
+    background: #B0A08C;
+    color: #fff;
   }
 
   .browse-layout {
@@ -230,13 +339,53 @@ const formatLabel = (value) => value.replace(/-/g, ' ').replace(/\b\w/g, (char) 
   }
 
   .empty-state {
-    margin: 2rem 0 0;
-    padding: 1rem;
-    border: 1px dashed rgba(176, 160, 140, 0.5);
-    border-radius: 10px;
+    margin: 2rem auto 0;
+    max-width: 720px;
+    padding: 2rem;
+    border: 1px solid rgba(176, 160, 140, 0.4);
+    border-radius: 16px;
     color: #666;
     text-align: center;
     background: #fffaf4;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.04);
+  }
+
+  .empty-kicker {
+    margin: 0 0 0.35rem;
+    color: #A0907C;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .empty-state h3 {
+    margin: 0 0 0.6rem;
+    color: #555;
+  }
+
+  .empty-state p:not(.empty-kicker) {
+    max-width: 560px;
+    margin: 0 auto 1.25rem;
+    line-height: 1.65;
+  }
+
+  .empty-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .empty-actions .btn {
+    border: 0;
+    cursor: pointer;
+  }
+
+  .empty-link {
+    color: #A0907C;
+    font-weight: 700;
   }
 
   @media (min-width: 900px) {
