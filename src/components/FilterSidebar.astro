@@ -1,12 +1,18 @@
 ---
 // src/components/FilterSidebar.astro
-interface Props {
-  categories: string[];
-  materials: string[];
+interface FilterOption {
+  value: string;
+  label: string;
+  count: number;
 }
 
-const { categories, materials } = Astro.props;
-const formatLabel = (value: string) => value.replace(/-/g, ' ').replace(/\b\w/g, (char) => char.toUpperCase());
+interface Props {
+  categories: FilterOption[];
+  materials: FilterOption[];
+  styles: FilterOption[];
+}
+
+const { categories, materials, styles } = Astro.props;
 ---
 
 <aside class="filter-sidebar" aria-label="Collection filters">
@@ -14,6 +20,7 @@ const formatLabel = (value: string) => value.replace(/-/g, ' ').replace(/\b\w/g,
     <div>
       <p class="filter-kicker">Refine</p>
       <h2>Find your piece</h2>
+      <p>Filter by form, metal, and design language.</p>
     </div>
     <button type="button" id="clearCollectionFilters" class="clear-filter-btn">Clear</button>
   </div>
@@ -22,8 +29,9 @@ const formatLabel = (value: string) => value.replace(/-/g, ' ').replace(/\b\w/g,
     <legend>Category</legend>
     {categories.map((category) => (
       <label>
-        <input type="checkbox" name="category" value={category} data-collection-filter="category" />
-        <span>{formatLabel(category)}</span>
+        <input type="checkbox" name="category" value={category.value} data-collection-filter="category" />
+        <span>{category.label}</span>
+        <small>{category.count}</small>
       </label>
     ))}
   </fieldset>
@@ -32,8 +40,20 @@ const formatLabel = (value: string) => value.replace(/-/g, ' ').replace(/\b\w/g,
     <legend>Material</legend>
     {materials.map((material) => (
       <label>
-        <input type="checkbox" name="material" value={material} data-collection-filter="material" />
-        <span>{material}</span>
+        <input type="checkbox" name="material" value={material.value} data-collection-filter="material" />
+        <span>{material.label}</span>
+        <small>{material.count}</small>
+      </label>
+    ))}
+  </fieldset>
+
+  <fieldset class="filter-group">
+    <legend>Style</legend>
+    {styles.map((style) => (
+      <label>
+        <input type="checkbox" name="style" value={style.value} data-collection-filter="style" />
+        <span>{style.label}</span>
+        <small>{style.count}</small>
       </label>
     ))}
   </fieldset>
@@ -41,6 +61,8 @@ const formatLabel = (value: string) => value.replace(/-/g, ' ').replace(/\b\w/g,
 
 <style>
   .filter-sidebar {
+    position: sticky;
+    top: 1rem;
     padding: 1.25rem;
     border: 1px solid rgba(176, 160, 140, 0.28);
     border-radius: 14px;
@@ -66,9 +88,16 @@ const formatLabel = (value: string) => value.replace(/-/g, ' ').replace(/\b\w/g,
   }
 
   .filter-header h2 {
-    margin: 0;
+    margin: 0 0 0.3rem;
     color: #555;
     font-size: 1.3rem;
+  }
+
+  .filter-header p:last-child {
+    margin: 0;
+    color: #666;
+    font-size: 0.9rem;
+    line-height: 1.45;
   }
 
   .clear-filter-btn {
@@ -83,7 +112,8 @@ const formatLabel = (value: string) => value.replace(/-/g, ' ').replace(/\b\w/g,
     padding: 0.35rem 0.8rem;
   }
 
-  .clear-filter-btn:hover {
+  .clear-filter-btn:hover,
+  .clear-filter-btn:focus-visible {
     background: #B0A08C;
     color: #fff;
   }
@@ -105,7 +135,8 @@ const formatLabel = (value: string) => value.replace(/-/g, ' ').replace(/\b\w/g,
   }
 
   .filter-group label {
-    display: flex;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
     gap: 0.55rem;
     align-items: center;
     margin-bottom: 0.55rem;
@@ -116,5 +147,24 @@ const formatLabel = (value: string) => value.replace(/-/g, ' ').replace(/\b\w/g,
 
   .filter-group input {
     accent-color: #B0A08C;
+  }
+
+  .filter-group small {
+    display: inline-flex;
+    min-width: 1.65rem;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    background: rgba(176, 160, 140, 0.16);
+    color: #8a7663;
+    font-size: 0.72rem;
+    font-weight: 700;
+    line-height: 1.65;
+  }
+
+  @media (max-width: 899px) {
+    .filter-sidebar {
+      position: static;
+    }
   }
 </style>
