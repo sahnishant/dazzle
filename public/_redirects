@@ -1,0 +1,22 @@
+# Product route aliases
+# Keep short/common product URLs from returning 404s.
+
+/collections/rings/solitaire/ /collections/rings/solitaire-round-ring/ 301
+/collections/rings/solitaire-ring/ /collections/rings/solitaire-round-ring/ 301
+/collections/rings/classic-solitaire/ /collections/rings/solitaire-round-ring/ 301
+
+/collections/rings/cocktail-ring/ /collections/rings/cocktail-ring-floral/ 301
+/collections/rings/floral-cocktail-ring/ /collections/rings/cocktail-ring-floral/ 301
+
+/collections/necklaces/emerald-pendant/ /collections/necklaces/emerald-cut-pendant/ 301
+/collections/necklaces/diamond-pendant/ /collections/necklaces/emerald-cut-pendant/ 301
+/collections/necklaces/silver-necklace/ /collections/necklaces/simple-silver-necklace/ 301
+
+/collections/bracelets/diamond-bracelet/ /collections/bracelets/bracelet-large-diamonds/ 301
+/collections/bracelets/chain-bracelet/ /collections/bracelets/bracelet-large-diamonds/ 301
+
+/collections/earrings/studs/ /collections/earrings/diamond-stud-earrings/ 301
+/collections/earrings/diamond-studs/ /collections/earrings/diamond-stud-earrings/ 301
+
+/collections/custom/engagement-ring/ /collections/custom/custom-engagement-ring/ 301
+/collections/custom/custom-ring/ /collections/custom/custom-engagement-ring/ 301
