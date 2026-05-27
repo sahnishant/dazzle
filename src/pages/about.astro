@@ -2,60 +2,127 @@
 // src/pages/about.astro
 import BaseLayout from '../layouts/BaseLayout.astro';
 ---
-<BaseLayout title="About Us" description="Learn about our commitment to craftsmanship, ethical sourcing, and personalized service.">
+<BaseLayout title="About Dazzle" description="Learn about Dazzle's consultation-first approach to diamond jewelry, transparent guidance, and custom design support.">
   <section class="about-us-hero container">
-    <h1 class="text-center mb-4">Our Story: Where Passion Meets Brilliance</h1>
+    <p class="about-kicker">About Dazzle</p>
+    <h1 class="text-center mb-4">Diamond jewelry, chosen with clarity.</h1>
     <img src="/images/about-hero.png" alt="Jeweler at work" class="about-hero-image" loading="eager" />
   </section>
 
   <section class="about-content container mt-4 mb-4">
     <div class="text-block">
-      <h2>Crafted with Legacy, Inspired by You</h2>
-      <p>For over [X] generations, Your Diamond Business Name has been synonymous with exquisite diamond jewelry. Founded on a passion for timeless beauty and unparalleled craftsmanship, we believe every piece tells a story. From the initial design sketch to the final polish, our master jewelers pour their expertise and artistry into every detail, ensuring each creation is a masterpiece.</p>
+      <h2>Consultation-first, not pressure-first</h2>
+      <p>Dazzle is built around considered jewelry decisions. Whether you are exploring a ready piece, comparing diamond details, or planning a custom design, our role is to guide you through the choices that matter: design, certification, metal, budget, timeline, and long-term wearability.</p>
     </div>
 
     <div class="text-block">
-      <h2>Ethical Sourcing & Transparency</h2>
-      <p>We are deeply committed to responsible and ethical sourcing practices. Every diamond in our collection is meticulously selected from reputable suppliers who adhere to the highest industry standards, including the Kimberley Process Certification Scheme. We prioritize transparency, ensuring our diamonds are conflict-free and traceable, so you can wear your jewelry with pride and peace of mind.</p>
+      <h2>Transparency around quality</h2>
+      <p>Diamond buying can feel opaque when every detail sounds technical. We focus on explaining the practical meaning of cut, clarity, color, carat, certification, and setting quality so you can make a confident decision instead of relying on guesswork.</p>
     </div>
 
     <div class="text-block">
-      <h2>Personalized Experience</h2>
-      <p>At Your Diamond Business Name, we understand that choosing a diamond is a deeply personal journey. Our dedicated team of gemologists and design consultants offers a bespoke experience, guiding you through our curated collections or helping you bring your custom design dreams to life. Your vision, our expertise – together, we create extraordinary.</p>
+      <h2>Custom design with clear steps</h2>
+      <p>For custom rings and bespoke jewelry, we keep the process structured. We begin with your intent and references, discuss stone and metal options, clarify budget and timeline, and move forward only after the design direction feels right.</p>
     </div>
-    <!-- Add more sections like Team, Certifications etc. -->
+
+    <div class="about-cta">
+      <h2>Planning a meaningful piece?</h2>
+      <p>Start with a consultation or browse the current collection to understand the design language that fits you best.</p>
+      <div class="about-actions">
+        <a href="/contact/" class="btn">Book a Consultation</a>
+        <a href="/collections/" class="secondary-link">Browse Collections</a>
+      </div>
+    </div>
   </section>
 </BaseLayout>
 
 <style>
   .about-us-hero {
     padding: 3rem 1rem;
-    background-color: #f0f0f0;
+    border-radius: 16px;
+    background: linear-gradient(135deg, #fffaf4 0%, #f0f0f0 100%);
     text-align: center;
   }
+
+  .about-kicker {
+    margin: 0 0 0.35rem;
+    color: #A0907C;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .about-us-hero h1 {
+    max-width: 760px;
+    margin-left: auto;
+    margin-right: auto;
+    color: #555;
+    font-size: clamp(2.2rem, 5vw, 3.4rem);
+    line-height: 1.1;
+  }
+
   .about-hero-image {
     max-width: 800px;
     margin: 0 auto;
-    border-radius: 8px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    border-radius: 14px;
+    box-shadow: 0 10px 26px rgba(0,0,0,0.12);
   }
+
   .about-content {
     padding: 3rem 1rem;
   }
-  .text-block {
+
+  .text-block,
+  .about-cta {
     background-color: white;
     padding: 2.5rem;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-    margin-bottom: 2rem;
+    border-radius: 14px;
+    border: 1px solid rgba(176, 160, 140, 0.2);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+    margin-bottom: 1.5rem;
   }
-  .text-block h2 {
+
+  .text-block h2,
+  .about-cta h2 {
     font-size: 2rem;
     color: #B0A08C;
     margin-bottom: 1rem;
   }
-  .text-block p {
+
+  .text-block p,
+  .about-cta p {
+    color: #555;
     font-size: 1.1rem;
     line-height: 1.8;
+  }
+
+  .about-cta {
+    background: #2b2624;
+    color: #fffaf4;
+    text-align: center;
+  }
+
+  .about-cta h2 {
+    color: #fffaf4;
+  }
+
+  .about-cta p {
+    max-width: 680px;
+    margin: 0 auto 1.4rem;
+    color: rgba(255, 250, 244, 0.86);
+  }
+
+  .about-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .secondary-link {
+    color: #f4dfbd;
+    font-weight: 700;
   }
 </style>
