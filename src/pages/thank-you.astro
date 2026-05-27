@@ -2,9 +2,33 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 <BaseLayout title="Thank You!" description="Thank you for your inquiry. We will get back to you shortly.">
-  <section class="container text-center p-4 mt-4 mb-4" style="min-height: 400px;">
+  <section class="container text-center p-4 mt-4 mb-4 thank-you-section">
     <h1 class="mb-2">Thank You for Your Message!</h1>
     <p class="mb-4">We have received your inquiry and will get back to you within 1-2 business days.</p>
-    <a href="/" class="btn">Return to Home</a>
+
+    <div class="thank-you-actions">
+      <a href="/collections/" class="btn">Browse Collections</a>
+      <a href="/diamond-buyer-guide/" class="secondary-link">Read Buyer Guide</a>
+      <a href="/contact/" class="secondary-link">Add More Details</a>
+    </div>
   </section>
 </BaseLayout>
+
+<style>
+  .thank-you-section {
+    min-height: 400px;
+  }
+
+  .thank-you-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .secondary-link {
+    color: #A0907C;
+    font-weight: 700;
+  }
+</style>
