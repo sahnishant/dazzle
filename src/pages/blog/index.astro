@@ -4,26 +4,50 @@ import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 
 const allArticles = await getCollection('articles');
-// Sort articles by date, newest first
 const sortedArticles = allArticles.sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
+const featuredArticle = sortedArticles[0];
+const remainingArticles = sortedArticles.slice(1);
 ---
-<BaseLayout title="Our Blog" description="Stay updated with the latest diamond jewelry trends, lab-grown diamond insights, and expert buying tips from our blog.">
+<BaseLayout title="Diamond Journal" description="Explore diamond jewelry guidance, grading explainers, lab-grown diamond insights, and boutique buying advice from Dazzle.">
   <section class="container page-section blog-listing">
-    <h1 class="text-center mb-4">Our Diamond Insights & Stories</h1>
-    <p class="text-center mb-5">Explore our latest articles on jewelry trends, lab-grown diamonds, buying tips, and the fascinating world of fine gems.</p>
+    <div class="blog-hero">
+      <p class="blog-kicker">Dazzle Journal</p>
+      <h1>Diamond insights for considered jewelry decisions</h1>
+      <p>Read practical guidance on certification, design, trends, lab-grown diamonds, heirloom pieces, and buying with confidence.</p>
+    </div>
+
+    {featuredArticle && (
+      <a href={`/blog/${featuredArticle.slug}/`} class="featured-article-card">
+        {featuredArticle.data.image && (
+          <img src={featuredArticle.data.image} alt={featuredArticle.data.title} loading="eager" />
+        )}
+        <div class="featured-copy">
+          <p class="blog-kicker">Featured guide</p>
+          <h2>{featuredArticle.data.title}</h2>
+          <p>{featuredArticle.data.description}</p>
+          <span class="article-meta">
+            {featuredArticle.data.pubDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+          </span>
+          <span class="read-more">Read the guide →</span>
+        </div>
+      </a>
+    )}
+
+    <div class="article-section-heading">
+      <p class="blog-kicker">More from the journal</p>
+      <h2>Education, trends, and buying notes</h2>
+    </div>
 
     <div class="articles-grid">
-      {sortedArticles.map(article => (
+      {remainingArticles.map(article => (
         <a href={`/blog/${article.slug}/`} class="article-card">
           {article.data.image && (
             <img src={article.data.image} alt={article.data.title} loading="lazy" />
           )}
           <div class="card-content">
+            <p class="article-date">{article.data.pubDate.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}</p>
             <h3>{article.data.title}</h3>
             <p class="description">{article.data.description}</p>
-            <p class="meta">
-              <span>By {article.data.author}</span> | <span>{article.data.pubDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
-            </p>
             <span class="read-more">Read More →</span>
           </div>
         </a>
@@ -33,67 +57,181 @@ const sortedArticles = allArticles.sort((a, b) => b.data.pubDate.getTime() - a.d
 </BaseLayout>
 
 <style>
-  /* Ensure these styles are consistent or defined here */
   .blog-listing {
     padding: 3rem 1rem;
   }
+
+  .blog-hero,
+  .article-section-heading {
+    max-width: 820px;
+    margin: 0 auto 2.5rem;
+    text-align: center;
+  }
+
+  .blog-kicker {
+    margin: 0 0 0.35rem;
+    color: #A0907C;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .blog-hero h1 {
+    margin: 0 auto 0.85rem;
+    max-width: 760px;
+    color: #555;
+    font-size: clamp(2.3rem, 5vw, 3.6rem);
+    line-height: 1.08;
+  }
+
+  .blog-hero p:last-child {
+    margin: 0 auto;
+    max-width: 720px;
+    color: #666;
+    font-size: 1.05rem;
+    line-height: 1.75;
+  }
+
+  .featured-article-card {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0;
+    overflow: hidden;
+    margin: 0 0 3.5rem;
+    border-radius: 18px;
+    background: #2b2624;
+    color: #fffaf4;
+    text-decoration: none;
+    box-shadow: 0 14px 36px rgba(0, 0, 0, 0.12);
+  }
+
+  .featured-article-card img {
+    width: 100%;
+    height: 320px;
+    object-fit: cover;
+  }
+
+  .featured-copy {
+    padding: 2rem;
+  }
+
+  .featured-copy h2 {
+    margin: 0 0 0.9rem;
+    color: #fffaf4;
+    font-size: clamp(1.9rem, 4vw, 3rem);
+    line-height: 1.12;
+  }
+
+  .featured-copy p:not(.blog-kicker) {
+    margin: 0 0 1rem;
+    color: rgba(255, 250, 244, 0.84);
+    line-height: 1.7;
+  }
+
+  .article-meta,
+  .article-date {
+    display: block;
+    margin-bottom: 0.8rem;
+    color: #8a7663;
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .featured-copy .article-meta {
+    color: #f4dfbd;
+  }
+
+  .read-more {
+    color: #B0A08C;
+    font-weight: 700;
+  }
+
+  .featured-copy .read-more {
+    color: #f4dfbd;
+  }
+
+  .article-section-heading {
+    margin-bottom: 1.5rem;
+  }
+
+  .article-section-heading h2 {
+    margin: 0;
+    color: #555;
+  }
+
   .articles-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 2rem;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
   }
+
   .article-card {
-    background-color: white;
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
     display: flex;
+    min-height: 100%;
     flex-direction: column;
-    text-decoration: none;
+    overflow: hidden;
+    border: 1px solid rgba(176, 160, 140, 0.2);
+    border-radius: 14px;
+    background-color: white;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.06);
     color: #333;
+    text-decoration: none;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
   }
-  .article-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 16px rgba(0,0,0,0.12);
+
+  .article-card:hover,
+  .article-card:focus-visible {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px rgba(0,0,0,0.1);
   }
+
   .article-card img {
     width: 100%;
     height: 200px;
     object-fit: cover;
   }
+
   .article-card .card-content {
-    padding: 1.5rem;
-    flex-grow: 1;
     display: flex;
+    flex: 1;
     flex-direction: column;
+    padding: 1.25rem;
   }
+
   .article-card h3 {
-    font-size: 1.5rem;
-    margin-bottom: 0.8rem;
-    color: #B0A08C;
-  }
-  .article-card .description {
-    font-size: 0.95rem;
+    margin: 0 0 0.75rem;
     color: #555;
-    margin-bottom: 1rem;
+    font-size: 1.35rem;
+    line-height: 1.25;
+  }
+
+  .article-card .description {
     flex-grow: 1;
+    margin: 0 0 1rem;
+    color: #555;
+    font-size: 0.96rem;
+    line-height: 1.65;
   }
-  .article-card .meta {
-    font-size: 0.85rem;
-    color: #888;
-    margin-bottom: 1rem;
+
+  @media (min-width: 820px) {
+    .featured-article-card {
+      grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+      align-items: stretch;
+    }
+
+    .featured-article-card img {
+      height: 100%;
+      min-height: 420px;
+    }
+
+    .featured-copy {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 3rem;
+    }
   }
-  .article-card .read-more {
-    font-weight: bold;
-    color: #B0A08C;
-    align-self: flex-start;
-    margin-top: 0.5rem;
-  }
-  /* Ensure these general page-section styles are available, either globally or here */
-  .container { max-width: 1200px; margin: 0 auto; padding: 1rem; }
-  .page-section { padding: 2rem 1rem; background-color: #fff; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); margin-top: 2rem; margin-bottom: 2rem; }
-  .text-center { text-align: center; }
-  .mb-4 { margin-bottom: 2rem; }
-  .mb-5 { margin-bottom: 3rem; }
 </style>
