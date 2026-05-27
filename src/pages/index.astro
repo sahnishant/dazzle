@@ -14,9 +14,66 @@ import ConsultationConfidence from '../components/ConsultationConfidence.astro';
   <WhyChooseUs />
   <ConsultationConfidence />
 
-  <section class="call-to-action text-center container mt-4 mb-4">
-    <h2>Ready to Find Your Perfect Piece?</h2>
-    <p class="mb-4">Our experts are here to guide you through our exquisite collection.</p>
-    <a href="/contact/" class="btn">Book a Consultation</a>
+  <section class="home-final-cta container mt-4 mb-4" aria-labelledby="home-final-cta-title">
+    <p class="cta-kicker">Ready when you are</p>
+    <h2 id="home-final-cta-title">Find the right piece with guidance, not guesswork.</h2>
+    <p>Browse the collection, compare diamond education notes, or start a private consultation for custom and high-consideration pieces.</p>
+    <div class="cta-actions">
+      <a href="/collections/" class="btn">Browse Collections</a>
+      <a href="/contact/" class="secondary-link">Book a Consultation</a>
+      <a href="/diamond-buyer-guide/" class="secondary-link">Read Buyer Guide</a>
+    </div>
   </section>
 </BaseLayout>
+
+<style>
+  .home-final-cta {
+    padding: 2.5rem 1.5rem;
+    border-radius: 18px;
+    background: linear-gradient(135deg, #2b2624 0%, #4a4038 100%);
+    color: #fffaf4;
+    text-align: center;
+    box-shadow: 0 14px 36px rgba(0, 0, 0, 0.12);
+  }
+
+  .cta-kicker {
+    margin: 0 0 0.35rem;
+    color: #f4dfbd;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .home-final-cta h2 {
+    max-width: 760px;
+    margin: 0 auto 0.85rem;
+    color: #fffaf4;
+    font-size: clamp(2rem, 5vw, 3rem);
+    line-height: 1.1;
+  }
+
+  .home-final-cta p:not(.cta-kicker) {
+    max-width: 720px;
+    margin: 0 auto 1.5rem;
+    color: rgba(255, 250, 244, 0.86);
+    line-height: 1.75;
+  }
+
+  .cta-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .secondary-link {
+    color: #f4dfbd;
+    font-weight: 700;
+  }
+
+  .secondary-link:hover {
+    color: #fff;
+  }
+</style>

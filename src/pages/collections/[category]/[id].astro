@@ -70,9 +70,16 @@ const breadcrumbs = [
       </div>
 
       <div class="product-info">
+        <p class="product-kicker">{isCustomProduct ? 'Custom consultation' : 'Dazzle selection'}</p>
         <h1 class="product-name">{item.name}</h1>
         <p class="product-price">{item.price}</p>
         <TrustSnippet certification={item.details?.certification} />
+
+        <div class="product-reassurance" aria-label="Purchase reassurance">
+          <span>Certification guidance</span>
+          <span>Insured delivery support</span>
+          <a href="/policies/">View policies</a>
+        </div>
 
         <h2 class="section-title">Description</h2>
         <p class="product-description">{item.description}</p>
@@ -255,6 +262,14 @@ const breadcrumbs = [
     border-radius: 8px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.05);
   }
+  .product-kicker {
+    margin: 0 0 0.35rem;
+    color: #A0907C;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
   .product-name {
     font-size: 2.5rem;
     margin-bottom: 0.5rem;
@@ -265,6 +280,24 @@ const breadcrumbs = [
     font-weight: bold;
     color: #B0A08C;
     margin-bottom: 1.5rem;
+  }
+  .product-reassurance {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 1.25rem 0;
+  }
+  .product-reassurance span,
+  .product-reassurance a {
+    display: inline-flex;
+    align-items: center;
+    border: 1px solid rgba(176, 160, 140, 0.3);
+    border-radius: 999px;
+    background: #fffaf4;
+    color: #7d6d5b;
+    font-size: 0.82rem;
+    font-weight: 700;
+    padding: 0.35rem 0.7rem;
   }
   .section-title {
     font-size: 1.5rem;
