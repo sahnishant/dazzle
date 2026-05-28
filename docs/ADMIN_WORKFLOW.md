@@ -1,6 +1,6 @@
 # Dazzle Admin Workflow
 
-Dazzle now has a lightweight Git-backed admin path for products, articles, and build-safe content generation.
+Dazzle now has a lightweight Git-backed admin path for products, articles, policies, and build-safe content generation.
 
 ## Admin URL
 
@@ -38,14 +38,6 @@ The storefront still reads the generated compatibility file:
 src/data/jewelry.js
 ```
 
-After editing product JSON files, run:
-
-```bash
-npm run sync:content
-npm run build
-npm run check:launch
-```
-
 `sync:content` regenerates generated storefront data from admin-editable content records.
 
 ## Adding a product
@@ -60,7 +52,7 @@ From `/admin/`:
 6. Save the entry.
 7. Publish or submit for review, depending on editorial workflow settings.
 
-After the product is committed, run the validation commands above before deploying.
+After the product is committed, run the validation commands before deploying.
 
 ## Product image rules
 
@@ -88,6 +80,16 @@ src/content/articles/*.md
 
 The admin panel supports title, description, publish date, author, hero image, tags, and markdown body.
 
+## Policy editing
+
+The policies page is now sourced from markdown:
+
+```txt
+src/content/pages/policies.md
+```
+
+The `/policies/` route renders this content through Astro content collections. The admin panel exposes it under **Editable Pages**.
+
 ## Business contact settings
 
 Business contact source data now lives in:
@@ -102,7 +104,7 @@ It generates:
 src/data/businessContact.js
 ```
 
-This means the contact data has a clean JSON source of truth. The admin UI can expose it after the CMS config update is completed.
+This means the contact data has a clean JSON source of truth. The CMS config still needs a final accepted update before business contact fields appear in `/admin/`.
 
 ## Build/deploy commands
 
@@ -122,6 +124,7 @@ The admin panel currently manages:
 
 - Products
 - Blog articles
+- Policies page
 
 The content architecture now supports generated settings for:
 
@@ -130,13 +133,12 @@ The content architecture now supports generated settings for:
 Still pending:
 
 - Site URL/domain JSON source
-- Policy page markdown source
 - Homepage section copy source
 - CMS config exposure for business contact settings
 
 ## Recommended next admin pass
 
 1. Move `siteConfig.js` to a JSON source.
-2. Move policies into markdown so admin can edit policy copy without touching code.
-3. Expose business settings in `/admin/` after the config payload is accepted.
-4. Add an automated drift check so generated files cannot fall behind JSON content.
+2. Expose business settings in `/admin/` after the config payload is accepted.
+3. Move homepage section copy into content files.
+4. Add an automated generated-content drift check when the connector allows the script payload.
