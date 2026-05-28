@@ -2,55 +2,64 @@
 // src/pages/privacy-policy.astro
 import BaseLayout from '../layouts/BaseLayout.astro';
 ---
-<BaseLayout title="Privacy Policy" description="Our privacy policy regarding the collection and use of your personal data.">
-  <section class="container p-4 mt-4 mb-4">
+<BaseLayout title="Privacy Policy" description="How Dazzle handles inquiry and consultation information shared through this website.">
+  <section class="container p-4 mt-4 mb-4 privacy-page">
     <h1 class="text-center mb-4">Privacy Policy</h1>
-    <p>Your privacy is important to us. This Privacy Policy explains how [Your Diamond Business Name] collects, uses, and discloses information about you when you visit our website.</p>
+    <p>Your privacy is important to us. This Privacy Policy explains how Dazzle handles information you share when you browse the website, submit a product inquiry, or request a consultation.</p>
 
     <h2>Information We Collect</h2>
-    <p>We collect information you provide directly to us when you fill out a contact form, subscribe to our newsletter, or communicate with us in any other way. This may include your name, email address, phone number, and any other information you choose to provide.</p>
+    <p>We collect information you provide directly to us, such as your name, phone number, email address, selected product, consultation preference, and message details.</p>
 
     <h2>How We Use Your Information</h2>
     <p>We use the information we collect to:</p>
     <ul>
-      <li>Respond to your inquiries and provide customer support.</li>
-      <li>Send you marketing and promotional communications (if you have opted in).</li>
-      <li>Improve our website and services.</li>
-      <li>Comply with legal obligations.</li>
+      <li>Respond to product inquiries and consultation requests.</li>
+      <li>Discuss product availability, pricing, customization, delivery, and care questions.</li>
+      <li>Improve our website, product information, and customer support process.</li>
+      <li>Maintain basic inquiry records and meet applicable legal requirements.</li>
     </ul>
 
     <h2>Data Sharing and Disclosure</h2>
-    <p>We do not sell or rent your personal information to third parties. We may share your information with third-party service providers who perform services on our behalf (e.g., email service providers) under strict confidentiality agreements.</p>
+    <p>We do not sell your personal information. We may share limited information with trusted service providers that help operate the website, process form submissions, communicate with you, or support customer service.</p>
 
     <h2>Security</h2>
-    <p>We take reasonable measures to protect your personal information from unauthorized access, use, or disclosure. However, no internet transmission is completely secure, and we cannot guarantee the absolute security of your information.</p>
+    <p>We take reasonable measures to protect submitted information. However, no internet transmission or storage system can be guaranteed as completely secure.</p>
 
     <h2>Your Choices</h2>
-    <p>You may opt out of receiving promotional emails from us by following the unsubscribe instructions in those emails. You may also request to access, update, or delete your personal information by contacting us.</p>
+    <p>You may ask us to access, correct, or delete inquiry information you previously shared, subject to practical and legal retention requirements.</p>
 
     <h2>Changes to This Policy</h2>
-    <p>We may update this Privacy Policy from time to time. We will notify you of any changes by posting the new policy on this page. We encourage you to review this policy periodically.</p>
+    <p>We may update this Privacy Policy when website features, business processes, or legal requirements change. The latest version will be posted on this page.</p>
 
     <h2>Contact Us</h2>
-    <p>If you have any questions about this Privacy Policy, please contact us at <a href="mailto:info@yourdomain.com">info@yourdomain.com</a>.</p>
-    
-    <p class="text-small mt-4"><em>Last updated: [Current Date]</em></p>
+    <p>If you have questions about this Privacy Policy, please contact us through the <a href="/contact/">contact page</a>.</p>
+
+    <p class="text-small mt-4"><em>Last updated: May 28, 2026</em></p>
   </section>
 </BaseLayout>
 
 <style>
+  .privacy-page {
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 8px 26px rgba(0,0,0,0.06);
+  }
+
   .text-small {
     font-size: 0.8rem;
     color: #777;
   }
+
   .container h2 {
     margin-top: 1.5rem;
   }
+
   .container ul {
     margin-left: 2rem;
     list-style: disc;
     margin-bottom: 1.5rem;
   }
+
   .container li {
     margin-bottom: 0.5rem;
   }
