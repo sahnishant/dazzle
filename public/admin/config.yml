@@ -101,3 +101,11 @@ collections:
           - { label: "Description", name: "description", widget: "text" }
           - { label: "Updated At", name: "updatedAt", widget: "datetime", required: false }
           - { label: "Body", name: "body", widget: "markdown" }
+      - name: "privacy_policy"
+        label: "Privacy Policy"
+        file: "src/content/pages/privacy-policy.md"
+        fields:
+          - { label: "Title", name: "title", widget: "string" }
+          - { label: "Description", name: "description", widget: "text" }
+          - { label: "Updated At", name: "updatedAt", widget: "datetime", required: false }
+          - { label: "Body", name: "body", widget: "markdown" }
