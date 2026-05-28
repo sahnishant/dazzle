@@ -1,0 +1,26 @@
+{
+  "id": "bracelet-large-diamonds",
+  "name": "Diamond Chain Bracelet",
+  "category": "bracelets",
+  "mainImage": "/images/products/bracelet1.png",
+  "additionalImages": [],
+  "description": "An elegant diamond chain bracelet featuring delicately set diamonds in 18K white gold. Sophisticated and versatile.",
+  "details": {
+    "metal": "18K White Gold",
+    "mainStone": "0.75 Carat Total Weight Round Diamonds",
+    "cut": "Very Good",
+    "color": "F-G",
+    "clarity": "VS2",
+    "certification": "IGI Certified"
+  },
+  "price": "₹2,50,000",
+  "priceValue": 250000,
+  "material": "White Gold",
+  "stoneType": "Diamond",
+  "style": "Chain",
+  "dimensions": "Length: 7 inches, Width: 2mm, Weight: 5.8g",
+  "careInstructions": "Wipe with a soft cloth after each wear. Avoid contact with perfumes and lotions. Inspect clasps periodically.",
+  "uniqueFeatures": "Flexible chain for comfortable fit. Ideal for stacking with other bracelets or wearing on its own.",
+  "dateAdded": "2024-07-18T12:00:00Z",
+  "popularityScore": 6
+}
