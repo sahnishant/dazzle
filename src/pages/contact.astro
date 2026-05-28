@@ -22,9 +22,15 @@ const inquiryMessage = inquiredItem
     : requestedSubject
       ? 'I would like to book a consultation and discuss the next step.'
       : '';
+
+const isPlaceholderValue = (value = '') => /yourdomain|yourbusiness|123 Diamond St|Jewel City|JS 12345/i.test(value);
+const safeEmail = !isPlaceholderValue(businessContact.email) ? businessContact.email : '';
+const safeAddress = !isPlaceholderValue(businessContact.address) ? businessContact.address : '';
+const safeSocials = (businessContact.socials || []).filter((social) => !isPlaceholderValue(social.href));
 ---
 <BaseLayout title="Contact Us" description="Get in touch with our diamond experts for inquiries, consultations, or custom designs.">
   <section class="contact-hero container">
+    <p class="contact-kicker">Private consultation</p>
     <h1 class="text-center mb-4">Connect With Our Diamond Experts</h1>
     <p class="text-center">Whether you have a question about a specific piece, wish to book a private consultation, or want to discuss a custom design, we're here to help.</p>
   </section>
@@ -33,16 +39,33 @@ const inquiryMessage = inquiredItem
     <div class="contact-info">
       <h2>Our Contact Information</h2>
       <p><strong>Phone:</strong> <a href={`tel:${businessContact.telHref}`}>{businessContact.displayPhone}</a></p>
-      <p><strong>Email:</strong> <a href={`mailto:${businessContact.email}`}>{businessContact.email}</a></p>
-      <p><strong>Address:</strong> {businessContact.address}</p>
+      {safeEmail ? (
+        <p><strong>Email:</strong> <a href={`mailto:${safeEmail}`}>{safeEmail}</a></p>
+      ) : (
+        <p><strong>Email:</strong> Use the consultation form and we will reply from our verified inbox.</p>
+      )}
+      {safeAddress ? (
+        <p><strong>Address:</strong> {safeAddress}</p>
+      ) : (
+        <p><strong>Location:</strong> Shared during confirmed private consultations.</p>
+      )}
       <p><strong>Business Hours:</strong> {businessContact.businessHours}</p>
-      {businessContact.socials?.length > 0 && (
+      {safeSocials.length > 0 && (
         <div class="social-links mt-4">
-          {businessContact.socials.map((social) => (
+          {safeSocials.map((social) => (
             <a href={social.href} target="_blank" rel="noopener noreferrer">{social.label}</a>
           ))}
         </div>
       )}
+
+      <aside class="contact-trust-panel" aria-label="Consultation expectations">
+        <p class="contact-kicker">What to expect</p>
+        <ul>
+          <li>Guidance on certification, budget, metal, and design fit.</li>
+          <li>Clear next steps before any custom work begins.</li>
+          <li>No-pressure consultation for high-consideration purchases.</li>
+        </ul>
+      </aside>
     </div>
 
     <div class="contact-form-section">
@@ -106,8 +129,25 @@ const inquiryMessage = inquiredItem
 
 <style>
   .contact-hero {
-    padding: 3rem 1rem;
-    background-color: #f0f0f0;
+    padding: 3.5rem 1rem;
+    border-radius: 16px;
+    background: linear-gradient(135deg, #fffaf4 0%, #f0f0f0 100%);
+  }
+  .contact-kicker {
+    margin: 0 0 0.35rem;
+    color: #A0907C;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-align: center;
+    text-transform: uppercase;
+  }
+  .contact-hero p:last-child {
+    max-width: 760px;
+    margin-left: auto;
+    margin-right: auto;
+    color: #666;
+    line-height: 1.7;
   }
   .contact-details {
     display: grid;
@@ -115,8 +155,8 @@ const inquiryMessage = inquiredItem
     gap: 3rem;
     background-color: #fff;
     padding: 3rem;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    border-radius: 16px;
+    box-shadow: 0 8px 26px rgba(0,0,0,0.07);
   }
   .contact-info h2, .contact-form-section h2 {
     color: #B0A08C;
@@ -128,6 +168,22 @@ const inquiryMessage = inquiredItem
   }
   .contact-info a {
     font-weight: bold;
+  }
+  .contact-trust-panel {
+    margin-top: 2rem;
+    padding: 1.1rem;
+    border: 1px solid rgba(176, 160, 140, 0.32);
+    border-radius: 12px;
+    background: #fffaf4;
+  }
+  .contact-trust-panel .contact-kicker {
+    text-align: left;
+  }
+  .contact-trust-panel ul {
+    margin: 0;
+    padding-left: 1.1rem;
+    color: #666;
+    line-height: 1.65;
   }
   .social-links a {
     display: inline-block;
@@ -184,7 +240,7 @@ const inquiryMessage = inquiredItem
     width: 100%;
     padding: 0.8rem;
     border: 1px solid #ddd;
-    border-radius: 5px;
+    border-radius: 8px;
     font-size: 1rem;
     font-family: 'Georgia', serif;
   }
