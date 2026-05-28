@@ -1,0 +1,145 @@
+backend:
+  name: git-gateway
+  branch: main
+
+local_backend: true
+
+publish_mode: editorial_workflow
+
+media_folder: "public/images/uploads"
+public_folder: "/images/uploads"
+
+site_url: "https://mydazzle.netlify.app"
+display_url: "https://mydazzle.netlify.app"
+logo_url: "/images/logo-diamond.png"
+
+collections:
+  - name: "products"
+    label: "Products"
+    label_singular: "Product"
+    folder: "src/content/products"
+    extension: "json"
+    format: "json"
+    create: true
+    slug: "{{id}}"
+    identifier_field: "name"
+    summary: "{{name}} — {{category}}"
+    sortable_fields: ["name", "category", "priceValue", "popularityScore", "dateAdded"]
+    fields:
+      - label: "Product ID"
+        name: "id"
+        widget: "string"
+        hint: "Lowercase kebab-case. This becomes the product URL slug. Example: solitaire-round-ring."
+        pattern: ["^[a-z0-9]+(?:-[a-z0-9]+)*$", "Use lowercase kebab-case only."]
+      - label: "Name"
+        name: "name"
+        widget: "string"
+      - label: "Category"
+        name: "category"
+        widget: "select"
+        options: ["rings", "necklaces", "bracelets", "earrings", "custom"]
+      - label: "Main Image"
+        name: "mainImage"
+        widget: "image"
+        choose_url: false
+        hint: "Upload or select the primary product image."
+      - label: "Gallery Images"
+        name: "additionalImages"
+        widget: "list"
+        required: false
+        summary: "{{fields.image}}"
+        field:
+          label: "Image"
+          name: "image"
+          widget: "image"
+          choose_url: false
+      - label: "Short Description"
+        name: "description"
+        widget: "text"
+      - label: "Display Price"
+        name: "price"
+        widget: "string"
+        hint: "Example: ₹5,50,000 or Price Upon Request."
+      - label: "Numeric Price"
+        name: "priceValue"
+        widget: "number"
+        value_type: "int"
+        min: 0
+        hint: "Used for sorting/filtering. Use 0 for Price Upon Request."
+      - label: "Material"
+        name: "material"
+        widget: "string"
+      - label: "Stone Type"
+        name: "stoneType"
+        widget: "string"
+      - label: "Style"
+        name: "style"
+        widget: "string"
+      - label: "Dimensions"
+        name: "dimensions"
+        widget: "string"
+      - label: "Care Instructions"
+        name: "careInstructions"
+        widget: "text"
+      - label: "Unique Features"
+        name: "uniqueFeatures"
+        widget: "text"
+      - label: "Date Added"
+        name: "dateAdded"
+        widget: "datetime"
+        date_format: "YYYY-MM-DD"
+        time_format: "HH:mm"
+        format: "YYYY-MM-DDTHH:mm:ss[Z]"
+      - label: "Popularity Score"
+        name: "popularityScore"
+        widget: "number"
+        value_type: "int"
+        min: 0
+        max: 10
+      - label: "Diamond / Product Details"
+        name: "details"
+        widget: "object"
+        fields:
+          - { label: "Metal", name: "metal", widget: "string" }
+          - { label: "Main Stone", name: "mainStone", widget: "string" }
+          - { label: "Cut", name: "cut", widget: "string" }
+          - { label: "Color", name: "color", widget: "string" }
+          - { label: "Clarity", name: "clarity", widget: "string" }
+          - { label: "Certification", name: "certification", widget: "string" }
+
+  - name: "articles"
+    label: "Blog Articles"
+    folder: "src/content/articles"
+    create: true
+    slug: "{{slug}}"
+    extension: "md"
+    format: "frontmatter"
+    identifier_field: "title"
+    fields:
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Description", name: "description", widget: "text" }
+      - { label: "Publish Date", name: "pubDate", widget: "datetime" }
+      - { label: "Author", name: "author", widget: "string", default: "Our Team" }
+      - { label: "Hero Image", name: "image", widget: "image", required: false, choose_url: false }
+      - { label: "Tags", name: "tags", widget: "list", required: false }
+      - { label: "Body", name: "body", widget: "markdown" }
+
+  - name: "settings"
+    label: "Site Settings"
+    files:
+      - name: "business_contact"
+        label: "Business Contact"
+        file: "src/data/businessContact.js"
+        fields:
+          - { label: "Telephone href", name: "telHref", widget: "string", hint: "Example: +919471499233" }
+          - { label: "WhatsApp Number", name: "directMessageNumber", widget: "string", hint: "Digits only. Example: 919471499233" }
+          - { label: "Display Phone", name: "displayPhone", widget: "string" }
+          - { label: "Email", name: "email", widget: "string", required: false }
+          - { label: "Address", name: "address", widget: "text", required: false }
+          - { label: "Business Hours", name: "businessHours", widget: "string" }
+      - name: "site_config"
+        label: "Site Config"
+        file: "src/data/siteConfig.js"
+        fields:
+          - { label: "Site Name", name: "name", widget: "string" }
+          - { label: "Production URL", name: "url", widget: "string" }
