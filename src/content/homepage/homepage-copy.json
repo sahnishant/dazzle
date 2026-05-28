@@ -3,5 +3,27 @@
     "kicker": "Featured boutique piece",
     "primaryCta": "View This Piece",
     "secondaryCta": "Explore Collections"
+  },
+  "finalCta": {
+    "kicker": "Ready when you are",
+    "title": "Find the right piece with guidance, not guesswork.",
+    "description": "Browse the collection, compare diamond education notes, or start a private consultation for custom and high-consideration pieces.",
+    "actions": [
+      {
+        "label": "Browse Collections",
+        "href": "/collections/",
+        "variant": "primary"
+      },
+      {
+        "label": "Book a Consultation",
+        "href": "/contact/",
+        "variant": "secondary"
+      },
+      {
+        "label": "Read Buyer Guide",
+        "href": "/diamond-buyer-guide/",
+        "variant": "secondary"
+      }
+    ]
   }
 }
