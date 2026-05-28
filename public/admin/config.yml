@@ -42,60 +42,26 @@ collections:
         name: "mainImage"
         widget: "image"
         choose_url: false
-        hint: "Upload or select the primary product image."
       - label: "Gallery Images"
         name: "additionalImages"
         widget: "list"
         required: false
-        summary: "{{fields.image}}"
         field:
           label: "Image"
           name: "image"
           widget: "image"
           choose_url: false
-      - label: "Short Description"
-        name: "description"
-        widget: "text"
-      - label: "Display Price"
-        name: "price"
-        widget: "string"
-        hint: "Example: ₹5,50,000 or Price Upon Request."
-      - label: "Numeric Price"
-        name: "priceValue"
-        widget: "number"
-        value_type: "int"
-        min: 0
-        hint: "Used for sorting/filtering. Use 0 for Price Upon Request."
-      - label: "Material"
-        name: "material"
-        widget: "string"
-      - label: "Stone Type"
-        name: "stoneType"
-        widget: "string"
-      - label: "Style"
-        name: "style"
-        widget: "string"
-      - label: "Dimensions"
-        name: "dimensions"
-        widget: "string"
-      - label: "Care Instructions"
-        name: "careInstructions"
-        widget: "text"
-      - label: "Unique Features"
-        name: "uniqueFeatures"
-        widget: "text"
-      - label: "Date Added"
-        name: "dateAdded"
-        widget: "datetime"
-        date_format: "YYYY-MM-DD"
-        time_format: "HH:mm"
-        format: "YYYY-MM-DDTHH:mm:ss[Z]"
-      - label: "Popularity Score"
-        name: "popularityScore"
-        widget: "number"
-        value_type: "int"
-        min: 0
-        max: 10
+      - { label: "Short Description", name: "description", widget: "text" }
+      - { label: "Display Price", name: "price", widget: "string" }
+      - { label: "Numeric Price", name: "priceValue", widget: "number", value_type: "int", min: 0 }
+      - { label: "Material", name: "material", widget: "string" }
+      - { label: "Stone Type", name: "stoneType", widget: "string" }
+      - { label: "Style", name: "style", widget: "string" }
+      - { label: "Dimensions", name: "dimensions", widget: "string" }
+      - { label: "Care Instructions", name: "careInstructions", widget: "text" }
+      - { label: "Unique Features", name: "uniqueFeatures", widget: "text" }
+      - { label: "Date Added", name: "dateAdded", widget: "datetime", format: "YYYY-MM-DDTHH:mm:ss[Z]" }
+      - { label: "Popularity Score", name: "popularityScore", widget: "number", value_type: "int", min: 0, max: 10 }
       - label: "Diamond / Product Details"
         name: "details"
         widget: "object"
@@ -123,3 +89,15 @@ collections:
       - { label: "Hero Image", name: "image", widget: "image", required: false, choose_url: false }
       - { label: "Tags", name: "tags", widget: "list", required: false }
       - { label: "Body", name: "body", widget: "markdown" }
+
+  - name: "pages"
+    label: "Editable Pages"
+    files:
+      - name: "policies"
+        label: "Policies Page"
+        file: "src/content/pages/policies.md"
+        fields:
+          - { label: "Title", name: "title", widget: "string" }
+          - { label: "Description", name: "description", widget: "text" }
+          - { label: "Updated At", name: "updatedAt", widget: "datetime", required: false }
+          - { label: "Body", name: "body", widget: "markdown" }
