@@ -109,3 +109,22 @@ collections:
           - { label: "Description", name: "description", widget: "text" }
           - { label: "Updated At", name: "updatedAt", widget: "datetime", required: false }
           - { label: "Body", name: "body", widget: "markdown" }
+
+  - name: "settings"
+    label: "Site Settings"
+    files:
+      - name: "business_contact"
+        label: "Business Contact"
+        file: "src/content/settings/business-contact.json"
+        fields:
+          - { label: "Email", name: "email", widget: "string" }
+          - { label: "Address", name: "address", widget: "string" }
+          - { label: "Service Area", name: "serviceArea", widget: "string" }
+          - { label: "Business Hours", name: "businessHours", widget: "string" }
+      - name: "site_config"
+        label: "Site Config"
+        file: "src/content/settings/site-config.json"
+        fields:
+          - { label: "Site Name", name: "name", widget: "string" }
+          - { label: "Site URL", name: "url", widget: "string" }
+

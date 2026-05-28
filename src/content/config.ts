@@ -55,16 +55,42 @@ const productsCollection = defineCollection({
 const settingsCollection = defineCollection({
   type: 'data',
   schema: z.object({
+    // business-contact.json fields
     telHref: z.string().optional(),
     directMessageNumber: z.string().optional(),
     displayPhone: z.string().optional(),
     email: z.string().optional(),
     address: z.string().optional(),
+    serviceArea: z.string().optional(),
     businessHours: z.string().optional(),
     socials: z.array(z.object({
       label: z.string(),
       href: z.string(),
     })).default([]).optional(),
+    // site-config.json fields
+    name: z.string().optional(),
+    url: z.string().optional(),
+  }),
+});
+
+const homepageCollection = defineCollection({
+  type: 'data',
+  schema: z.object({
+    hero: z.object({
+      kicker: z.string(),
+      primaryCta: z.string(),
+      secondaryCta: z.string(),
+    }).optional(),
+    finalCta: z.object({
+      kicker: z.string(),
+      title: z.string(),
+      description: z.string(),
+      actions: z.array(z.object({
+        label: z.string(),
+        href: z.string(),
+        variant: z.string(),
+      })),
+    }).optional(),
   }),
 });
 
@@ -73,4 +99,5 @@ export const collections = {
   pages: pagesCollection,
   products: productsCollection,
   settings: settingsCollection,
+  homepage: homepageCollection,
 };

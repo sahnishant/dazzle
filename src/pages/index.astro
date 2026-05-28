@@ -6,6 +6,9 @@ import TrustBar from '../components/TrustBar.astro';
 import FeaturedCollections from '../components/FeaturedCollections.astro';
 import WhyChooseUs from '../components/WhyChooseUs.astro';
 import ConsultationConfidence from '../components/ConsultationConfidence.astro';
+import { homepageContent } from '../data/homepageContent.js';
+
+const { finalCta } = homepageContent;
 ---
 <BaseLayout title="Home" description="Exquisite diamond jewelry for every occasion. Discover rings, necklaces, earrings, and more.">
   <Hero />
@@ -15,13 +18,16 @@ import ConsultationConfidence from '../components/ConsultationConfidence.astro';
   <ConsultationConfidence />
 
   <section class="home-final-cta container mt-4 mb-4" aria-labelledby="home-final-cta-title">
-    <p class="cta-kicker">Ready when you are</p>
-    <h2 id="home-final-cta-title">Find the right piece with guidance, not guesswork.</h2>
-    <p>Browse the collection, compare diamond education notes, or start a private consultation for custom and high-consideration pieces.</p>
+    <p class="cta-kicker">{finalCta.kicker}</p>
+    <h2 id="home-final-cta-title">{finalCta.title}</h2>
+    <p>{finalCta.description}</p>
     <div class="cta-actions">
-      <a href="/collections/" class="btn">Browse Collections</a>
-      <a href="/contact/" class="secondary-link">Book a Consultation</a>
-      <a href="/diamond-buyer-guide/" class="secondary-link">Read Buyer Guide</a>
+      {finalCta.actions.map((action) => (
+        <a
+          href={action.href}
+          class={action.variant === 'primary' ? 'btn' : 'secondary-link'}
+        >{action.label}</a>
+      ))}
     </div>
   </section>
 </BaseLayout>

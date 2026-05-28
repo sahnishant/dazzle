@@ -2,14 +2,16 @@
 // src/components/Hero.astro
 import { Image } from 'astro:assets';
 import { jewelryItems } from '../data/jewelry.js';
+import { homepageContent } from '../data/homepageContent.js';
 
+const { hero } = homepageContent;
 const featuredProduct = [...jewelryItems].sort((a, b) => (b.popularityScore || 0) - (a.popularityScore || 0))[0];
 const featuredProductUrl = `/collections/${featuredProduct.category}/${featuredProduct.id}/`;
 ---
 <section class="hero-section" aria-labelledby="homepage-hero-title">
   <div class="hero-content container">
     <div class="hero-copy">
-      <p class="hero-kicker">Featured boutique piece</p>
+      <p class="hero-kicker">{hero.kicker}</p>
       <h1 id="homepage-hero-title">{featuredProduct.name}</h1>
       <p>{featuredProduct.description}</p>
 
@@ -20,8 +22,8 @@ const featuredProductUrl = `/collections/${featuredProduct.category}/${featuredP
       </div>
 
       <div class="hero-actions">
-        <a href={featuredProductUrl} class="btn">View This Piece</a>
-        <a href="/collections/" class="btn btn-secondary">Explore Collections</a>
+        <a href={featuredProductUrl} class="btn">{hero.primaryCta}</a>
+        <a href="/collections/" class="btn btn-secondary">{hero.secondaryCta}</a>
       </div>
     </div>
 

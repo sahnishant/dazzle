@@ -7,6 +7,7 @@ export const businessContact = {
   "displayPhone": "+91-9471-499-233",
   "email": "",
   "address": "",
+  "serviceArea": "",
   "businessHours": "Consultation hours available on request",
   "socials": []
 };
