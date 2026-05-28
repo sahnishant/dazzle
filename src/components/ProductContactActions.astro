@@ -1,6 +1,7 @@
 ---
 // src/components/ProductContactActions.astro
 import { businessContact } from '../data/businessContact.js';
+import { isUsableDirectMessageNumber } from '../utils/businessContactReadiness.js';
 
 interface Props {
   product: {
@@ -20,13 +21,18 @@ const message = [
   `Product link: ${productPath}`,
   'Can you share details and availability?',
 ].filter(Boolean).join('\n');
-const directMessageUrl = `https://wa.me/${businessContact.directMessageNumber}?text=${encodeURIComponent(message)}`;
+const hasDirectMessage = isUsableDirectMessageNumber(businessContact.directMessageNumber);
+const directMessageUrl = hasDirectMessage
+  ? `https://wa.me/${businessContact.directMessageNumber}?text=${encodeURIComponent(message)}`
+  : '';
 ---
 
 <div class="product-contact-actions" aria-label="Product contact options">
-  <a href={directMessageUrl} class="btn direct-message-btn" target="_blank" rel="noopener noreferrer">
-    WhatsApp About This Piece
-  </a>
+  {hasDirectMessage && (
+    <a href={directMessageUrl} class="btn direct-message-btn" target="_blank" rel="noopener noreferrer">
+      WhatsApp About This Piece
+    </a>
+  )}
   {showContactLink && (
     <a href={`/contact/?item=${product.id}`} class="btn secondary-contact-btn">
       Send Detailed Inquiry
@@ -70,7 +76,7 @@ const directMessageUrl = `https://wa.me/${businessContact.directMessageNumber}?t
 
   @media (min-width: 640px) {
     .product-contact-actions {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
     }
   }
 </style>
