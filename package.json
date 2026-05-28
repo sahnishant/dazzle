@@ -6,7 +6,9 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "check:launch": "node scripts/check-launch-readiness.mjs",
+    "check:launch:strict": "node scripts/check-launch-readiness.mjs --strict"
   },
   "dependencies": {
     "astro": "^5.8.0"
