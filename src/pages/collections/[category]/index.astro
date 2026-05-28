@@ -4,52 +4,60 @@ import BaseLayout from '../../../layouts/BaseLayout.astro';
 import { jewelryItems } from '../../../data/jewelry.js';
 
 export async function getStaticPaths() {
-  if (!Array.isArray(jewelryItems) || jewelryItems.length === 0) {
-    console.warn("jewelryItems is empty or not an array. No category pages will be generated.");
-    return [];
-  }
-
   const categories = [...new Set(
     jewelryItems
-      .map(item => item && item.category)
-      .filter(category => typeof category === 'string' && category.length > 0)
+      .map((item) => item?.category)
+      .filter((category) => typeof category === 'string' && category.length > 0)
   )];
 
-  console.log("Generated categories for collection pages:", categories);
-
-  return categories.map(category => ({
-    params: { category: category },
+  return categories.map((category) => ({
+    params: { category },
   }));
 }
 
 const { category } = Astro.params;
-
 const displayCategoryName = category
-  ? category.replace(/-/g, ' ').replace(/\b\w/g, char => char.toUpperCase())
-  : 'Unknown Category';
+  ? category.replace(/-/g, ' ').replace(/\b\w/g, (char) => char.toUpperCase())
+  : 'Collection';
 
-const rawCategoryItems = Array.isArray(jewelryItems) ? jewelryItems.filter(item => item.category === category) : [];
+const categoryItems = jewelryItems
+  .filter((item) => item.category === category)
+  .sort((a, b) => {
+    const dateA = a.dateAdded instanceof Date ? a.dateAdded.getTime() : 0;
+    const dateB = b.dateAdded instanceof Date ? b.dateAdded.getTime() : 0;
+    return dateB - dateA;
+  });
 
-// Sort initial items by 'newest' by default (descending date)
-rawCategoryItems.sort((a, b) => {
-  const dateA = a.dateAdded instanceof Date ? a.dateAdded.getTime() : 0;
-  const dateB = b.dateAdded instanceof Date ? b.dateAdded.getTime() : 0;
-  return dateB - dateA;
-});
+const buildOptions = (key) => Object.entries(
+  categoryItems.reduce((counts, item) => {
+    const value = item[key];
+    if (!value) return counts;
+    counts[value] = (counts[value] || 0) + 1;
+    return counts;
+  }, {})
+)
+  .sort(([a], [b]) => a.localeCompare(b))
+  .map(([value, count]) => ({ value, count }));
 
+const materials = buildOptions('material');
+const stoneTypes = buildOptions('stoneType');
+const styles = buildOptions('style');
+const pageDescription = `Browse ${displayCategoryName.toLowerCase()} by material, stone type, style, and price.`;
 ---
 
-<BaseLayout title={`${displayCategoryName} Collection`} description={`Browse our exquisite collection of ${displayCategoryName.toLowerCase()} diamond jewelry.`}>
+<BaseLayout title={`${displayCategoryName} Collection`} description={pageDescription}>
   <section class="container page-section category-page" data-category-slug={category}>
-    <h1 class="text-center mb-4">{displayCategoryName} Collection</h1>
-    <div id="category-products-data" data-products={JSON.stringify(rawCategoryItems)} style="display: none;"></div>
+    <div class="category-hero">
+      <p class="category-kicker">Dazzle collection</p>
+      <h1>{displayCategoryName} Collection</h1>
+      <p>{pageDescription}</p>
+    </div>
 
-    {/* Mobile Filter & Sort Toggles */}
     <div class="mobile-filter-sort-toggles">
-      <button id="mobileFilterBtn" class="btn btn-outline mobile-toggle-btn">Filter</button>
-      <div class="sort-options mobile-sort-inline"> {/* Inline sort for mobile */}
-        <label for="sortOrderMobile">Sort By:</label>
-        <select id="sortOrderMobile">
+      <button id="mobileFilterBtn" class="btn btn-outline mobile-toggle-btn" type="button">Filter</button>
+      <div class="sort-options mobile-sort-inline">
+        <label for="sortOrderMobile">Sort by</label>
+        <select id="sortOrderMobile" data-sort-control>
           <option value="newest">Newest</option>
           <option value="price-asc">Price: Low to High</option>
           <option value="price-desc">Price: High to Low</option>
@@ -59,91 +67,122 @@ rawCategoryItems.sort((a, b) => {
     </div>
 
     <div class="collection-layout">
-      {/* Filters Sidebar (will be modal on mobile) */}
-      <aside id="filtersSidebar" class="filters-sidebar">
+      <aside id="filtersSidebar" class="filters-sidebar" aria-label="Collection filters">
         <div class="sidebar-header">
-          <h3>Filter By:</h3>
-          <button id="closeFilterSidebar" class="close-btn">×</button>
+          <div>
+            <p class="category-kicker">Refine</p>
+            <h2>Filter pieces</h2>
+          </div>
+          <button id="closeFilterSidebar" class="close-btn" type="button" aria-label="Close filters">×</button>
         </div>
-        <button id="clearFilters" class="btn btn-outline small-btn mb-4 w-full">Clear Filters</button>
 
-        <div class="filter-group">
-          <h4>Material</h4>
-          <label><input type="checkbox" data-filter-type="material" value="Yellow Gold" /> Yellow Gold</label>
-          <label><input type="checkbox" data-filter-type="material" value="White Gold" /> White Gold</label>
-          <label><input type="checkbox" data-filter-type="material" value="Rose Gold" /> Rose Gold</label>
-          <label><input type="checkbox" data-filter-type="material" value="Platinum" /> Platinum</label>
-          <label><input type="checkbox" data-filter-type="material" value="Silver" /> Silver</label>
-          <label><input type="checkbox" data-filter-type="material" value="Customizable" /> Customizable</label>
-        </div>
-        <div class="filter-group">
-          <h4>Stone Type</h4>
-          <label><input type="checkbox" data-filter-type="stoneType" value="Diamond" /> Diamond</label>
-          <label><input type="checkbox" data-filter-type="stoneType" value="Emerald" /> Emerald</label>
-          <label><input type="checkbox" data-filter-type="stoneType" value="Ruby" /> Ruby</label>
-          <label><input type="checkbox" data-filter-type="stoneType" value="Sapphire" /> Sapphire</label>
-        </div>
-        <div class="filter-group">
-          <h4>Style</h4>
-          {category === 'rings' && (
-            <>
-              <label><input type="checkbox" data-filter-type="style" value="Solitaire" /> Solitaire</label>
-              <label><input type="checkbox" data-filter-type="style" value="Halo" /> Halo</label>
-              <label><input type="checkbox" data-filter-type="style" value="Pave" /> Pave</label>
-              <label><input type="checkbox" data-filter-type="style" value="Cluster" /> Cluster</label>
-              <label><input type="checkbox" data-filter-type="style" value="Cocktail" /> Cocktail</label>
-            </>
-          )}
-          {category === 'earrings' && (
-            <>
-              <label><input type="checkbox" data-filter-type="style" value="Stud" /> Stud</label>
-              <label><input type="checkbox" data-filter-type="style" value="Hoop" /> Hoop</label>
-              <label><input type="checkbox" data-filter-type="style" value="Dangle" /> Dangle</label>
-            </>
-          )}
-          {category === 'necklaces' && (
-            <>
-              <label><input type="checkbox" data-filter-type="style" value="Pendant" /> Pendant</label>
-              <label><input type="checkbox" data-filter-type="style" value="Choker" /> Choker</label>
-            </>
-          )}
-          {category === 'bracelets' && (
-            <>
-              <label><input type="checkbox" data-filter-type="style" value="Tennis" /> Tennis</label>
-              <label><input type="checkbox" data-filter-type="style" value="Bangle" /> Bangle</label>
-              <label><input type="checkbox" data-filter-type="style" value="Cuff" /> Cuff</label>
-              <label><input type="checkbox" data-filter-type="style" value="Chain" /> Chain</label>
-            </>
-          )}
-          {category === 'custom' && (
-            <label><input type="checkbox" data-filter-type="style" value="Custom" /> Custom</label>
-          )}
-        </div>
-        <div class="filter-group">
-          <h4>Price Range</h4>
-          <label><input type="checkbox" data-filter-type="priceRange" value="0-100000" /> Under ₹1 Lakh</label>
-          <label><input type="checkbox" data-filter-type="priceRange" value="100001-300000" /> ₹1 Lakh - ₹3 Lakh</label>
-          <label><input type="checkbox" data-filter-type="priceRange" value="300001-700000" /> ₹3 Lakh - ₹7 Lakh</label>
-          <label><input type="checkbox" data-filter-type="priceRange" value="700001-999999999" /> ₹7 Lakh +</label>
-        </div>
-        {/* Only for mobile: Apply Filters button */}
-        <button id="applyFiltersBtn" class="btn w-full mt-4 mobile-only">Apply Filters</button>
+        <button id="clearFilters" class="btn btn-outline small-btn mb-4 w-full" type="button">Clear Filters</button>
+
+        {materials.length > 0 && (
+          <fieldset class="filter-group">
+            <legend>Material</legend>
+            {materials.map((option) => (
+              <label>
+                <input type="checkbox" data-filter-type="material" value={option.value} />
+                <span>{option.value}</span>
+                <small>{option.count}</small>
+              </label>
+            ))}
+          </fieldset>
+        )}
+
+        {stoneTypes.length > 0 && (
+          <fieldset class="filter-group">
+            <legend>Stone Type</legend>
+            {stoneTypes.map((option) => (
+              <label>
+                <input type="checkbox" data-filter-type="stoneType" value={option.value} />
+                <span>{option.value}</span>
+                <small>{option.count}</small>
+              </label>
+            ))}
+          </fieldset>
+        )}
+
+        {styles.length > 0 && (
+          <fieldset class="filter-group">
+            <legend>Style</legend>
+            {styles.map((option) => (
+              <label>
+                <input type="checkbox" data-filter-type="style" value={option.value} />
+                <span>{option.value}</span>
+                <small>{option.count}</small>
+              </label>
+            ))}
+          </fieldset>
+        )}
+
+        <fieldset class="filter-group">
+          <legend>Price Range</legend>
+          <label><input type="checkbox" data-filter-type="priceRange" value="0-100000" /> <span>Under ₹1 Lakh</span></label>
+          <label><input type="checkbox" data-filter-type="priceRange" value="100001-300000" /> <span>₹1 Lakh - ₹3 Lakh</span></label>
+          <label><input type="checkbox" data-filter-type="priceRange" value="300001-700000" /> <span>₹3 Lakh - ₹7 Lakh</span></label>
+          <label><input type="checkbox" data-filter-type="priceRange" value="700001-999999999" /> <span>₹7 Lakh +</span></label>
+        </fieldset>
+
+        <button id="applyFiltersBtn" class="btn w-full mt-4 mobile-only" type="button">Apply Filters</button>
       </aside>
 
-      {/* Main Content Area (Sort & Products) */}
       <div class="main-collection-content">
-        <div class="sort-options desktop-sort-inline"> {/* Desktop inline sort */}
-          <label for="sortOrderDesktop">Sort By:</label>
-          <select id="sortOrderDesktop">
-            <option value="newest">Newest</option>
-            <option value="price-asc">Price: Low to High</option>
-            <option value="price-desc">Price: High to Low</option>
-            <option value="popularity-desc">Popularity</option>
-          </select>
+        <div class="collection-toolbar">
+          <p id="categoryResultCount">Showing {categoryItems.length} {categoryItems.length === 1 ? 'piece' : 'pieces'}</p>
+          <div class="sort-options desktop-sort-inline">
+            <label for="sortOrderDesktop">Sort by</label>
+            <select id="sortOrderDesktop" data-sort-control>
+              <option value="newest">Newest</option>
+              <option value="price-asc">Price: Low to High</option>
+              <option value="price-desc">Price: High to Low</option>
+              <option value="popularity-desc">Popularity</option>
+            </select>
+          </div>
         </div>
 
+        <div id="activeFilterChips" class="active-filter-chips" aria-label="Active filters"></div>
+
         <div id="productGrid" class="product-grid">
-          {/* Products will be rendered here by JavaScript */}
+          {categoryItems.map((item) => (
+            <article
+              class="product-card"
+              data-product-card
+              data-id={item.id}
+              data-name={item.name}
+              data-price={item.price}
+              data-price-value={item.priceValue || 0}
+              data-popularity={item.popularityScore || 0}
+              data-date={item.dateAdded instanceof Date ? item.dateAdded.toISOString() : ''}
+              data-material={item.material || ''}
+              data-stone-type={item.stoneType || ''}
+              data-style={item.style || ''}
+            >
+              <a href={`/collections/${item.category}/${item.id}/`} class="product-card-link">
+                <img src={item.mainImage} alt={item.name} loading="lazy" />
+                <div class="product-info-card">
+                  <p class="product-meta">{item.material} · {item.style}</p>
+                  <h3>{item.name}</h3>
+                  <p class="price">{item.price}</p>
+                </div>
+              </a>
+              <div class="card-actions">
+                <a href={`/collections/${item.category}/${item.id}/`} class="small-link">View Details</a>
+                <a href={`/contact/?item=${item.id}`} class="small-link">Inquire</a>
+              </div>
+            </article>
+          ))}
+        </div>
+
+        <div id="emptyCollectionState" class="empty-state" hidden>
+          <p class="category-kicker">No exact match</p>
+          <h2>No pieces match these filters</h2>
+          <p>Clear the filters or contact us for a recommendation based on your preferred style, material, and budget.</p>
+          <div class="empty-actions">
+            <button id="clearEmptyFilters" class="btn" type="button">Clear Filters</button>
+            <a href="/contact/" class="secondary-link">Request Guidance</a>
+          </div>
         </div>
       </div>
     </div>
@@ -152,579 +191,437 @@ rawCategoryItems.sort((a, b) => {
       <a href="/collections/" class="btn btn-outline">← Back to All Collections</a>
     </div>
   </section>
-
-  <!-- Quick View Modal Structure (unchanged) -->
-  <div id="quickViewModal" class="modal">
-    <div class="modal-content quick-view-content">
-      <span class="close-btn">×</span>
-      <div class="modal-body">
-        <div class="modal-image">
-          <img src="" alt="" id="quickViewImage" />
-        </div>
-        <div class="modal-details">
-          <h3 id="quickViewName"></h3>
-          <p class="modal-price" id="quickViewPrice"></p>
-          <p id="quickViewDescription"></p>
-          <a href="#" id="quickViewLink" class="btn mt-4">View Full Details</a>
-          <a href="#" id="quickViewContactLink" class="btn btn-outline mt-2">Inquire About This Piece</a>
-        </div>
-      </div>
-    </div>
-  </div>
 </BaseLayout>
 
 <script is:inline>
   document.addEventListener('DOMContentLoaded', () => {
-    function reviveDates(key, value) {
-        const isoDateRegex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{3})?Z$/;
-        if (typeof value === 'string' && isoDateRegex.test(value)) {
-            return new Date(value);
-        }
-        return value;
-    }
-
-
-
-    const dataElement = document.getElementById('category-products-data');
-    // Add null check for dataElement, though it should be present
-    if (!dataElement) {
-        console.error("Error: #category-products-data element not found. Filtering/sorting will not work.");
-        return; // Exit script if critical element not found
-    }
-    const rawItems = JSON.parse(dataElement.dataset.products, reviveDates);
-
-    const pageSection = document.querySelector('.category-page');
-
-    let currentCategorySlug;
-    if (pageSection) {
-        currentCategorySlug = pageSection.dataset.categorySlug;
-    } else {
-        // Fallback: If for some reason .category-page isn't found, try to extract from URL path
-        // This is a last resort and should ideally not be hit if HTML is correct
-        const pathSegments = window.location.pathname.split('/').filter(Boolean); // Remove empty strings
-        // Expects URL like /collections/rings/
-        if (pathSegments.length >= 2 && pathSegments[0] === 'collections') {
-            currentCategorySlug = pathSegments[1];
-            console.warn("Fallback: currentCategorySlug derived from URL path. .category-page element not found.");
-        } else {
-            currentCategorySlug = 'unknown-category'; // Default if all else fails
-            console.error("Critical Error: Cannot determine currentCategorySlug from DOM or URL.");
-        }
-    }
-``
-
-    let displayedItems = [...rawItems];
-
-    const productGrid = document.getElementById('productGrid');
-    const sortOrderSelectDesktop = document.getElementById('sortOrderDesktop'); // Desktop sort
-    const sortOrderSelectMobile = document.getElementById('sortOrderMobile');   // Mobile sort
-    const filterCheckboxes = document.querySelectorAll('.filters input[type="checkbox"]');
-    const clearFiltersBtn = document.getElementById('clearFilters');
-
-    // Mobile filter sidebar elements
+    const sidebar = document.getElementById('filtersSidebar');
     const mobileFilterBtn = document.getElementById('mobileFilterBtn');
-    const filtersSidebar = document.getElementById('filtersSidebar');
     const closeFilterSidebar = document.getElementById('closeFilterSidebar');
     const applyFiltersBtn = document.getElementById('applyFiltersBtn');
+    const clearFiltersBtn = document.getElementById('clearFilters');
+    const clearEmptyFiltersBtn = document.getElementById('clearEmptyFilters');
+    const filterCheckboxes = Array.from(document.querySelectorAll('#filtersSidebar input[type="checkbox"]'));
+    const sortControls = Array.from(document.querySelectorAll('[data-sort-control]'));
+    const productGrid = document.getElementById('productGrid');
+    const cards = Array.from(document.querySelectorAll('[data-product-card]'));
+    const resultCount = document.getElementById('categoryResultCount');
+    const emptyState = document.getElementById('emptyCollectionState');
+    const activeFilterChips = document.getElementById('activeFilterChips');
 
-    // Quick View Modal elements
-    const quickViewModal = document.getElementById('quickViewModal');
-    const closeBtn = quickViewModal.querySelector('.close-btn'); // Renamed from closeQuickViewModal to avoid conflict
-    const quickViewImage = document.getElementById('quickViewImage');
-    const quickViewName = document.getElementById('quickViewName');
-    const quickViewPrice = document.getElementById('quickViewPrice');
-    const quickViewDescription = document.getElementById('quickViewDescription');
-    const quickViewLink = document.getElementById('quickViewLink');
-    const quickViewContactLink = document.getElementById('quickViewContactLink');
-    
-    // --- Filtering and Sorting Logic ---
-    function applyFiltersAndSort() {
-      let filtered = [...rawItems];
+    const filterTypes = ['material', 'stoneType', 'style', 'priceRange'];
 
-      const activeFilters = {};
-      filterCheckboxes.forEach(checkbox => {
-        if (checkbox.checked) {
-          const type = checkbox.dataset.filterType;
-          if (!activeFilters[type]) {
-            activeFilters[type] = new Set();
-          }
-          activeFilters[type].add(checkbox.value);
-        }
+    const getActiveFilters = () => filterCheckboxes
+      .filter((checkbox) => checkbox.checked)
+      .map((checkbox) => ({
+        type: checkbox.dataset.filterType,
+        value: checkbox.value,
+        label: checkbox.nextElementSibling?.textContent?.trim() || checkbox.value,
+      }));
+
+    const syncSortControls = (changedControl) => {
+      sortControls.forEach((control) => {
+        if (control !== changedControl) control.value = changedControl.value;
       });
+    };
 
-      Object.keys(activeFilters).forEach(type => {
-        if (activeFilters[type].size > 0) {
-          filtered = filtered.filter(item => {
-            if (type === 'priceRange') {
-              let matchesPriceRange = false;
-              activeFilters[type].forEach(range => {
-                const [min, max] = range.split('-').map(Number);
-                const itemPrice = item.priceValue || 0;
-                if (itemPrice >= min && itemPrice <= max) {
-                  matchesPriceRange = true;
-                }
-              });
-              return matchesPriceRange;
-            } else { // For material, stoneType, style filters
-              if (!item.hasOwnProperty(type) || typeof item[type] !== 'string') {
-                return false;
-              }
-              return activeFilters[type].has(item[type]);
-            }
-          });
-        }
-      });
+    const getSortValue = () => sortControls.find((control) => control.offsetParent !== null)?.value || sortControls[0]?.value || 'newest';
 
-      // Determine which sort dropdown is currently active/visible
-      const sortValue = window.innerWidth >= 768 ? sortOrderSelectDesktop.value : sortOrderSelectMobile.value;
+    const matchesPriceRange = (priceValue, range) => {
+      const [min, max] = range.split('-').map(Number);
+      return priceValue >= min && priceValue <= max;
+    };
 
-      if (sortValue === 'price-asc') {
-        filtered.sort((a, b) => (a.priceValue || 0) - (b.priceValue || 0));
-      } else if (sortValue === 'price-desc') {
-        filtered.sort((a, b) => (b.priceValue || 0) - (a.priceValue || 0));
-      } else if (sortValue === 'newest') {
-          filtered.sort((a, b) => {
-              const dateA = a.dateAdded instanceof Date ? a.dateAdded.getTime() : 0;
-              const dateB = b.dateAdded instanceof Date ? b.dateAdded.getTime() : 0;
-              return dateB - dateA;
-          });
-      } else if (sortValue === 'popularity-desc') {
-          filtered.sort((a, b) => (b.popularityScore || 0) - (a.popularityScore || 0));
-      }
+    const getSelectedValues = (type) => filterCheckboxes
+      .filter((checkbox) => checkbox.dataset.filterType === type && checkbox.checked)
+      .map((checkbox) => checkbox.value);
 
-      displayedItems = filtered;
-      renderProducts();
-    }
+    const renderActiveChips = () => {
+      if (!activeFilterChips) return;
+      const filters = getActiveFilters();
+      activeFilterChips.innerHTML = '';
 
-    function renderProducts() {
-      if (!productGrid) return;
-
-      productGrid.innerHTML = '';
-      if (displayedItems.length === 0) {
-        productGrid.innerHTML = '<p class="text-center text-gray-600 col-span-full">No items match your criteria.</p>';
-        return;
-      }
-
-      displayedItems.forEach(item => {
-        const productCardWrapper = document.createElement('div');
-        productCardWrapper.classList.add('product-card-wrapper');
-
-        const productCardLink = document.createElement('a');
-        productCardLink.href = `/collections/${currentCategorySlug}/${item.id}/`;
-        productCardLink.classList.add('product-card');
-
-        const img = document.createElement('img');
-        img.src = item.mainImage;
-        img.alt = item.name;
-        img.loading = 'lazy';
-        productCardLink.appendChild(img);
-
-        const cardContent = document.createElement('div');
-        cardContent.classList.add('card-content');
-        
-        const h3 = document.createElement('h3');
-        h3.textContent = item.name;
-        cardContent.appendChild(h3);
-
-        const priceP = document.createElement('p');
-        priceP.classList.add('price');
-        priceP.textContent = item.price;
-        cardContent.appendChild(priceP);
-
-        productCardLink.appendChild(cardContent);
-        productCardWrapper.appendChild(productCardLink);
-
-        const quickViewButton = document.createElement('button');
-        quickViewButton.classList.add('quick-view-btn');
-        quickViewButton.textContent = 'Quick View';
-        quickViewButton.dataset.productId = item.id;
-        productCardWrapper.appendChild(quickViewButton);
-
-        productGrid.appendChild(productCardWrapper);
-      });
-      attachQuickViewListeners();
-    }
-
-    // --- Event Listeners for Filtering and Sorting ---
-    sortOrderSelectDesktop.addEventListener('change', applyFiltersAndSort); // Desktop sort
-    sortOrderSelectMobile.addEventListener('change', applyFiltersAndSort);   // Mobile sort
-    filterCheckboxes.forEach(checkbox => {
-      checkbox.addEventListener('change', applyFiltersAndSort);
-    });
-    clearFiltersBtn.addEventListener('click', () => {
-      filterCheckboxes.forEach(checkbox => checkbox.checked = false);
-      // Reset both sort selects to 'newest'
-      sortOrderSelectDesktop.value = 'newest';
-      sortOrderSelectMobile.value = 'newest';
-      applyFiltersAndSort();
-    });
-
-    // --- Mobile Filter Sidebar Logic ---
-    mobileFilterBtn.addEventListener('click', () => {
-      filtersSidebar.classList.add('active');
-      document.body.classList.add('modal-open'); // Prevent scrolling behind
-    });
-
-    closeFilterSidebar.addEventListener('click', () => {
-      filtersSidebar.classList.remove('active');
-      document.body.classList.remove('modal-open');
-    });
-
-    applyFiltersBtn.addEventListener('click', () => {
-      applyFiltersAndSort(); // Apply filters from mobile sidebar
-      filtersSidebar.classList.remove('active');
-      document.body.classList.remove('modal-open');
-    });
-
-    // --- Quick View Modal Logic ---
-    function openQuickViewModal(productId) {
-      const product = rawItems.find(item => item.id === productId);
-      if (product) {
-        quickViewImage.src = product.mainImage;
-        quickViewImage.alt = product.name;
-        quickViewName.textContent = product.name;
-        quickViewPrice.textContent = product.price;
-        quickViewDescription.textContent = product.description;
-        quickViewLink.href = `/collections/${product.category}/${product.id}/`;
-        quickViewContactLink.href = `/contact/?item=${product.id}`;
-        quickViewModal.style.display = 'flex';
-        document.body.classList.add('modal-open');
-      }
-    }
-
-    function closeQuickViewModal() {
-      quickViewModal.style.display = 'none';
-      document.body.classList.remove('modal-open');
-    }
-
-    function attachQuickViewListeners() {
-        const currentQuickViewButtons = productGrid.querySelectorAll('.quick-view-btn');
-        currentQuickViewButtons.forEach(button => {
-            button.removeEventListener('click', handleQuickViewClick);
-            button.addEventListener('click', handleQuickViewClick);
+      filters.forEach((filter) => {
+        const chip = document.createElement('button');
+        chip.type = 'button';
+        chip.className = 'active-filter-chip';
+        chip.textContent = `${filter.label} ×`;
+        chip.addEventListener('click', () => {
+          const checkbox = filterCheckboxes.find((candidate) => candidate.dataset.filterType === filter.type && candidate.value === filter.value);
+          if (checkbox) checkbox.checked = false;
+          applyFiltersAndSort();
         });
-    }
+        activeFilterChips.appendChild(chip);
+      });
+    };
 
-    function handleQuickViewClick(event) {
-        openQuickViewModal(event.target.dataset.productId);
-    }
+    const sortCards = (visibleCards) => {
+      const sortValue = getSortValue();
+      return visibleCards.sort((a, b) => {
+        if (sortValue === 'price-asc') return Number(a.dataset.priceValue || 0) - Number(b.dataset.priceValue || 0);
+        if (sortValue === 'price-desc') return Number(b.dataset.priceValue || 0) - Number(a.dataset.priceValue || 0);
+        if (sortValue === 'popularity-desc') return Number(b.dataset.popularity || 0) - Number(a.dataset.popularity || 0);
+        return new Date(b.dataset.date || 0).getTime() - new Date(a.dataset.date || 0).getTime();
+      });
+    };
 
-    closeBtn.addEventListener('click', closeQuickViewModal); // This close button is for Quick View Modal
-    window.addEventListener('click', (event) => {
-      if (event.target === quickViewModal) {
-        closeQuickViewModal();
+    const applyFiltersAndSort = () => {
+      const selected = Object.fromEntries(filterTypes.map((type) => [type, getSelectedValues(type)]));
+      const visibleCards = [];
+
+      cards.forEach((card) => {
+        const priceValue = Number(card.dataset.priceValue || 0);
+        const isVisible = filterTypes.every((type) => {
+          if (selected[type].length === 0) return true;
+          if (type === 'priceRange') return selected[type].some((range) => matchesPriceRange(priceValue, range));
+          return selected[type].includes(card.dataset[type]);
+        });
+
+        card.hidden = !isVisible;
+        if (isVisible) visibleCards.push(card);
+      });
+
+      sortCards(visibleCards).forEach((card) => productGrid?.appendChild(card));
+
+      if (resultCount) {
+        resultCount.textContent = `Showing ${visibleCards.length} ${visibleCards.length === 1 ? 'piece' : 'pieces'}`;
       }
-    });
 
-    // Initial render when page loads
+      if (emptyState) {
+        emptyState.hidden = visibleCards.length > 0;
+      }
+
+      renderActiveChips();
+    };
+
+    const clearFilters = () => {
+      filterCheckboxes.forEach((checkbox) => {
+        checkbox.checked = false;
+      });
+      applyFiltersAndSort();
+    };
+
+    mobileFilterBtn?.addEventListener('click', () => sidebar?.classList.add('is-open'));
+    closeFilterSidebar?.addEventListener('click', () => sidebar?.classList.remove('is-open'));
+    applyFiltersBtn?.addEventListener('click', () => sidebar?.classList.remove('is-open'));
+    clearFiltersBtn?.addEventListener('click', clearFilters);
+    clearEmptyFiltersBtn?.addEventListener('click', clearFilters);
+    filterCheckboxes.forEach((checkbox) => checkbox.addEventListener('change', applyFiltersAndSort));
+    sortControls.forEach((control) => control.addEventListener('change', () => {
+      syncSortControls(control);
+      applyFiltersAndSort();
+    }));
+
     applyFiltersAndSort();
   });
 </script>
 
 <style>
-  /* Base section styling - should ideally be in global.css */
-  /* If these are already in global.css, you can remove them from here to avoid duplication */
   .page-section {
-    padding: 2rem 1rem;
+    padding: 3rem 1rem;
     background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    border-radius: 16px;
+    box-shadow: 0 8px 26px rgba(0,0,0,0.06);
     margin-top: 2rem;
     margin-bottom: 2rem;
   }
-  .page-section h1 {
-    color: #B0A08C;
-    margin-bottom: 1.5rem;
-  }
-  .small-btn {
-    padding: 0.5rem 1rem;
-    font-size: 0.9rem;
-  }
-  .btn-outline {
-    background-color: transparent;
-    color: #B0A08C;
-    border: 2px solid #B0A08C;
-  }
-  .btn-outline:hover {
-    background-color: #B0A08C;
-    color: white;
+
+  .category-hero {
+    max-width: 820px;
+    margin: 0 auto 2rem;
+    text-align: center;
   }
 
-  /* --- NEW Layout for Filters and Products --- */
+  .category-kicker {
+    margin: 0 0 0.35rem;
+    color: #A0907C;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .category-hero h1 {
+    margin: 0 0 0.75rem;
+    color: #555;
+    font-size: clamp(2.2rem, 5vw, 3.4rem);
+  }
+
+  .category-hero p {
+    margin: 0;
+    color: #666;
+    line-height: 1.7;
+  }
+
   .mobile-filter-sort-toggles {
     display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 1.5rem;
-    padding: 0.5rem;
-    background-color: #fcf8f3;
-    border-radius: 8px;
-    box-shadow: 0 1px 5px rgba(0,0,0,0.05);
-  }
-  .mobile-toggle-btn {
-    flex: 1; /* Take equal space */
-    margin: 0 0.5rem;
-  }
-  .mobile-sort-inline {
-    flex: 1;
-    margin: 0 0.5rem;
-  }
-  .mobile-sort-inline select {
-    width: 100%;
-    padding: 0.5rem;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    font-size: 1rem;
-    font-family: 'Georgia', serif;
-    background-color: white;
-    cursor: pointer;
-  }
-  .desktop-sort-inline {
-    display: none; /* Hidden by default, shown on desktop */
-    text-align: right;
-    margin-bottom: 1.5rem; /* Spacing above product grid */
-  }
-  .desktop-sort-inline select {
-    padding: 0.5rem;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    font-size: 1rem;
-    font-family: 'Georgia', serif;
-    background-color: white;
-    cursor: pointer;
-    min-width: 150px;
   }
 
   .collection-layout {
     display: grid;
-    grid-template-columns: 1fr; /* Single column by default for mobile */
-    gap: 2rem;
+    gap: 1.5rem;
   }
 
-  /* Filters Sidebar (Mobile Drawer) */
   .filters-sidebar {
-    background-color: #fcf8f3;
-    padding: 1.5rem;
-    border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
-    position: fixed; /* For mobile drawer */
-    top: 0;
-    left: 0;
-    width: 80%; /* Takes 80% of screen width */
-    max-width: 300px; /* Max width for consistency */
-    height: 100%;
-    overflow-y: auto; /* Scroll if filters are long */
-    z-index: 1001; /* Above everything else */
-    transform: translateX(-100%); /* Hidden by default */
-    transition: transform 0.3s ease-out;
-    display: flex; /* Flex container for content */
-    flex-direction: column;
+    padding: 1.25rem;
+    border: 1px solid rgba(176, 160, 140, 0.28);
+    border-radius: 14px;
+    background: #fffaf4;
   }
-  .filters-sidebar.active {
-    transform: translateX(0); /* Slide in */
-  }
+
   .sidebar-header {
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1.5rem;
-    border-bottom: 1px solid #eee;
-    padding-bottom: 0.5rem;
+    gap: 1rem;
+    align-items: flex-start;
+    margin-bottom: 1rem;
   }
-  .sidebar-header h3 {
-    font-size: 1.3rem;
-    color: #555;
+
+  .sidebar-header h2 {
     margin: 0;
+    color: #555;
+    font-size: 1.3rem;
   }
-  .filters-sidebar .close-btn {
-    position: static; /* Override modal close button position */
-    font-size: 28px;
-    line-height: 1;
-    padding: 0;
-    background: none;
-    border: none;
+
+  .close-btn {
+    border: 0;
+    background: transparent;
+    color: #555;
     cursor: pointer;
-    color: #aaa;
-  }
-  .filters-sidebar .close-btn:hover {
-    color: black;
+    font-size: 1.6rem;
   }
 
   .filter-group {
-    margin-bottom: 1.5rem;
+    border: 0;
+    margin: 0 0 1.25rem;
+    padding: 0;
   }
-  .filter-group h4 {
-    font-size: 1rem;
-    color: #777;
-    margin-bottom: 0.8rem;
-    font-weight: bold;
+
+  .filter-group legend {
+    margin-bottom: 0.65rem;
+    color: #555;
+    font-weight: 700;
   }
+
   .filter-group label {
-    display: block;
-    margin-bottom: 0.5rem;
-    font-size: 0.95rem;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 0.55rem;
+    align-items: center;
+    margin-bottom: 0.55rem;
+    color: #555;
     cursor: pointer;
   }
-  .filter-group input[type="checkbox"] {
-    margin-right: 0.5rem;
-  }
-  .w-full { /* Utility for full width button */
-    width: 100%;
-  }
-  .mobile-only {
-    display: block; /* Shown on mobile, hidden on desktop */
+
+  .filter-group input {
+    accent-color: #B0A08C;
   }
 
-  .main-collection-content {
-    flex: 1; /* Main content takes remaining space */
+  .filter-group small {
+    display: inline-flex;
+    min-width: 1.65rem;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    background: rgba(176, 160, 140, 0.16);
+    color: #8a7663;
+    font-size: 0.72rem;
+    font-weight: 700;
+    line-height: 1.65;
   }
 
-
-  /* Product Grid and Card styles (mostly unchanged from previous steps) */
-  .product-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 2rem;
-  }
-  .product-card-wrapper {
-    position: relative;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
-    border-radius: 8px;
-    overflow: hidden;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-  }
-  .product-card-wrapper:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 16px rgba(0,0,0,0.12);
-  }
-  .product-card {
-    background-color: white;
-    text-align: center;
-    text-decoration: none;
-    color: #333;
+  .collection-toolbar {
     display: flex;
-    flex-direction: column;
-    height: 100%;
-  }
-  .product-card img {
-    width: 100%;
-    height: 250px;
-    object-fit: cover;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: space-between;
+    align-items: center;
     margin-bottom: 1rem;
   }
-  .product-card .card-content {
-    padding: 0 1.5rem 1.5rem;
-    flex-grow: 1;
+
+  .collection-toolbar p {
+    margin: 0;
+    color: #666;
+    font-weight: 700;
+  }
+
+  .sort-options {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+  }
+
+  .sort-options label {
+    color: #555;
+    font-weight: 700;
+  }
+
+  .sort-options select {
+    border: 1px solid rgba(176, 160, 140, 0.42);
+    border-radius: 999px;
+    background: #fff;
+    color: #555;
+    padding: 0.45rem 0.75rem;
+  }
+
+  .active-filter-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .active-filter-chip {
+    border: 1px solid rgba(176, 160, 140, 0.4);
+    border-radius: 999px;
+    background: #fffaf4;
+    color: #7d6d5b;
+    cursor: pointer;
+    font: inherit;
+    font-size: 0.85rem;
+    font-weight: 700;
+    padding: 0.35rem 0.75rem;
+  }
+
+  .product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 1.4rem;
+  }
+
+  .product-card {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    overflow: hidden;
+    border: 1px solid rgba(176, 160, 140, 0.2);
+    border-radius: 14px;
+    background-color: white;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.06);
   }
-  .product-card h3 {
-    font-size: 1.4rem;
-    margin-bottom: 0.5rem;
+
+  .product-card-link {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    color: #333;
+    text-decoration: none;
+  }
+
+  .product-card img {
+    width: 100%;
+    height: 230px;
+    object-fit: cover;
+  }
+
+  .product-info-card {
+    padding: 1rem;
+  }
+
+  .product-meta {
+    margin: 0 0 0.35rem;
+    color: #A0907C;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .product-info-card h3 {
+    margin: 0 0 0.75rem;
+    color: #555;
+    font-size: 1.12rem;
+  }
+
+  .price {
+    margin: 0;
+    color: #B0A08C;
+    font-weight: 700;
+  }
+
+  .card-actions {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0 1rem 1rem;
+  }
+
+  .small-link,
+  .secondary-link {
+    color: #A0907C;
+    font-weight: 700;
+  }
+
+  .empty-state {
+    margin-top: 1.5rem;
+    padding: 2rem;
+    border: 1px solid rgba(176, 160, 140, 0.35);
+    border-radius: 16px;
+    background: #fffaf4;
+    text-align: center;
+  }
+
+  .empty-state h2 {
     color: #555;
   }
-  .product-card .price {
-    font-size: 1.2rem;
-    font-weight: bold;
-    color: #B0A08C;
-    margin-top: 1rem;
-  }
 
-  /* Quick View Button on Card Hover */
-  .quick-view-btn {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    background-color: rgba(176, 160, 140, 0.9);
-    color: white;
-    border: none;
-    padding: 0.8rem 1rem;
-    font-size: 1rem;
-    cursor: pointer;
-    opacity: 0;
-    transform: translateY(100%);
-    transition: opacity 0.3s ease, transform 0.3s ease;
-  }
-  .product-card-wrapper:hover .quick-view-btn {
-    opacity: 1;
-    transform: translateY(0);
-  }
-
-  /* --- Quick View Modal Styles (unchanged from previous steps) --- */
-  .modal {
-    display: none;
-    position: fixed;
-    z-index: 1000;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: rgba(0,0,0,0.6);
+  .empty-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
     justify-content: center;
     align-items: center;
   }
-  .modal-content.quick-view-content { /* ... styles ... */ }
-  .modal-body { /* ... styles ... */ }
-  .modal-image { /* ... styles ... */ }
-  .modal-image img { /* ... styles ... */ }
-  .modal-details { /* ... styles ... */ }
-  .modal-details h3 { /* ... styles ... */ }
-  .modal-details .modal-price { /* ... styles ... */ }
-  .modal-details p { /* ... styles ... */ }
-  .modal-details .btn { /* ... styles ... */ }
-  .close-btn { /* for quick view modal (position is static) */
-    color: #aaa;
-    position: absolute; /* Default for modals */
-    top: 10px;
-    right: 20px;
-    font-size: 28px;
-    font-weight: bold;
-    cursor: pointer;
-  }
-  .close-btn:hover,
-  .close-btn:focus {
-    color: black;
-    text-decoration: none;
-  }
-  /* Body class to prevent scrolling behind modal */
-  body.modal-open {
-    overflow: hidden;
+
+  .desktop-sort-inline {
+    display: none;
   }
 
-  /* --- Responsive Design for Filters/Sort --- */
-  @media (min-width: 768px) { /* Desktop styles */
-    .mobile-filter-sort-toggles {
-      display: none; /* Hide mobile toggles on desktop */
-    }
-    .desktop-sort-inline {
-      display: block; /* Show desktop sort */
-    }
-    .collection-layout {
-      grid-template-columns: 250px 1fr; /* Sidebar (250px) + Main Content (rest) */
-    }
+  .mobile-only {
+    display: inline-flex;
+  }
+
+  @media (max-width: 767px) {
     .filters-sidebar {
-      position: static; /* No longer fixed/modal */
-      transform: translateX(0); /* Always visible */
-      height: auto; /* Content-driven height */
-      max-width: unset; /* Remove max-width constraint */
-      box-shadow: none; /* Remove shadow */
-      border-right: 1px solid #eee; /* Visual separator */
-      padding-right: 2rem;
-      border-radius: 0; /* No rounded corners on left side */
-      background-color: transparent; /* Match page background */
+      position: fixed;
+      inset: 0 0 0 auto;
+      z-index: 50;
+      width: min(88vw, 360px);
+      overflow-y: auto;
+      transform: translateX(105%);
+      transition: transform 0.25s ease;
+      box-shadow: -12px 0 30px rgba(0,0,0,0.15);
     }
-    .filters-sidebar .sidebar-header {
-      display: block; /* Remove flex, just show header */
-      text-align: left;
+
+    .filters-sidebar.is-open {
+      transform: translateX(0);
     }
-    .filters-sidebar .close-btn {
-      display: none; /* Hide close button on desktop */
+  }
+
+  @media (min-width: 768px) {
+    .collection-layout {
+      grid-template-columns: minmax(220px, 280px) 1fr;
+      align-items: start;
     }
-    .filters-sidebar .mobile-only {
-      display: none; /* Hide mobile-only apply button */
+
+    .filters-sidebar {
+      position: sticky;
+      top: 1rem;
+    }
+
+    .desktop-sort-inline {
+      display: flex;
+    }
+
+    .mobile-sort-inline,
+    .mobile-toggle-btn,
+    .mobile-only,
+    .close-btn {
+      display: none;
     }
   }
 </style>
