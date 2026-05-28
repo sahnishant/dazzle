@@ -4,12 +4,12 @@
   "version": "0.0.1",
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
+    "build": "npm run sync:products && astro build",
     "preview": "astro preview",
     "astro": "astro",
     "sync:products": "node scripts/sync-products.mjs",
-    "check:launch": "node scripts/check-launch-readiness.mjs",
-    "check:launch:strict": "node scripts/check-launch-readiness.mjs --strict"
+    "check:launch": "npm run sync:products && node scripts/check-launch-readiness.mjs",
+    "check:launch:strict": "npm run sync:products && node scripts/check-launch-readiness.mjs --strict"
   },
   "dependencies": {
     "astro": "^5.8.0"
