@@ -1,6 +1,6 @@
 # Dazzle Admin Workflow
 
-Dazzle now has a lightweight Git-backed admin path for product and article content.
+Dazzle now has a lightweight Git-backed admin path for products, articles, and build-safe content generation.
 
 ## Admin URL
 
@@ -41,12 +41,12 @@ src/data/jewelry.js
 After editing product JSON files, run:
 
 ```bash
-npm run sync:products
+npm run sync:content
 npm run build
 npm run check:launch
 ```
 
-`sync:products` regenerates `src/data/jewelry.js` from the admin-editable JSON records.
+`sync:content` regenerates generated storefront data from admin-editable content records.
 
 ## Adding a product
 
@@ -88,26 +88,55 @@ src/content/articles/*.md
 
 The admin panel supports title, description, publish date, author, hero image, tags, and markdown body.
 
-## Current limitations
+## Business contact settings
+
+Business contact source data now lives in:
+
+```txt
+src/content/settings/business-contact.json
+```
+
+It generates:
+
+```txt
+src/data/businessContact.js
+```
+
+This means the contact data has a clean JSON source of truth. The admin UI can expose it after the CMS config update is completed.
+
+## Build/deploy commands
+
+Use:
+
+```bash
+npm run sync:content
+npm run build
+npm run check:launch
+```
+
+`npm run build` and `npm run check:launch` already run `sync:content` first, so deploy builds pick up product and settings changes automatically.
+
+## Current admin coverage
 
 The admin panel currently manages:
 
 - Products
 - Blog articles
 
-It does not yet safely manage:
+The content architecture now supports generated settings for:
 
 - Business contact details
-- Site URL/domain
-- Policy page copy
-- Homepage section copy
 
-Those should be moved from JavaScript/Astro pages into JSON or markdown content files before exposing them through the CMS.
+Still pending:
+
+- Site URL/domain JSON source
+- Policy page markdown source
+- Homepage section copy source
+- CMS config exposure for business contact settings
 
 ## Recommended next admin pass
 
-1. Move `businessContact.js` to `src/content/settings/business-contact.json`.
-2. Move `siteConfig.js` to `src/content/settings/site-config.json`.
-3. Add a settings sync/loader layer.
-4. Expose settings safely in `/admin/`.
-5. Move policies into markdown so admin can edit policy copy without touching code.
+1. Move `siteConfig.js` to a JSON source.
+2. Move policies into markdown so admin can edit policy copy without touching code.
+3. Expose business settings in `/admin/` after the config payload is accepted.
+4. Add an automated drift check so generated files cannot fall behind JSON content.
