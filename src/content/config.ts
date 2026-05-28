@@ -8,11 +8,21 @@ const articlesCollection = defineCollection({
     description: z.string(),
     pubDate: z.date(),
     author: z.string().default('Our Team'),
-    image: z.string().optional(), // Optional hero image for the article
+    image: z.string().optional(),
     tags: z.array(z.string()).default([]),
   }),
 });
 
+const pagesCollection = defineCollection({
+  type: 'content',
+  schema: z.object({
+    title: z.string(),
+    description: z.string(),
+    updatedAt: z.date().optional(),
+  }),
+});
+
 export const collections = {
-  'articles': articlesCollection,
+  articles: articlesCollection,
+  pages: pagesCollection,
 };
