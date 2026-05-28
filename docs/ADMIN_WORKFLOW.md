@@ -130,11 +130,19 @@ The content architecture now supports generated settings for:
 
 - Business contact details
 
-Still pending:
+## Launch gaps to close
 
-- Site URL/domain JSON source
-- Homepage section copy source
-- CMS config exposure for business contact settings
+Before public launch, close these items:
+
+- Add real business email.
+- Add real address, service-area, or consultation-area copy.
+- Add live social profile links.
+- Replace the Netlify preview/default domain with the final production domain.
+- Add supporting images for `bracelet-large-diamonds`.
+- Add supporting images for `simple-silver-necklace`.
+- Replace fallback reused images for products that still use another product's images.
+- Confirm `/admin/` login works with Netlify Identity and Git Gateway.
+- Review final privacy and policy copy with real business details.
 
 ## Recommended next admin pass
 
