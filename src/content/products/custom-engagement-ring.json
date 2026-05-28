@@ -1,0 +1,28 @@
+{
+  "id": "custom-engagement-ring",
+  "name": "Bespoke Diamond Engagement Ring",
+  "category": "custom",
+  "mainImage": "/images/products/solitaire-round-1.png",
+  "additionalImages": [
+    "/images/products/solitaire-round-2.png"
+  ],
+  "description": "Design the engagement ring of your dreams with our bespoke service. Choose your diamond and setting to create a truly unique symbol of love.",
+  "details": {
+    "metal": "Customizable (Platinum, 18K Gold)",
+    "mainStone": "Client's Choice",
+    "cut": "Client's Choice",
+    "color": "Client's Choice",
+    "clarity": "Client's Choice",
+    "certification": "GIA/IGI Certified"
+  },
+  "price": "Price Upon Request",
+  "priceValue": 0,
+  "material": "Customizable",
+  "stoneType": "Diamond",
+  "style": "Custom",
+  "dimensions": "Customizable based on design",
+  "careInstructions": "Care instructions provided upon finalization of design and materials.",
+  "uniqueFeatures": "One-on-one design consultation, 3D rendering included. Crafting your unique love story.",
+  "dateAdded": "2024-07-28T16:00:00Z",
+  "popularityScore": 3
+}
