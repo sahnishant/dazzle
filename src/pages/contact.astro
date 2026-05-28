@@ -3,6 +3,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { businessContact } from '../data/businessContact.js';
 import { jewelryItems } from '../data/jewelry.js';
+import { getBusinessContactReadiness, getUsableSocials } from '../utils/businessContactReadiness.js';
 
 // Get item ID from URL if redirected from a product page
 const urlParams = Astro.url.searchParams;
@@ -10,6 +11,9 @@ const inquiredItemId = urlParams.get('item') || '';
 const requestedSubject = urlParams.get('subject') || '';
 const inquiredItem = jewelryItems.find((item) => item.id === inquiredItemId);
 const productPath = inquiredItem ? `/collections/${inquiredItem.category}/${inquiredItem.id}/` : '';
+const contactReadiness = getBusinessContactReadiness(businessContact);
+const usableSocials = getUsableSocials(businessContact.socials);
+const hasAnyPublicContactDetail = contactReadiness.hasPhone || contactReadiness.hasEmail || contactReadiness.hasAddress || usableSocials.length > 0;
 const inquirySubject = inquiredItem
   ? `Inquiry about ${inquiredItem.name}`
   : inquiredItemId
@@ -32,15 +36,24 @@ const inquiryMessage = inquiredItem
   <section class="contact-details container mt-4 mb-4">
     <div class="contact-info">
       <h2>Our Contact Information</h2>
-      <p><strong>Phone:</strong> <a href={`tel:${businessContact.telHref}`}>{businessContact.displayPhone}</a></p>
-      <p><strong>Email:</strong> <a href={`mailto:${businessContact.email}`}>{businessContact.email}</a></p>
-      <p><strong>Address:</strong> {businessContact.address}</p>
-      <p><strong>Business Hours:</strong> {businessContact.businessHours}</p>
-      {businessContact.socials?.length > 0 && (
-        <div class="social-links mt-4">
-          {businessContact.socials.map((social) => (
-            <a href={social.href} target="_blank" rel="noopener noreferrer">{social.label}</a>
-          ))}
+      {hasAnyPublicContactDetail ? (
+        <>
+          {contactReadiness.hasPhone && <p><strong>Phone:</strong> <a href={`tel:${businessContact.telHref}`}>{businessContact.displayPhone}</a></p>}
+          {contactReadiness.hasEmail && <p><strong>Email:</strong> <a href={`mailto:${businessContact.email}`}>{businessContact.email}</a></p>}
+          {contactReadiness.hasAddress && <p><strong>Address:</strong> {businessContact.address}</p>}
+          <p><strong>Business Hours:</strong> {businessContact.businessHours}</p>
+          {usableSocials.length > 0 && (
+            <div class="social-links mt-4">
+              {usableSocials.map((social) => (
+                <a href={social.href} target="_blank" rel="noopener noreferrer">{social.label}</a>
+              ))}
+            </div>
+          )}
+        </>
+      ) : (
+        <div class="contact-readiness-note">
+          <p class="inquiry-kicker">Contact details pending</p>
+          <p>Use the inquiry form for now. Public phone, email, address, and social links should be finalized before production launch.</p>
         </div>
       )}
     </div>
@@ -128,6 +141,12 @@ const inquiryMessage = inquiredItem
   }
   .contact-info a {
     font-weight: bold;
+  }
+  .contact-readiness-note {
+    padding: 1rem;
+    border: 1px solid rgba(176, 160, 140, 0.35);
+    border-radius: 10px;
+    background: #fffaf4;
   }
   .social-links a {
     display: inline-block;
