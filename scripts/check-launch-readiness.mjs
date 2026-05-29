@@ -139,7 +139,7 @@ function checkBusinessContact() {
   if (!readiness.hasPhone) addWarning('Business phone/display phone still appears incomplete or placeholder-like.');
   if (!readiness.hasDirectMessage) addWarning('Direct message/WhatsApp number is missing or invalid.');
   if (!readiness.hasEmail) addWarning('Business email still appears incomplete or placeholder-like.');
-  if (!readiness.hasAddress) addWarning('Business address still appears incomplete or placeholder-like.');
+  if (!readiness.hasLocationCopy) addWarning('Business address or service-area copy still appears incomplete or placeholder-like.');
   if (!readiness.hasSocials) addWarning('No usable social links are configured.');
 
   if (businessContact?.directMessageNumber && !isUsableDirectMessageNumber(businessContact.directMessageNumber)) {
