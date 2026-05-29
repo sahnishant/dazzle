@@ -22,6 +22,7 @@ const structuredData = {
   ...(isUsableContactValue(businessContact.displayPhone) ? { telephone: businessContact.displayPhone } : {}),
   ...(isUsableContactValue(businessContact.email) ? { email: businessContact.email } : {}),
   ...(isUsableContactValue(businessContact.address) ? { address: businessContact.address } : {}),
+  ...(isUsableContactValue(businessContact.serviceArea) ? { areaServed: businessContact.serviceArea } : {}),
   ...(isUsableContactValue(businessContact.businessHours) ? { openingHours: businessContact.businessHours } : {}),
   ...(socials.length > 0 ? { sameAs: socials } : {}),
 };
