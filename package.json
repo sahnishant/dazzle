@@ -14,7 +14,8 @@
     "check:launch:strict": "npm run sync:content && node scripts/check-launch-readiness.mjs --strict",
     "check:generated-content": "node scripts/check-generated-content.mjs",
     "check:product-media": "npm run sync:content && node scripts/check-product-media.mjs",
-    "check:product-media:strict": "npm run sync:content && node scripts/check-product-media.mjs --strict"
+    "check:product-media:strict": "npm run sync:content && node scripts/check-product-media.mjs --strict",
+    "check:release": "node scripts/check-release.mjs"
   },
   "dependencies": {
     "astro": "^5.8.0"
