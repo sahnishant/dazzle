@@ -1,61 +1,98 @@
 ---
 // src/components/TrustBar.astro
 ---
-<section class="trust-bar">
-  <div class="container trust-grid">
-    <div class="trust-item">
-      <span class="icon">✅</span>
-      <h3>Certified Quality</h3>
-      <p>Every diamond is GIA/IGI certified.</p>
-    </div>
-    <div class="trust-item">
-      <span class="icon">🌱</span>
-      <h3>Ethical & Sustainable</h3>
-      <p>Conflict-free, lab-grown brilliance.</p>
-    </div>
-    <div class="trust-item">
-      <span class="icon">💰</span>
-      <h3>Affordable Luxury</h3>
-      <p>Up to 90% less than mined diamonds.</p>
-    </div>
-    <div class="trust-item">
-      <span class="icon">✨</span>
-      <h3>Exceptional Service</h3>
-      <p>Personalized care, lifetime support.</p>
+<section class="trust-bar" aria-labelledby="trust-bar-title">
+  <div class="container">
+    <p class="trust-kicker">How we help</p>
+    <h2 id="trust-bar-title">A calmer way to choose fine jewelry</h2>
+    <div class="trust-grid">
+      <div class="trust-item">
+        <span class="icon" aria-hidden="true">◇</span>
+        <h3>Certification Guidance</h3>
+        <p>We help you compare available GIA, IGI, or in-house certification details before you decide.</p>
+      </div>
+      <div class="trust-item">
+        <span class="icon" aria-hidden="true">◈</span>
+        <h3>Private Consultation</h3>
+        <p>Discuss budget, occasion, design preferences, and practical wearability before shortlisting pieces.</p>
+      </div>
+      <div class="trust-item">
+        <span class="icon" aria-hidden="true">◆</span>
+        <h3>Transparent Inquiry</h3>
+        <p>Ask about availability, current pricing, customization scope, delivery, and aftercare before purchase.</p>
+      </div>
+      <div class="trust-item">
+        <span class="icon" aria-hidden="true">✦</span>
+        <h3>Design Support</h3>
+        <p>For bespoke pieces, we guide stone selection, metal choice, proportions, and finish step by step.</p>
+      </div>
     </div>
   </div>
 </section>
 
 <style>
   .trust-bar {
-    background-color: #edeae5; /* Light, warm background */
-    padding: 2.5rem 0;
-    margin-top: 3rem; /* Spacing from hero */
+    background: #edeae5;
+    padding: 3rem 0;
+    margin-top: 0;
   }
-  .trust-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 1.5rem;
+
+  .trust-kicker {
+    margin: 0 0 0.35rem;
+    color: #A0907C;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-align: center;
+    text-transform: uppercase;
+  }
+
+  .trust-bar h2 {
+    max-width: 720px;
+    margin: 0 auto 1.75rem;
+    color: #3d3632;
+    font-size: clamp(1.8rem, 4vw, 2.6rem);
+    line-height: 1.15;
     text-align: center;
   }
+
+  .trust-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.25rem;
+  }
+
   .trust-item {
-    background-color: white;
+    min-height: 100%;
+    background-color: #fff;
     padding: 1.5rem;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    border: 1px solid rgba(176, 160, 140, 0.22);
+    border-radius: 16px;
+    box-shadow: 0 10px 26px rgba(0, 0, 0, 0.06);
   }
+
   .trust-item .icon {
-    font-size: 2.5rem;
-    margin-bottom: 0.8rem;
-    display: block;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.4rem;
+    height: 2.4rem;
+    margin-bottom: 0.9rem;
+    border-radius: 999px;
+    background: #f8f1e9;
+    color: #A0907C;
+    font-size: 1.35rem;
   }
+
   .trust-item h3 {
-    font-size: 1.3rem;
-    color: #B0A08C;
-    margin-bottom: 0.5rem;
+    color: #3d3632;
+    font-size: 1.22rem;
+    margin-bottom: 0.45rem;
   }
+
   .trust-item p {
-    font-size: 0.9rem;
     color: #666;
+    font-size: 0.95rem;
+    line-height: 1.65;
   }
 </style>

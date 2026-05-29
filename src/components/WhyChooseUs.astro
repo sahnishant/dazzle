@@ -2,28 +2,29 @@
 // src/components/WhyChooseUs.astro
 const benefits = [
   {
-    icon: '💎', // Use an emoji or replace with an SVG icon
-    title: 'Expert Craftsmanship',
-    description: 'Our jewelers combine traditional techniques with modern design to create perfection.'
+    icon: '01',
+    title: 'Curated Shortlisting',
+    description: 'Instead of overwhelming you with endless options, we help narrow the choice by occasion, budget, metal, stone quality, and daily-wear practicality.',
   },
   {
-    icon: '🌱',
-    title: 'Ethically Sourced',
-    description: 'We are committed to conflict-free and sustainable diamond sourcing practices.'
+    icon: '02',
+    title: 'Detail-Led Guidance',
+    description: 'Each serious inquiry can include certification notes, material details, sizing considerations, care guidance, and customization possibilities.',
   },
   {
-    icon: '✨',
-    title: 'Personalized Service',
-    description: 'Experience one-on-one consultations to find or create your dream piece.'
-  }
+    icon: '03',
+    title: 'Consultation Before Commitment',
+    description: 'High-value jewelry deserves conversation. Ask questions, compare alternatives, and confirm availability before moving ahead.',
+  },
 ];
 ---
-<section class="why-choose-us container">
-  <h2 class="text-center mb-4">Why Choose Us?</h2>
+<section class="why-choose-us container" aria-labelledby="why-choose-us-title">
+  <p class="section-kicker">Why Dazzle</p>
+  <h2 id="why-choose-us-title" class="text-center mb-4">Built for considered jewelry decisions</h2>
   <div class="benefits-grid">
-    {benefits.map(benefit => (
+    {benefits.map((benefit) => (
       <div class="benefit-card">
-        <div class="icon">{benefit.icon}</div>
+        <div class="icon" aria-hidden="true">{benefit.icon}</div>
         <h3>{benefit.title}</h3>
         <p>{benefit.description}</p>
       </div>
@@ -38,24 +39,64 @@ const benefits = [
     border-top: 1px solid #eee;
     border-bottom: 1px solid #eee;
   }
+
+  .section-kicker {
+    margin: 0 0 0.35rem;
+    color: #A0907C;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-align: center;
+    text-transform: uppercase;
+  }
+
+  .why-choose-us h2 {
+    max-width: 720px;
+    margin-left: auto;
+    margin-right: auto;
+    color: #3d3632;
+    font-size: clamp(1.8rem, 4vw, 2.6rem);
+    line-height: 1.15;
+  }
+
   .benefits-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 2rem;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.25rem;
   }
+
   .benefit-card {
-    text-align: center;
+    min-height: 100%;
     padding: 2rem;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-    background-color: #fcfcfc;
+    border: 1px solid rgba(176, 160, 140, 0.22);
+    border-radius: 18px;
+    background: #fcfaf7;
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.05);
   }
+
   .benefit-card .icon {
-    font-size: 3rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.75rem;
+    height: 2.75rem;
     margin-bottom: 1rem;
+    border-radius: 999px;
+    background: #3d3632;
+    color: #f4dfbd;
+    font-size: 0.9rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
   }
+
   .benefit-card h3 {
-    font-size: 1.5rem;
-    margin-bottom: 0.8rem;
+    color: #3d3632;
+    font-size: 1.35rem;
+    margin-bottom: 0.7rem;
+  }
+
+  .benefit-card p {
+    color: #666;
+    line-height: 1.7;
   }
 </style>

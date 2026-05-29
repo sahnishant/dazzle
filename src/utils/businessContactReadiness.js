@@ -24,11 +24,16 @@ export function getUsableSocials(socials = []) {
 }
 
 export function getBusinessContactReadiness(contact) {
+  const hasAddress = isUsableContactValue(contact?.address);
+  const hasServiceArea = isUsableContactValue(contact?.serviceArea);
+
   return {
     hasPhone: isUsableContactValue(contact?.displayPhone) && isUsableContactValue(contact?.telHref),
     hasDirectMessage: isUsableDirectMessageNumber(contact?.directMessageNumber),
     hasEmail: isUsableContactValue(contact?.email),
-    hasAddress: isUsableContactValue(contact?.address),
+    hasAddress,
+    hasServiceArea,
+    hasLocationCopy: hasAddress || hasServiceArea,
     hasSocials: getUsableSocials(contact?.socials).length > 0,
   };
 }

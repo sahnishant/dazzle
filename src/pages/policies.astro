@@ -1,69 +1,22 @@
 ---
 // src/pages/policies.astro
+import { getEntry } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
+
+const policies = await getEntry('pages', 'policies');
+if (!policies) throw new Error('Missing src/content/pages/policies.md');
+const { Content } = await policies.render();
 ---
-<BaseLayout
-  title="Policies & Guarantees"
-  description="Review Dazzle policies for buyback, exchange, returns, shipping, certification, custom orders, and jewelry care."
->
+<BaseLayout title={policies.data.title} description={policies.data.description}>
   <section class="container page-section policies-page">
     <div class="policy-hero">
       <p class="policy-kicker">Confidence before commitment</p>
-      <h1>Our Promises to You</h1>
-      <p>At Dazzle, every inquiry and purchase should feel considered, transparent, and supported. These policies explain how we handle value protection, certification, custom orders, delivery, and care.</p>
+      <h1>{policies.data.title}</h1>
+      <p>{policies.data.description}</p>
     </div>
 
-    <div class="policy-grid">
-      <div class="policy-card">
-        <h3>80% Buyback Guidance</h3>
-        <p>Eligible diamond jewelry may qualify for buyback guidance based on current market value, item condition, and original certification.</p>
-      </div>
-      <div class="policy-card">
-        <h3>80% Exchange Policy</h3>
-        <p>Eligible pieces may be exchanged toward another design, upgrade, or custom consultation subject to final inspection and current value.</p>
-      </div>
-      <div class="policy-card">
-        <h3>15-Day Return Window</h3>
-        <p>Standard ready pieces may be eligible for return within 15 days if unused, undamaged, and accompanied by original packaging and certification.</p>
-      </div>
-      <div class="policy-card">
-        <h3>Free & Insured Shipping</h3>
-        <p>Shipments are handled with care and insurance where applicable, so your jewelry reaches you securely.</p>
-      </div>
-      <div class="policy-card">
-        <h3>Certified & Hallmarked Quality</h3>
-        <p>Where applicable, diamonds are supported by grading documentation and jewelry metal purity is hallmarked or documented.</p>
-      </div>
-      <div class="policy-card">
-        <h3>Custom Order Clarity</h3>
-        <p>Custom work begins only after design, budget, stone, timeline, and final approval are clearly discussed.</p>
-      </div>
-    </div>
-
-    <hr class="section-divider" />
-
-    <h2 class="text-center mb-4">Detailed Policies</h2>
-    <div class="policy-details">
-      <h3>Buyback Policy</h3>
-      <p>Eligible diamond jewelry purchased from Dazzle may qualify for an 80% buyback reference value. The final value depends on current market rates, metal and stone condition, certification availability, and any applicable making charges, taxes, or deductions.</p>
-
-      <h3>Exchange Policy</h3>
-      <p>Eligible pieces may qualify for an 80% exchange reference value toward a new piece of equal or higher value. The final exchange value is confirmed after inspection and valuation.</p>
-
-      <h3>Return Policy</h3>
-      <p>Standard ready-to-ship items may be returned within 15 days of delivery if they are unused, unworn, undamaged, and returned with original packaging, invoices, and certificates. Custom, resized, engraved, altered, or made-to-order pieces may not be eligible for standard returns unless specifically agreed in writing.</p>
-
-      <h3>Shipping & Delivery</h3>
-      <p>We aim to provide secure, trackable, and insured shipping where available. Delivery timelines can vary by product readiness, customization, location, and logistics partner.</p>
-
-      <h3>Certification & Hallmarking</h3>
-      <p>Where applicable, diamonds are supported by grading documentation from recognized laboratories or supplier documentation. Metal purity is supported through hallmarking or appropriate documentation. We can explain certification details before purchase or consultation approval.</p>
-
-      <h3>Custom Orders</h3>
-      <p>Custom pieces are consultation-led. Before work begins, we discuss design direction, budget range, stone preference, metal choice, expected timeline, and approval steps. Any custom-order deposit, cancellation rule, or production milestone should be confirmed before proceeding.</p>
-
-      <h3>Warranty & Maintenance</h3>
-      <p>Manufacturing issues are reviewed case by case. Regular wear, impact damage, accidental breakage, misuse, loss, resizing by another jeweler, or stone damage after delivery may not be covered. We recommend periodic inspection and cleaning to preserve the piece.</p>
+    <div class="policy-content">
+      <Content />
     </div>
 
     <div class="policy-cta">
@@ -98,12 +51,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     text-transform: uppercase;
   }
 
-  .policy-hero h1,
-  .page-section h2,
-  .page-section h3 {
-    color: #B0A08C;
-  }
-
   .policy-hero h1 {
     margin: 0 0 0.85rem;
     color: #555;
@@ -117,60 +64,42 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     line-height: 1.75;
   }
 
-  .section-divider {
-    border: 0;
-    border-top: 1px dashed #ddd;
-    margin: 2.5rem 0;
-  }
-
-  .policy-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 1.25rem;
-    margin-top: 2rem;
-  }
-
-  .policy-card {
-    background-color: #fffaf4;
-    padding: 1.5rem;
-    border-radius: 14px;
-    box-shadow: 0 4px 14px rgba(0,0,0,0.05);
-    border: 1px solid rgba(176, 160, 140, 0.26);
-    text-align: center;
-  }
-
-  .policy-card h3 {
-    color: #B0A08C;
-    font-size: 1.35rem;
-    margin: 0 0 0.8rem;
-  }
-
-  .policy-card p {
-    margin: 0;
-    color: #666;
-    font-size: 0.96rem;
-    line-height: 1.65;
-  }
-
-  .policy-details {
-    max-width: 880px;
-    margin: 2rem auto 0;
-  }
-
-  .policy-details h3 {
-    font-size: 1.6rem;
-    color: #555;
-    margin-top: 2.2rem;
-    margin-bottom: 0.75rem;
-    border-bottom: 1px solid #eee;
-    padding-bottom: 0.45rem;
-  }
-
-  .policy-details p {
+  .policy-content {
+    max-width: 900px;
+    margin: 0 auto;
     color: #666;
     font-size: 1.05rem;
-    margin-bottom: 1rem;
     line-height: 1.75;
+  }
+
+  .policy-content :global(h2) {
+    margin-top: 2.4rem;
+    margin-bottom: 1rem;
+    color: #B0A08C;
+    font-size: clamp(1.7rem, 3vw, 2.25rem);
+  }
+
+  .policy-content :global(h3) {
+    margin-top: 1.8rem;
+    margin-bottom: 0.65rem;
+    border-bottom: 1px solid #eee;
+    color: #555;
+    font-size: 1.35rem;
+    padding-bottom: 0.35rem;
+  }
+
+  .policy-content :global(p) {
+    margin-bottom: 1rem;
+  }
+
+  .policy-content :global(ul),
+  .policy-content :global(ol) {
+    margin-left: 1.5rem;
+    margin-bottom: 1.2rem;
+  }
+
+  .policy-content :global(li) {
+    margin-bottom: 0.45rem;
   }
 
   .policy-cta {

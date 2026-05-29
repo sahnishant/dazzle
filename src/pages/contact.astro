@@ -13,7 +13,7 @@ const inquiredItem = jewelryItems.find((item) => item.id === inquiredItemId);
 const productPath = inquiredItem ? `/collections/${inquiredItem.category}/${inquiredItem.id}/` : '';
 const contactReadiness = getBusinessContactReadiness(businessContact);
 const usableSocials = getUsableSocials(businessContact.socials);
-const hasAnyPublicContactDetail = contactReadiness.hasPhone || contactReadiness.hasEmail || contactReadiness.hasAddress || usableSocials.length > 0;
+const hasAnyPublicContactDetail = contactReadiness.hasPhone || contactReadiness.hasEmail || contactReadiness.hasLocationCopy || usableSocials.length > 0;
 const inquirySubject = inquiredItem
   ? `Inquiry about ${inquiredItem.name}`
   : inquiredItemId
@@ -41,6 +41,7 @@ const inquiryMessage = inquiredItem
           {contactReadiness.hasPhone && <p><strong>Phone:</strong> <a href={`tel:${businessContact.telHref}`}>{businessContact.displayPhone}</a></p>}
           {contactReadiness.hasEmail && <p><strong>Email:</strong> <a href={`mailto:${businessContact.email}`}>{businessContact.email}</a></p>}
           {contactReadiness.hasAddress && <p><strong>Address:</strong> {businessContact.address}</p>}
+          {contactReadiness.hasServiceArea && <p><strong>Service Area:</strong> {businessContact.serviceArea}</p>}
           <p><strong>Business Hours:</strong> {businessContact.businessHours}</p>
           {usableSocials.length > 0 && (
             <div class="social-links mt-4">
@@ -53,7 +54,7 @@ const inquiryMessage = inquiredItem
       ) : (
         <div class="contact-readiness-note">
           <p class="inquiry-kicker">Contact details pending</p>
-          <p>Use the inquiry form for now. Public phone, email, address, and social links should be finalized before production launch.</p>
+          <p>Use the inquiry form for now. Public phone, email, address or service area, and social links should be finalized before production launch.</p>
         </div>
       )}
     </div>

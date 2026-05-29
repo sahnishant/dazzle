@@ -1,0 +1,29 @@
+{
+  "id": "diamond-stud-earrings",
+  "name": "Classic Diamond Stud Earrings",
+  "category": "earrings",
+  "mainImage": "/images/products/solitaire-round-1.png",
+  "additionalImages": [
+    "/images/products/solitaire-round-2.png",
+    "/images/products/solitaire-round-3.png"
+  ],
+  "description": "Timeless diamond stud earrings, a versatile staple for every jewelry collection. Available in various carat weights.",
+  "details": {
+    "metal": "14K Yellow Gold",
+    "mainStone": "0.50 Carat Total Weight Round Diamonds",
+    "cut": "Excellent",
+    "color": "G",
+    "clarity": "VS2",
+    "certification": "GIA Certified"
+  },
+  "price": "₹1,50,000",
+  "priceValue": 150000,
+  "material": "Yellow Gold",
+  "stoneType": "Diamond",
+  "style": "Stud",
+  "dimensions": "Each Diamond: 4.5mm diameter, Weight: 2.1g (pair)",
+  "careInstructions": "Clean regularly with a mild jewelry cleaner. Ensure backs are secure before wearing. Store in a padded box.",
+  "uniqueFeatures": "Perfect for daily wear or formal occasions, available with secure screw-back or push-back options. Hypoallergenic posts.",
+  "dateAdded": "2024-07-10T13:00:00Z",
+  "popularityScore": 8
+}

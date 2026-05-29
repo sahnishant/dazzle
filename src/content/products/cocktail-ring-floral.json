@@ -1,0 +1,29 @@
+{
+  "id": "cocktail-ring-floral",
+  "name": "Sparkling Floral Cocktail Ring",
+  "category": "rings",
+  "mainImage": "/images/products/cocktail-ring-1.png",
+  "additionalImages": [
+    "/images/products/cocktail-ring-2.png",
+    "/images/products/cocktail-ring-3.png"
+  ],
+  "description": "An exquisite cocktail ring featuring a captivating floral design adorned with brilliant diamonds, perfect for making a statement.",
+  "details": {
+    "metal": "18K Rose Gold",
+    "mainStone": "2.00 Carat Total Weight Mixed Cut Diamonds",
+    "cut": "Very Good",
+    "color": "G-H",
+    "clarity": "VS2-SI1",
+    "certification": "IGI Certified"
+  },
+  "price": "₹4,90,000",
+  "priceValue": 490000,
+  "material": "Rose Gold",
+  "stoneType": "Diamond",
+  "style": "Cocktail",
+  "dimensions": "Top Surface: 20mm diameter, Weight: 9.8g",
+  "careInstructions": "Avoid harsh chemicals and impact. Professional cleaning recommended. Store in a separate compartment to avoid scratches.",
+  "uniqueFeatures": "Intricate floral motif, ideal for special occasions. Features a comfortable wide band design.",
+  "dateAdded": "2024-07-25T14:00:00Z",
+  "popularityScore": 9
+}

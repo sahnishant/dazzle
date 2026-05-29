@@ -1,0 +1,26 @@
+{
+  "id": "simple-silver-necklace",
+  "name": "Delicate Silver Diamond Necklace",
+  "category": "necklaces",
+  "mainImage": "/images/products/emerald-pendant-1.png",
+  "additionalImages": [],
+  "description": "A charming necklace featuring a small, brilliant diamond set in pure sterling silver, perfect for minimalist everyday wear.",
+  "details": {
+    "metal": "925 Sterling Silver",
+    "mainStone": "0.10 Carat Round Diamond",
+    "cut": "Good",
+    "color": "H-I",
+    "clarity": "SI2",
+    "certification": "In-house Certified"
+  },
+  "price": "₹15,000",
+  "priceValue": 15000,
+  "material": "Silver",
+  "stoneType": "Diamond",
+  "style": "Pendant",
+  "dimensions": "Pendant: 5mm diameter, Chain Length: 16-18 inches (adjustable), Weight: 2.0g",
+  "careInstructions": "Polish with a silver cleaning cloth. Avoid prolonged exposure to moisture to prevent tarnishing.",
+  "uniqueFeatures": "Hypoallergenic, perfect for gifting. Adjustable chain length for versatile styling.",
+  "dateAdded": "2024-08-01T15:00:00Z",
+  "popularityScore": 4
+}

@@ -1,0 +1,30 @@
+{
+  "id": "solitaire-round-ring",
+  "name": "Classic Solitaire Round Diamond Ring",
+  "category": "rings",
+  "mainImage": "/images/products/solitaire-round-1.png",
+  "additionalImages": [
+    "/images/products/solitaire-round-2.png",
+    "/images/products/solitaire-round-3.png",
+    "/images/products/solitaire-round-4.png"
+  ],
+  "description": "A timeless solitaire ring featuring a brilliant round-cut diamond set in a classic four-prong platinum band. Perfect for an engagement or a cherished gift.",
+  "details": {
+    "metal": "Platinum",
+    "mainStone": "1.00 Carat Round Brilliant Diamond",
+    "cut": "Excellent",
+    "color": "D",
+    "clarity": "VS1",
+    "certification": "GIA Certified"
+  },
+  "price": "₹5,50,000",
+  "priceValue": 550000,
+  "material": "Platinum",
+  "stoneType": "Diamond",
+  "style": "Solitaire",
+  "dimensions": "Diamond: 6.5mm, Band Width: 2mm, Weight: 4.5g",
+  "careInstructions": "Clean with mild soap and soft brush. Store separately to prevent scratches. Avoid harsh chemicals and extreme temperatures.",
+  "uniqueFeatures": "Ethically sourced, GIA certified diamond. Hand-polished to a brilliant shine. Comes with a complimentary luxury velvet box.",
+  "dateAdded": "2024-07-01T10:00:00Z",
+  "popularityScore": 5
+}

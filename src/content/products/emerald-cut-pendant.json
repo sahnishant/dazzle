@@ -1,0 +1,28 @@
+{
+  "id": "emerald-cut-pendant",
+  "name": "Emerald Cut Diamond Pendant Necklace",
+  "category": "necklaces",
+  "mainImage": "/images/products/emerald-pendant-1.png",
+  "additionalImages": [
+    "/images/products/emerald-pendant-2.png"
+  ],
+  "description": "An elegant emerald-cut diamond pendant suspended from a delicate 18K white gold chain. Sophisticated and striking.",
+  "details": {
+    "metal": "18K White Gold",
+    "mainStone": "0.75 Carat Emerald Cut Diamond",
+    "cut": "Very Good",
+    "color": "F",
+    "clarity": "VVS2",
+    "certification": "IGI Certified"
+  },
+  "price": "₹3,80,000",
+  "priceValue": 380000,
+  "material": "White Gold",
+  "stoneType": "Diamond",
+  "style": "Pendant",
+  "dimensions": "Pendant: 10mm x 7mm, Chain Length: 18 inches, Weight: 3.2g",
+  "careInstructions": "Avoid harsh chemicals. Store in a soft pouch to prevent tangling. Professional cleaning recommended annually.",
+  "uniqueFeatures": "Unique emerald cut, perfect for layering or as a statement piece. Secure clasp for daily wear.",
+  "dateAdded": "2024-06-15T11:00:00Z",
+  "popularityScore": 7
+}
