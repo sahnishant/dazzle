@@ -3,9 +3,9 @@ import { spawnSync } from 'node:child_process';
 import process from 'node:process';
 
 function run(command, args) {
-  const result = spawnSync(command, args, {
+  const executable = process.platform === 'win32' && command === 'npm' ? 'npm.cmd' : command;
+  const result = spawnSync(executable, args, {
     encoding: 'utf8',
-    shell: process.platform === 'win32',
     stdio: 'inherit',
   });
 
@@ -28,6 +28,7 @@ const diffStatus = run('git', [
   '--',
   'src/data/businessContact.js',
   'src/data/siteConfig.js',
+  'src/data/homepageContent.js',
   'src/data/jewelry.js',
 ]);
 
