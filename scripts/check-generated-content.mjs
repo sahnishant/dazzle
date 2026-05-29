@@ -3,10 +3,25 @@ import { spawnSync } from 'node:child_process';
 import process from 'node:process';
 
 function run(command, args) {
-  const executable = process.platform === 'win32' && command === 'npm' ? 'npm.cmd' : command;
+  const isWin = process.platform === 'win32';
+  let executable = command;
+  let useShell = false;
+
+  if (command === 'npm') {
+    const npmCli = process.env.npm_execpath;
+    if (npmCli) {
+      executable = process.execPath;
+      args = [npmCli, ...args];
+    } else {
+      executable = isWin ? 'npm.cmd' : 'npm';
+      useShell = isWin;
+    }
+  }
+
   const result = spawnSync(executable, args, {
     encoding: 'utf8',
     stdio: 'inherit',
+    shell: useShell,
   });
 
   if (result.error) {
