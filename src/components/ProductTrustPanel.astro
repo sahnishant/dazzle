@@ -1,0 +1,126 @@
+---
+const { product } = Astro.props;
+
+const trustRows = [
+  ['Stone origin', product.diamondOrigin || product.stoneType || 'Laboratory-grown diamond origin confirmed during consultation'],
+  ['Certificate path', product.certificationLab || product.details?.certification || 'Certificate details shared before order confirmation'],
+  ['Growth method', product.details?.growthMethod || 'CVD or HPHT confirmed when the selected stone is reserved'],
+  ['Main stone', product.details?.mainStone],
+  ['Metal purity', product.metalPurity || product.details?.metal || product.material],
+  ['Hallmarking', product.metalHallmark || 'BIS hallmarking guidance for eligible gold jewellery'],
+  ['Lead time', product.leadTime || 'Confirmed during consultation'],
+  ['Order type', product.madeToOrder ? 'Made-to-order / availability-confirmed' : 'Availability confirmed before payment'],
+].filter(([, value]) => Boolean(value));
+---
+
+<section class="product-trust-panel" aria-labelledby="product-trust-title">
+  <div class="trust-panel-heading">
+    <p>Verification before payment</p>
+    <h2 id="product-trust-title">Trust and specification check</h2>
+  </div>
+
+  <dl class="trust-panel-grid">
+    {trustRows.map(([label, value]) => (
+      <div>
+        <dt>{label}</dt>
+        <dd>{value}</dd>
+      </div>
+    ))}
+  </dl>
+
+  <div class="trust-policy-links" aria-label="Policy links">
+    <a href="/certification-policy/">Certification policy</a>
+    <a href="/custom-order-policy/">Custom order policy</a>
+    <a href="/return-exchange-policy/">Return and exchange policy</a>
+    <a href="/shipping-policy/">Shipping policy</a>
+  </div>
+
+  <p class="trust-panel-note">
+    Dazzle should confirm certificate details, final stone specification, metal purity, final price, and timeline in writing before advance payment.
+  </p>
+</section>
+
+<style>
+  .product-trust-panel {
+    margin: 1.5rem 0;
+    padding: 1.25rem;
+    border: 1px solid rgba(176, 160, 140, 0.28);
+    border-radius: 18px;
+    background: #fffaf4;
+  }
+
+  .trust-panel-heading p {
+    margin: 0 0 0.35rem;
+    color: #a0907c;
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .trust-panel-heading h2 {
+    margin: 0 0 1rem;
+    color: #3b332e;
+    font-size: 1.35rem;
+  }
+
+  .trust-panel-grid {
+    display: grid;
+    gap: 0.75rem;
+    margin: 0;
+  }
+
+  .trust-panel-grid div {
+    display: grid;
+    gap: 0.15rem;
+    padding: 0.75rem;
+    border: 1px solid rgba(176, 160, 140, 0.18);
+    border-radius: 14px;
+    background: #fff;
+  }
+
+  .trust-panel-grid dt {
+    color: #8b7663;
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .trust-panel-grid dd {
+    margin: 0;
+    color: #3f3832;
+    line-height: 1.5;
+  }
+
+  .trust-policy-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.55rem;
+    margin-top: 1rem;
+  }
+
+  .trust-policy-links a {
+    display: inline-flex;
+    border: 1px solid rgba(176, 160, 140, 0.35);
+    border-radius: 999px;
+    padding: 0.38rem 0.7rem;
+    background: #fff;
+    color: #7d6d5b;
+    font-size: 0.82rem;
+    font-weight: 800;
+  }
+
+  .trust-panel-note {
+    margin: 1rem 0 0;
+    color: #665b52;
+    font-size: 0.92rem;
+    line-height: 1.6;
+  }
+
+  @media (min-width: 760px) {
+    .trust-panel-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+</style>

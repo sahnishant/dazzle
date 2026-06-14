@@ -1,16 +1,17 @@
 ---
-// src/pages/collections/[category]/[id].astro
+import { Image } from 'astro:assets';
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import BreadcrumbStructuredData from '../../../components/BreadcrumbStructuredData.astro';
 import CustomInquiryForm from '../../../components/CustomInquiryForm.astro';
 import ProductContactActions from '../../../components/ProductContactActions.astro';
 import ProductFaq from '../../../components/ProductFaq.astro';
 import ProductStructuredData from '../../../components/ProductStructuredData.astro';
-import TrustSnippet from '../../../components/TrustSnippet.astro';
-import { jewelryItems } from '../../../data/jewelry.js'; // Import your jewelry data
+import ProductTrustPanel from '../../../components/ProductTrustPanel.astro';
+import TrustLedger from '../../../components/TrustLedger.astro';
+import { jewelryItems } from '../../../data/jewelry.js';
 
 export async function getStaticPaths() {
-  return jewelryItems.map(item => ({
+  return jewelryItems.map((item) => ({
     params: { category: item.category, id: item.id },
     props: { item },
   }));
@@ -18,277 +19,261 @@ export async function getStaticPaths() {
 
 const { item } = Astro.props;
 const isCustomProduct = item.category === 'custom';
-// Combine mainImage and additionalImages for the gallery
-const allImages = [item.mainImage, ...(item.additionalImages || [])]; // Ensure additionalImages exists and is an array
+const allImages = [item.mainImage, ...(item.additionalImages || [])].filter(Boolean);
+const formatLabel = (value) => value.replace(/-/g, ' ').replace(/\b\w/g, (char) => char.toUpperCase());
 
-// Breadcrumbs for navigation
 const breadcrumbs = [
   { name: 'Home', path: '/' },
   { name: 'Collections', path: '/collections/' },
-  { name: item.category.replace(/-/g, ' ').replace(/\b\w/g, char => char.toUpperCase()), path: `/collections/${item.category}/` },
-  { name: item.name, path: `/collections/${item.category}/${item.id}/` } // Current page
+  { name: formatLabel(item.category), path: `/collections/${item.category}/` },
+  { name: item.name, path: `/collections/${item.category}/${item.id}/` },
 ];
+
+const detailRows = Object.entries(item.details || {});
 ---
 
 <BaseLayout title={item.name} description={item.description} image={item.mainImage} type="product">
   <ProductStructuredData product={item} />
   <BreadcrumbStructuredData items={breadcrumbs} />
-  <section class="container product-detail-page">
-    {/* Breadcrumbs Component */}
-    <nav class="breadcrumbs">
+
+  <main class="container product-detail-page">
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
       <ol>
         {breadcrumbs.map((crumb, index) => (
           <li>
-            {index < breadcrumbs.length - 1 ? (
-              <a href={crumb.path}>{crumb.name}</a>
-            ) : (
-              <span>{crumb.name}</span>
-            )}
+            {index < breadcrumbs.length - 1 ? <a href={crumb.path}>{crumb.name}</a> : <span>{crumb.name}</span>}
             {index < breadcrumbs.length - 1 && <span class="separator">/</span>}
           </li>
         ))}
       </ol>
     </nav>
 
-    <div class="product-layout">
+    <section class="product-layout">
       <div class="product-images">
-        {/* Main Product Image (Clickable for Zoom) */}
-        <img id="mainProductImage" src={allImages[0]} alt={item.name} loading="eager" class="main-product-image" />
-        
-        {/* Thumbnail Gallery */}
-        <div class="thumbnail-gallery">
-          {allImages.map((img, index) => (
-            <img
-              src={img}
-              alt={`${item.name} - view ${index + 1}`}
-              loading="lazy"
-              class={`thumbnail ${index === 0 ? 'active' : ''}`} {/* Set first as active initially */}
-              data-full-src={img}
-            />
-          ))}
-        </div>
+        {allImages.length > 0 && (
+          <Image
+            id="mainProductImage"
+            src={allImages[0]}
+            alt={item.name}
+            width={900}
+            height={900}
+            format="webp"
+            loading="eager"
+            decoding="async"
+            class="main-product-image"
+          />
+        )}
+
+        {allImages.length > 1 && (
+          <div class="thumbnail-gallery" aria-label="Product image gallery">
+            {allImages.map((img, index) => (
+              <img
+                src={img}
+                alt={`${item.name} - view ${index + 1}`}
+                loading="lazy"
+                class={`thumbnail ${index === 0 ? 'active' : ''}`}
+                data-full-src={img}
+              />
+            ))}
+          </div>
+        )}
       </div>
 
       <div class="product-info">
-        <p class="product-kicker">{isCustomProduct ? 'Custom consultation' : 'Dazzle selection'}</p>
-        <h1 class="product-name">{item.name}</h1>
+        <p class="product-kicker">{isCustomProduct ? 'Custom consultation' : 'Dazzle verified shortlist'}</p>
+        <h1>{item.name}</h1>
         <p class="product-price">{item.price}</p>
-        <TrustSnippet certification={item.details?.certification} />
 
         <div class="product-reassurance" aria-label="Purchase reassurance">
-          <span>Certification guidance</span>
-          <span>Insured delivery support</span>
-          <a href="/policies/">View policies</a>
+          <span>{item.diamondOrigin || 'Laboratory-grown diamond'}</span>
+          <span>{item.certificationLab || item.details?.certification || 'Certificate guidance'}</span>
+          <span>{item.metalPurity || item.material}</span>
         </div>
 
-        <h2 class="section-title">Description</h2>
-        <p class="product-description">{item.description}</p>
+        <ProductTrustPanel product={item} />
 
-        <h2 class="section-title">Diamond Details</h2>
-        <ul class="details-list">
-          {Object.entries(item.details).map(([key, value]) => (
-            <li><strong>{key.replace(/\b\w/g, char => char.toUpperCase())}:</strong> {value}</li>
-          ))}
-        </ul>
+        <section class="product-section">
+          <h2>Description</h2>
+          <p>{item.description}</p>
+        </section>
 
-        {item.material && (
-          <>
-            <h2 class="section-title">Materials Used</h2>
-            <p>{item.material}</p>
-          </>
+        {detailRows.length > 0 && (
+          <section class="product-section">
+            <h2>Stone and jewellery details</h2>
+            <dl class="details-list">
+              {detailRows.map(([key, value]) => (
+                <div>
+                  <dt>{formatLabel(key)}</dt>
+                  <dd>{value}</dd>
+                </div>
+              ))}
+            </dl>
+          </section>
         )}
+
+        <section class="product-section">
+          <h2>Before you order</h2>
+          <ul class="order-checklist">
+            <li>Confirm final laboratory-grown diamond certificate details.</li>
+            <li>Confirm metal purity and hallmarking expectation.</li>
+            <li>Confirm final price, making details, delivery city, and timeline.</li>
+            <li>Read custom-order, return/exchange, and shipping policy before advance payment.</li>
+          </ul>
+        </section>
+
         {item.dimensions && (
-          <>
-            <h2 class="section-title">Dimensions</h2>
+          <section class="product-section">
+            <h2>Dimensions</h2>
             <p>{item.dimensions}</p>
-          </>
+          </section>
         )}
+
         {item.uniqueFeatures && (
-          <>
-            <h2 class="section-title">Unique Features</h2>
+          <section class="product-section">
+            <h2>Design notes</h2>
             <p>{item.uniqueFeatures}</p>
-          </>
+          </section>
         )}
+
         {item.careInstructions && (
-          <>
-            <h2 class="section-title">Care Instructions</h2>
+          <section class="product-section">
+            <h2>Care guidance</h2>
             <p>{item.careInstructions}</p>
-          </>
+          </section>
         )}
 
         <ProductContactActions product={item} showContactLink={!isCustomProduct} />
         {isCustomProduct && <CustomInquiryForm productTitle={item.name} productId={item.id} />}
         <ProductFaq product={item} />
       </div>
-    </div>
-  </section>
+    </section>
 
-  {/* Image Zoom Modal */}
-  <div id="imageZoomModal" class="modal zoom-modal">
-    <div class="modal-content zoom-content">
-      <span class="close-btn zoom-close">×</span>
-      <img src="" alt="" id="zoomImage" />
-    </div>
-  </div>
+    <TrustLedger compact={true} />
+  </main>
 </BaseLayout>
 
 <script is:inline>
   document.addEventListener('DOMContentLoaded', () => {
-    // --- Image Gallery & Switcher Logic ---
     const mainImage = document.getElementById('mainProductImage');
     const thumbnails = document.querySelectorAll('.thumbnail-gallery .thumbnail');
 
     if (mainImage && thumbnails.length > 0) {
-      thumbnails.forEach(thumbnail => {
+      thumbnails.forEach((thumbnail) => {
         thumbnail.addEventListener('click', () => {
-          thumbnails.forEach(t => t.classList.remove('active')); // Deactivate all thumbnails
-          thumbnail.classList.add('active'); // Activate clicked thumbnail
-          mainImage.src = thumbnail.dataset.fullSrc; // Update main image source
+          thumbnails.forEach((candidate) => candidate.classList.remove('active'));
+          thumbnail.classList.add('active');
+          mainImage.src = thumbnail.dataset.fullSrc;
         });
       });
     }
-
-    // --- Image Zoom Logic ---
-    const zoomModal = document.getElementById('imageZoomModal');
-    const zoomImage = document.getElementById('zoomImage');
-    const zoomCloseBtn = zoomModal.querySelector('.close-btn');
-
-    mainImage.addEventListener('click', () => {
-      zoomImage.src = mainImage.src; // Set zoom image to current main image
-      zoomModal.style.display = 'flex'; // Use flex to center modal
-      document.body.classList.add('modal-open'); // Prevent scrolling behind modal
-    });
-
-    zoomCloseBtn.addEventListener('click', () => {
-      zoomModal.style.display = 'none';
-      document.body.classList.remove('modal-open');
-    });
-
-    window.addEventListener('click', (event) => {
-      if (event.target === zoomModal) { // Close if clicked outside the zoom image
-        zoomModal.style.display = 'none';
-        document.body.classList.remove('modal-open');
-      }
-    });
   });
 </script>
 
 <style>
-  /* Base page section styling - should ideally be in global.css */
   .product-detail-page {
-    padding: 2rem 1rem;
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-    margin-top: 2rem;
-    margin-bottom: 2rem;
+    padding-bottom: 4rem;
   }
 
-  /* Breadcrumbs */
   .breadcrumbs {
+    margin: 1.5rem 0;
+    color: #7b7169;
     font-size: 0.9rem;
-    color: #888;
-    margin-bottom: 1.5rem;
-    padding-left: 1rem; /* Align with container */
-  }
-  .breadcrumbs ol {
-    list-style: none;
-    display: flex;
-    flex-wrap: wrap; /* Allow wrapping */
-  }
-  .breadcrumbs li {
-    display: flex;
-    align-items: center;
-    margin-right: 0.5rem;
-  }
-  .breadcrumbs a {
-    color: #B0A08C;
-    text-decoration: none;
-  }
-  .breadcrumbs a:hover {
-    text-decoration: underline;
-  }
-  .breadcrumbs .separator {
-    margin: 0 0.5rem;
-    color: #ccc;
   }
 
-  /* Product Layout (Grid for larger screens) */
+  .breadcrumbs ol {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .separator {
+    color: #b7aaa0;
+    margin-left: 0.35rem;
+  }
+
   .product-layout {
     display: grid;
-    grid-template-columns: 1fr; /* Single column by default */
     gap: 2rem;
-    align-items: start; /* Align content to the top */
+    align-items: start;
   }
 
   .product-images {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    position: sticky; /* Keep images in view on scroll */
-    top: 2rem; /* Adjust to stay below header (if header is fixed) */
+    display: grid;
+    gap: 1rem;
   }
+
   .main-product-image {
-    max-width: 100%;
-    height: auto; /* Maintain aspect ratio */
-    border: 1px solid #eee;
-    border-radius: 8px;
-    margin-bottom: 1rem;
-    cursor: zoom-in; /* Indicate zoomability */
+    width: 100%;
+    border: 1px solid rgba(176, 160, 140, 0.22);
+    border-radius: 24px;
+    background: #fff;
+    object-fit: cover;
+    box-shadow: 0 18px 42px rgba(0, 0, 0, 0.08);
   }
+
   .thumbnail-gallery {
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
-    gap: 0.5rem;
+    gap: 0.65rem;
   }
+
   .thumbnail {
-    width: 80px; /* Smaller size for thumbnails */
-    height: 80px;
-    object-fit: cover; /* Crop to fit, maintain aspect ratio */
+    width: 78px;
+    height: 78px;
+    border: 1px solid rgba(176, 160, 140, 0.35);
+    border-radius: 12px;
     cursor: pointer;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    object-fit: cover;
   }
-  .thumbnail:hover, .thumbnail.active {
+
+  .thumbnail.active,
+  .thumbnail:hover {
     border-color: #B0A08C;
-    box-shadow: 0 0 0 2px rgba(176, 160, 140, 0.5); /* Highlight active/hovered */
+    box-shadow: 0 0 0 2px rgba(176, 160, 140, 0.35);
   }
 
   .product-info {
-    background-color: #fff; /* White background for info box */
-    padding: 2rem;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    padding: clamp(1.25rem, 3vw, 2rem);
+    border: 1px solid rgba(176, 160, 140, 0.18);
+    border-radius: 24px;
+    background: #fff;
+    box-shadow: 0 14px 36px rgba(0, 0, 0, 0.06);
   }
+
   .product-kicker {
     margin: 0 0 0.35rem;
     color: #A0907C;
     font-size: 0.78rem;
-    font-weight: 700;
+    font-weight: 800;
     letter-spacing: 0.14em;
     text-transform: uppercase;
   }
-  .product-name {
-    font-size: 2.5rem;
-    margin-bottom: 0.5rem;
-    color: #555;
+
+  .product-info h1 {
+    margin: 0 0 0.75rem;
+    color: #3b332e;
+    font-size: clamp(2rem, 5vw, 3.6rem);
+    line-height: 1;
   }
+
   .product-price {
-    font-size: 1.8rem;
-    font-weight: bold;
+    margin: 0 0 1rem;
     color: #B0A08C;
-    margin-bottom: 1.5rem;
+    font-size: 1.6rem;
+    font-weight: 800;
   }
+
   .product-reassurance {
     display: flex;
     flex-wrap: wrap;
     gap: 0.5rem;
-    margin: 1.25rem 0;
+    margin: 1rem 0;
   }
-  .product-reassurance span,
-  .product-reassurance a {
+
+  .product-reassurance span {
     display: inline-flex;
     align-items: center;
     border: 1px solid rgba(176, 160, 140, 0.3);
@@ -296,73 +281,65 @@ const breadcrumbs = [
     background: #fffaf4;
     color: #7d6d5b;
     font-size: 0.82rem;
-    font-weight: 700;
+    font-weight: 800;
     padding: 0.35rem 0.7rem;
   }
-  .section-title {
-    font-size: 1.5rem;
-    color: #777;
-    margin-top: 1.5rem;
-    margin-bottom: 0.8rem;
-    border-bottom: 1px solid #eee; /* Subtle separator */
-    padding-bottom: 0.4rem;
+
+  .product-section {
+    margin: 1.5rem 0;
   }
-  .product-description, .product-info p, .product-info ul {
-    font-size: 1.05rem;
+
+  .product-section h2 {
+    margin: 0 0 0.75rem;
+    color: #3b332e;
+    font-size: 1.35rem;
+  }
+
+  .product-section p,
+  .order-checklist {
+    color: #665b52;
     line-height: 1.7;
-    margin-bottom: 1rem;
   }
+
   .details-list {
-    list-style: none; /* Removed default list style */
-    margin-bottom: 1.5rem;
-    padding-left: 0; /* Remove default padding */
-  }
-  .details-list li {
-    margin-bottom: 0.5rem;
-    font-size: 1rem;
-  }
-  .details-list strong {
-    color: #555;
+    display: grid;
+    gap: 0.65rem;
+    margin: 0;
   }
 
-  /* --- Image Zoom Modal (reusing .modal from quick view but with specific overrides) --- */
-  .modal.zoom-modal {
-    background-color: rgba(0,0,0,0.8); /* Darker overlay for zoom */
-  }
-  .modal-content.zoom-content {
-    background-color: transparent; /* No background for image */
-    border: none;
-    padding: 0;
-    max-width: 90%; /* Max width for the image */
-    width: auto; /* Adjusts to image content */
-    height: auto; /* Adjusts to image content */
-    display: block; /* So image inside can scale naturally */
-  }
-  .modal-content.zoom-content img {
-    max-width: 100%;
-    max-height: 90vh; /* Limit height to viewport height */
-    display: block;
-    margin: auto; /* Center image within modal content */
-    border-radius: 0; /* Remove rounded corners for full image */
-  }
-  .zoom-close { /* Close button for zoom modal */
-    color: white;
-    top: 20px;
-    right: 30px;
-    font-size: 40px;
-    text-shadow: 0 0 5px rgba(0,0,0,0.5); /* For better visibility */
-  }
-  .zoom-close:hover {
-    color: #eee;
+  .details-list div {
+    display: grid;
+    gap: 0.15rem;
+    padding-bottom: 0.65rem;
+    border-bottom: 1px solid rgba(176, 160, 140, 0.18);
   }
 
-  /* Responsive Adjustments for Product Detail Page */
-  @media (min-width: 768px) {
+  .details-list dt {
+    color: #8b7663;
+    font-size: 0.8rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .details-list dd {
+    margin: 0;
+    color: #3f3832;
+  }
+
+  .order-checklist {
+    margin: 0;
+    padding-left: 1.2rem;
+  }
+
+  @media (min-width: 900px) {
     .product-layout {
-      grid-template-columns: 1.2fr 1fr; /* Two columns on larger screens */
+      grid-template-columns: minmax(0, 1.05fr) minmax(380px, 0.95fr);
     }
+
     .product-images {
-      top: 3rem; /* Adjust sticky top for bigger screens if header is fixed */
+      position: sticky;
+      top: 1.5rem;
     }
   }
 </style>

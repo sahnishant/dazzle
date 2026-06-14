@@ -1,32 +1,77 @@
 ---
 import { businessContact } from '../data/businessContact.js';
+import { buildProductLeadMessage } from '../utils/leadMessage.js';
 import { isUsableDirectMessageNumber } from '../utils/businessContactReadiness.js';
-const { product, showContactLink = true } = Astro.props;
-const productPath = `/collections/${product.category}/${product.id}/`;
-const message = [
-  `Hi Dazzle, I am interested in this laboratory-grown diamond piece.`,
-  `Product: ${product.name}`,
-  product.price ? `Displayed price: ${product.price}` : '',
-  product.material ? `Material: ${product.material}` : '',
-  product.metalPurity ? `Metal purity: ${product.metalPurity}` : '',
-  product.leadTime ? `Expected lead time shown: ${product.leadTime}` : '',
-  `Product link: ${productPath}`,
-  '',
-  'Please share certification details, final price, metal hallmarking details, and delivery or consultation options.',
-].filter(Boolean).join('\n');
+
+const { product, showContactLink = true, sourcePage = `/collections/${product.category}/${product.id}/` } = Astro.props;
+const message = buildProductLeadMessage(product, { sourcePage });
 const hasDirectMessage = isUsableDirectMessageNumber(businessContact.directMessageNumber);
-const directMessageUrl = hasDirectMessage ? `https://wa.me/${businessContact.directMessageNumber}?text=${encodeURIComponent(message)}` : '';
+const directMessageUrl = hasDirectMessage
+  ? `https://wa.me/${businessContact.directMessageNumber}?text=${encodeURIComponent(message)}`
+  : '';
 ---
+
 <div class="product-contact-actions" aria-label="Product contact options">
-  {hasDirectMessage && (<a href={directMessageUrl} class="btn direct-message-btn" target="_blank" rel="noopener noreferrer">WhatsApp for Verified Details</a>)}
-  {showContactLink && (<a href={`/contact/?item=${product.id}`} class="btn secondary-contact-btn">Send Detailed Inquiry</a>)}
+  {hasDirectMessage && (
+    <a href={directMessageUrl} class="btn direct-message-btn" target="_blank" rel="noopener noreferrer">
+      WhatsApp for Verified Details
+    </a>
+  )}
+  {showContactLink && (
+    <a href={`/contact/?item=${product.id}&source=${encodeURIComponent(sourcePage)}`} class="btn secondary-contact-btn">
+      Send Detailed Inquiry
+    </a>
+  )}
 </div>
-<p class="product-contact-note">Confirm laboratory-grown diamond origin, certificate details, metal purity, and lead time before advance payment.</p>
+
+<p class="product-contact-note">
+  Confirm laboratory-grown diamond origin, certificate details, metal purity, final price, and lead time before advance payment.
+</p>
+
 <style>
-  .product-contact-actions{display:grid;grid-template-columns:1fr;gap:.8rem;margin-top:2rem}
-  .product-contact-actions .btn{width:100%;text-align:center;font-size:1.04rem;padding:1rem 1.25rem}
-  .direct-message-btn{background:#1f8f56}.direct-message-btn:hover{background:#177547}
-  .secondary-contact-btn{background:transparent;border:2px solid #B0A08C;color:#B0A08C}.secondary-contact-btn:hover{background:#B0A08C;color:#fff}
-  .product-contact-note{margin:.85rem 0 0;color:#6b625b;font-size:.92rem;line-height:1.55}
-  @media (min-width:640px){.product-contact-actions{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}}
+  .product-contact-actions {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.8rem;
+    margin-top: 2rem;
+  }
+
+  .product-contact-actions .btn {
+    width: 100%;
+    text-align: center;
+    font-size: 1.04rem;
+    padding: 1rem 1.25rem;
+  }
+
+  .direct-message-btn {
+    background: #1f8f56;
+  }
+
+  .direct-message-btn:hover {
+    background: #177547;
+  }
+
+  .secondary-contact-btn {
+    background: transparent;
+    border: 2px solid #B0A08C;
+    color: #B0A08C;
+  }
+
+  .secondary-contact-btn:hover {
+    background: #B0A08C;
+    color: #fff;
+  }
+
+  .product-contact-note {
+    margin: 0.85rem 0 0;
+    color: #6b625b;
+    font-size: 0.92rem;
+    line-height: 1.55;
+  }
+
+  @media (min-width: 640px) {
+    .product-contact-actions {
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    }
+  }
 </style>
