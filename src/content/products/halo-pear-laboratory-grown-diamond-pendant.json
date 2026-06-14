@@ -1,16 +1,18 @@
 {
-  "id": "station-laboratory-grown-diamond-bracelet",
-  "name": "Station Laboratory-Grown Diamond Bracelet",
-  "category": "bracelets",
-  "mainImage": "/images/products/bracelet1.png",
-  "additionalImages": [],
-  "description": "Station bracelet with bezel-set laboratory-grown diamonds for light daily wear. Dazzle confirms laboratory-grown diamond origin, certificate path, metal purity, and lead time before advance payment.",
+  "id": "halo-pear-laboratory-grown-diamond-pendant",
+  "name": "Halo Pear Laboratory-Grown Diamond Pendant",
+  "category": "necklaces",
+  "mainImage": "/images/products/emerald-pendant-2.png",
+  "additionalImages": [
+    "/images/products/emerald-pendant-1.png"
+  ],
+  "description": "Pear-shaped laboratory-grown diamond pendant with halo detail and consultation-led customization. Dazzle confirms laboratory-grown diamond origin, certificate path, metal purity, and lead time before advance payment.",
   "details": {
     "metal": "18K Yellow Gold",
-    "mainStone": "0.75 Carat Total Laboratory-Grown Diamonds",
+    "mainStone": "0.90 Carat Pear Laboratory-Grown Diamond",
     "cut": "Very Good",
-    "color": "G-H",
-    "clarity": "VS2-SI1",
+    "color": "F-G",
+    "clarity": "VS2",
     "certification": "IGI report guidance",
     "growthMethod": "CVD or HPHT confirmed during consultation",
     "certificateNumber": "Shared when the selected stone is reserved"
@@ -23,13 +25,13 @@
   "certificationLab": "IGI or equivalent report guidance",
   "metalHallmark": "BIS hallmarking guidance for gold jewellery",
   "metalPurity": "18K",
-  "style": "Station",
-  "productType": "Bracelet > Station",
+  "style": "Halo Pendant",
+  "productType": "Pendant > Halo",
   "dimensions": "Final measurements, ring size, chain length, or bracelet length confirmed during consultation.",
   "careInstructions": "Store separately, avoid harsh chemicals, and request professional cleaning guidance based on the final metal and setting.",
   "uniqueFeatures": "Consultation-first design with explicit origin disclosure and verification before order confirmation.",
   "leadTime": "7-21 days after specification approval",
   "madeToOrder": true,
-  "dateAdded": "2026-06-14T10:00:00Z",
-  "popularityScore": 6
+  "dateAdded": "2026-06-10T10:00:00Z",
+  "popularityScore": 7
 }

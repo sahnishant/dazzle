@@ -1,0 +1,18 @@
+---
+import { siteConfig } from '../data/siteConfig.js';
+import { businessContact } from '../data/businessContact.js';
+const { name = "Dazzle laboratory-grown diamond consultation", areaServed = businessContact.serviceArea || "India", pagePath = Astro.url.pathname } = Astro.props;
+const baseUrl = siteConfig.url.replace(/\/$/, '');
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'JewelryStore',
+  name: siteConfig.name,
+  url: `${baseUrl}${pagePath}`,
+  telephone: businessContact.telHref,
+  email: businessContact.email || undefined,
+  address: businessContact.address || undefined,
+  areaServed,
+  makesOffer: { '@type': 'Offer', itemOffered: { '@type': 'Service', name, serviceType: "Laboratory-grown diamond jewellery consultation" } },
+};
+---
+<script type="application/ld+json" set:html={JSON.stringify(structuredData)} />

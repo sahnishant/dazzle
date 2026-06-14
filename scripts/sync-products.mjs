@@ -3,21 +3,19 @@ import fs from 'node:fs';
 import path from 'node:path';
 import process from 'node:process';
 import { fileURLToPath } from 'node:url';
-
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const repoRoot = path.resolve(__dirname, '..');
 const productsDir = path.join(repoRoot, 'src', 'content', 'products');
 const outputFile = path.join(repoRoot, 'src', 'data', 'jewelry.js');
-
 const REQUIRED_FIELDS = ['id','name','category','mainImage','description','price','priceValue','material','stoneType','style','dimensions','careInstructions','uniqueFeatures','dateAdded','popularityScore'];
 const REQUIRED_DETAIL_FIELDS = ['metal','mainStone','cut','color','clarity','certification'];
-const CATEGORY_ORDER = ['rings', 'necklaces', 'bracelets', 'earrings', 'custom'];
+const CATEGORY_ORDER = ['rings','necklaces','pendants','bracelets','earrings','custom'];
 const ID_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
-function readJson(filePath){ try{return JSON.parse(fs.readFileSync(filePath,'utf8'));}catch(error){throw new Error(`${path.relative(repoRoot,filePath)}: invalid JSON (${error.message})`);} }
-function assert(condition,message){ if(!condition) throw new Error(message); }
-function validateProduct(product, sourceFile, seenIds){
-  const sourceLabel = path.relative(repoRoot, sourceFile).replace(/\\/g,'/');
-  REQUIRED_FIELDS.forEach((field)=>assert(product[field] !== undefined && product[field] !== null && product[field] !== '', `${sourceLabel}: missing required field '${field}'.`));
+function readJson(filePath) { try { return JSON.parse(fs.readFileSync(filePath, 'utf8')); } catch (error) { throw new Error(`${path.relative(repoRoot, filePath)}: invalid JSON (${error.message})`); } }
+function assert(condition, message) { if (!condition) throw new Error(message); }
+function validateProduct(product, sourceFile, seenIds) {
+  const sourceLabel = path.relative(repoRoot, sourceFile).replace(/\\/g, '/');
+  REQUIRED_FIELDS.forEach((field) => assert(product[field] !== undefined && product[field] !== null && product[field] !== '', `${sourceLabel}: missing required field '${field}'.`));
   assert(ID_PATTERN.test(product.id), `${sourceLabel}: id must be lowercase kebab-case.`);
   assert(!seenIds.has(product.id), `${sourceLabel}: duplicate product id '${product.id}'.`);
   seenIds.add(product.id);
@@ -26,27 +24,39 @@ function validateProduct(product, sourceFile, seenIds){
   assert(typeof product.popularityScore === 'number', `${sourceLabel}: popularityScore must be a number.`);
   assert(!Number.isNaN(new Date(product.dateAdded).getTime()), `${sourceLabel}: dateAdded must be a valid date string.`);
   assert(product.mainImage.startsWith('/'), `${sourceLabel}: mainImage must start with '/'.`);
-  product.additionalImages.forEach((imagePath,index)=>assert(typeof imagePath === 'string' && imagePath.startsWith('/'), `${sourceLabel}: additionalImages[${index}] must start with '/'.`));
   assert(product.details && typeof product.details === 'object', `${sourceLabel}: details object is required.`);
-  REQUIRED_DETAIL_FIELDS.forEach((field)=>assert(product.details[field] !== undefined && product.details[field] !== null && product.details[field] !== '', `${sourceLabel}: missing required details.${field}.`));
+  REQUIRED_DETAIL_FIELDS.forEach((field) => assert(product.details[field] !== undefined && product.details[field] !== null && product.details[field] !== '', `${sourceLabel}: missing required details.${field}.`));
 }
-function sortProducts(a,b){ const ai=CATEGORY_ORDER.indexOf(a.category); const bi=CATEGORY_ORDER.indexOf(b.category); const categoryDelta=(ai===-1?999:ai)-(bi===-1?999:bi); return categoryDelta || a.id.localeCompare(b.id); }
-function formatJsValue(value, indentLevel=2){
-  const indent=' '.repeat(indentLevel); const childIndent=' '.repeat(indentLevel+2);
-  if(value instanceof Date) return `new Date(${JSON.stringify(value.toISOString())})`;
-  if(Array.isArray(value)){ if(value.length===0) return '[]'; return `[\n${value.map((entry)=>`${childIndent}${formatJsValue(entry,indentLevel+2)}`).join(',\n')}\n${indent}]`; }
-  if(value && typeof value === 'object'){ const entries=Object.entries(value); if(entries.length===0) return '{}'; return `{\n${entries.map(([key,entry])=>`${childIndent}${JSON.stringify(key).replace(/^"|"$/g,'')}: ${formatJsValue(entry,indentLevel+2)}`).join(',\n')}\n${indent}}`; }
+function sortProducts(a, b) {
+  const ai = CATEGORY_ORDER.includes(a.category) ? CATEGORY_ORDER.indexOf(a.category) : CATEGORY_ORDER.length;
+  const bi = CATEGORY_ORDER.includes(b.category) ? CATEGORY_ORDER.indexOf(b.category) : CATEGORY_ORDER.length;
+  return ai - bi || a.id.localeCompare(b.id);
+}
+function formatJsValue(value, indentLevel = 2) {
+  const indent = ' '.repeat(indentLevel), childIndent = ' '.repeat(indentLevel + 2);
+  if (value instanceof Date) return `new Date(${JSON.stringify(value.toISOString())})`;
+  if (Array.isArray(value)) return value.length ? `[\n${value.map((entry) => `${childIndent}${formatJsValue(entry, indentLevel + 2)}`).join(',\n')}\n${indent}]` : '[]';
+  if (value && typeof value === 'object') {
+    const entries = Object.entries(value);
+    return entries.length ? `{\n${entries.map(([key, entry]) => `${childIndent}${key}: ${formatJsValue(entry, indentLevel + 2)}`).join(',\n')}\n${indent}}` : '{}';
+  }
   return JSON.stringify(value);
 }
-function normalizeProduct(product){ return { ...product, additionalImages: product.additionalImages || [], dateAdded: new Date(product.dateAdded) }; }
-function main(){
+function formatProduct(product) { return formatJsValue({ ...product, dateAdded: new Date(product.dateAdded) }, 2); }
+try {
   assert(fs.existsSync(productsDir), 'src/content/products directory does not exist.');
-  const productFiles=fs.readdirSync(productsDir).filter((file)=>file.endsWith('.json')).sort();
-  assert(productFiles.length>0, 'No product JSON files found in src/content/products.');
-  const seenIds=new Set();
-  const products=productFiles.map((file)=>{ const fullPath=path.join(productsDir,file); const product=readJson(fullPath); validateProduct(product,fullPath,seenIds); return normalizeProduct(product); }).sort(sortProducts);
-  const output=`// src/data/jewelry.js\n// AUTO-GENERATED by scripts/sync-products.mjs.\n// Edit src/content/products/*.json through /admin or directly, then run npm run sync:products.\nexport const jewelryItems = [\n${products.map((product)=>`  ${formatJsValue(product,2)}`).join(',\n')}\n];\n`;
+  const seenIds = new Set();
+  const products = fs.readdirSync(productsDir).filter((file) => file.endsWith('.json')).sort().map((file) => {
+    const fullPath = path.join(productsDir, file);
+    const product = readJson(fullPath);
+    validateProduct(product, fullPath, seenIds);
+    return product;
+  }).sort(sortProducts);
+  assert(products.length > 0, 'No product JSON files found.');
+  const output = `// src/data/jewelry.js\n// AUTO-GENERATED by scripts/sync-products.mjs.\n// Edit src/content/products/*.json through /admin or directly, then run npm run sync:products.\nexport const jewelryItems = [\n${products.map((product) => `  ${formatProduct(product)}`).join(',\n')}\n];\n`;
   fs.writeFileSync(outputFile, output, 'utf8');
-  console.log(`Synced ${products.length} products to ${path.relative(repoRoot, outputFile).replace(/\\/g,'/')}.`);
+  console.log(`Synced ${products.length} products to ${path.relative(repoRoot, outputFile).replace(/\\/g, '/')}.`);
+} catch (error) {
+  console.error(`Product sync failed: ${error.message}`);
+  process.exit(1);
 }
-try{ main(); }catch(error){ console.error(`Product sync failed: ${error.message}`); process.exit(1); }

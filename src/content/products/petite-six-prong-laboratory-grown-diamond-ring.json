@@ -1,15 +1,15 @@
 {
-  "id": "classic-laboratory-grown-diamond-stud-earrings",
-  "name": "Classic Laboratory-Grown Diamond Stud Earrings",
-  "category": "earrings",
-  "mainImage": "/images/products/solitaire-round-1.png",
+  "id": "petite-six-prong-laboratory-grown-diamond-ring",
+  "name": "Petite Six Prong Laboratory-Grown Diamond Ring",
+  "category": "rings",
+  "mainImage": "/images/products/solitaire-round-2.png",
   "additionalImages": [
-    "/images/products/solitaire-round-2.png"
+    "/images/products/solitaire-round-1.png"
   ],
-  "description": "Classic stud earrings with matched round laboratory-grown diamonds in 18K white gold. Dazzle confirms laboratory-grown diamond origin, certificate path, metal purity, and lead time before advance payment.",
+  "description": "Petite six-prong laboratory-grown diamond solitaire ring for clean everyday engagement styling. Dazzle confirms laboratory-grown diamond origin, certificate path, metal purity, and lead time before advance payment.",
   "details": {
-    "metal": "18K White Gold",
-    "mainStone": "1.00 Carat Total Laboratory-Grown Diamonds",
+    "metal": "14K White Gold",
+    "mainStone": "0.90 Carat Round Laboratory-Grown Diamond",
     "cut": "Excellent",
     "color": "F",
     "clarity": "VS1",
@@ -17,21 +17,21 @@
     "growthMethod": "CVD or HPHT confirmed during consultation",
     "certificateNumber": "Shared when the selected stone is reserved"
   },
-  "price": "₹1,65,000",
-  "priceValue": 165000,
+  "price": "₹1,55,000",
+  "priceValue": 155000,
   "material": "White Gold",
   "stoneType": "Laboratory-grown diamond",
   "diamondOrigin": "Laboratory-grown diamond",
   "certificationLab": "IGI or equivalent report guidance",
   "metalHallmark": "BIS hallmarking guidance for gold jewellery",
-  "metalPurity": "18K",
-  "style": "Stud",
-  "productType": "Earrings > Stud",
+  "metalPurity": "14K",
+  "style": "Solitaire",
+  "productType": "Ring > Engagement > Petite",
   "dimensions": "Final measurements, ring size, chain length, or bracelet length confirmed during consultation.",
   "careInstructions": "Store separately, avoid harsh chemicals, and request professional cleaning guidance based on the final metal and setting.",
   "uniqueFeatures": "Consultation-first design with explicit origin disclosure and verification before order confirmation.",
   "leadTime": "7-21 days after specification approval",
   "madeToOrder": true,
-  "dateAdded": "2026-06-02T10:00:00Z",
-  "popularityScore": 9
+  "dateAdded": "2026-06-05T10:00:00Z",
+  "popularityScore": 7
 }

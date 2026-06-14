@@ -1,0 +1,22 @@
+---
+import { siteConfig } from '../data/siteConfig.js';
+const { name, description, urlPath = Astro.url.pathname, products = [] } = Astro.props;
+const baseUrl = siteConfig.url.replace(/\/$/, '');
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name,
+  description,
+  url: `${baseUrl}${urlPath}`,
+  mainEntity: {
+    '@type': 'ItemList',
+    itemListElement: products.slice(0, 24).map((product, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      url: `${baseUrl}/collections/${product.category}/${product.id}/`,
+      name: product.name,
+    })),
+  },
+};
+---
+<script type="application/ld+json" set:html={JSON.stringify(structuredData)} />

@@ -1,0 +1,66 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import DiamondTaxonomyNav from '../components/DiamondTaxonomyNav.astro';
+import TrustLedger from '../components/TrustLedger.astro';
+import ConsultationPath from '../components/ConsultationPath.astro';
+import MerchantTrustChecklist from '../components/MerchantTrustChecklist.astro';
+import FaqStructuredData from '../components/FaqStructuredData.astro';
+import LocalServiceStructuredData from '../components/LocalServiceStructuredData.astro';
+const faqs = [
+  {
+    "question": "Why does Dazzle use the full phrase laboratory-grown diamond?",
+    "answer": "Clear origin disclosure helps buyers understand what they are shortlisting and keeps the catalogue aligned with transparent jewellery selling."
+  },
+  {
+    "question": "Can I ask for certificate details before paying?",
+    "answer": "Yes. Certificate, metal purity, lead time, and policy terms should be confirmed before advance payment."
+  },
+  {
+    "question": "Is every item ready to ship?",
+    "answer": "Many Dazzle pieces should be treated as made-to-order or availability-confirmed designs. The consultation step confirms final availability."
+  }
+];
+---
+<BaseLayout title="Diamond Jewellery Catalogue Architecture" description="Explore Dazzle's laboratory-grown diamond jewellery catalogue organized by tree, category, and design family.">
+  <FaqStructuredData items={faqs} />
+  <LocalServiceStructuredData name="Diamond Jewellery Catalogue Architecture" />
+  <main class="container strategic-page">
+    <section class="strategic-hero">
+      <p class="strategic-kicker">Dazzle guide</p>
+      <h1>Laboratory-grown diamond jewellery catalogue architecture</h1>
+      <p>A strong catalogue should help buyers move from stone origin to jewellery type to design family without guessing.</p>
+      <div class="strategic-actions">
+        <a href="/collections/" class="btn">Browse catalogue</a>
+        <a href="/contact/" class="btn btn-outline">Start consultation</a>
+      </div>
+    </section>
+    <section class="content-block"><h2>The catalogue tree</h2><p>The preferred structure is laboratory-grown diamond jewellery, then rings, pendants, earrings, bracelets, and custom work.</p></section>
+<section class="content-block"><h2>Why tree structure matters</h2><p>Internal links and structured product attributes help search engines understand buyer intent.</p></section>
+<section class="content-block"><h2>How to expand later</h2><p>New jewellery can be added as product JSON under the closest category first, then linked from an educational or local page.</p></section>
+    <DiamondTaxonomyNav /><TrustLedger /><ConsultationPath /><MerchantTrustChecklist />
+    <section class="faq-block">
+      <h2>Buyer questions</h2>
+      <div class="faq-grid">
+        {faqs.map((item) => (<article><h3>{item.question}</h3><p>{item.answer}</p></article>))}
+      </div>
+    </section>
+  </main>
+</BaseLayout>
+<style>
+  .strategic-page{padding-bottom:4rem}
+  .strategic-hero{margin:2rem 0;padding:clamp(2rem,6vw,4rem);border-radius:28px;background:radial-gradient(circle at 20% 20%,rgba(244,223,189,.22),transparent 32%),linear-gradient(135deg,#2b2624,#4b4038);color:#fffaf4}
+  .strategic-kicker{margin:0 0 .5rem;color:#f4dfbd;font-size:.78rem;font-weight:800;letter-spacing:.16em;text-transform:uppercase}
+  .strategic-hero h1{max-width:920px;margin:0 0 1rem;color:#fffaf4;font-size:clamp(2.3rem,6vw,4.8rem);line-height:1}
+  .strategic-hero p:not(.strategic-kicker){max-width:820px;margin:0 0 1.5rem;color:rgba(255,250,244,.86);font-size:1.1rem;line-height:1.75}
+  .strategic-actions{display:flex;flex-wrap:wrap;gap:.85rem}
+  .strategic-actions .btn-outline{border-color:rgba(244,223,189,.8);color:#f4dfbd}
+  .strategic-actions .btn-outline:hover{background:#f4dfbd;color:#2b2624}
+  .content-block{margin:1rem 0;padding:1.5rem;border:1px solid rgba(176,160,140,.22);border-radius:20px;background:#fff}
+  .content-block h2{margin:0 0 .65rem;color:#3b332e}
+  .content-block p{margin:0;color:#665b52;line-height:1.75}
+  .faq-block{margin:3rem 0}
+  .faq-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1rem}
+  .faq-grid article{padding:1rem;border:1px solid rgba(176,160,140,.22);border-radius:18px;background:#fffaf4}
+  .faq-grid h3{margin:0 0 .45rem;color:#3b332e}
+  .faq-grid p{margin:0;color:#665b52;line-height:1.6}
+</style>
