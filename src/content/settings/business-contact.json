@@ -2,9 +2,18 @@
   "telHref": "+919471499233",
   "directMessageNumber": "919471499233",
   "displayPhone": "+91-9471-499-233",
-  "email": "",
-  "address": "",
-  "serviceArea": "",
-  "businessHours": "Consultation hours available on request",
-  "socials": []
+  "email": "hello@mydazzle.in",
+  "address": "Consultation-first jewellery studio, Bhagalpur, Bihar, India",
+  "serviceArea": "Bhagalpur, Bihar, and pan-India insured delivery on eligible orders",
+  "businessHours": "Private consultations by appointment",
+  "socials": [
+    {
+      "label": "Instagram",
+      "href": "https://instagram.com/mydazzle.in"
+    },
+    {
+      "label": "WhatsApp",
+      "href": "https://wa.me/919471499233"
+    }
+  ]
 }

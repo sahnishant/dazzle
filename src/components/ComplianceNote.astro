@@ -1,0 +1,24 @@
+---
+import { complianceCopy } from '../data/brandTrust.js';
+const { variant = 'default' } = Astro.props;
+---
+<aside class={`compliance-note compliance-note-${variant}`}>
+  <strong>Transparent disclosure:</strong>
+  <span>{complianceCopy.short}</span>
+  <small>{complianceCopy.note}</small>
+</aside>
+
+<style>
+  .compliance-note {
+    display: grid;
+    gap: 0.35rem;
+    border: 1px solid rgba(176, 160, 140, 0.34);
+    border-radius: 16px;
+    background: #fffaf4;
+    color: #4d4540;
+    padding: 1rem 1.15rem;
+    line-height: 1.55;
+  }
+  .compliance-note strong { color: #7d6d5b; }
+  .compliance-note small { color: #756b63; }
+</style>

@@ -1,0 +1,100 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ComplianceNote from './ComplianceNote.astro';
+import LeadCapturePanel from './LeadCapturePanel.astro';
+import ProductTreeNav from './ProductTreeNav.astro';
+import ProductContactActions from './ProductContactActions.astro';
+import { jewelryItems } from '../data/jewelry.js';
+
+const { page } = Astro.props;
+const filters = page.filters || {};
+const matchedProducts = jewelryItems
+  .filter((item) => Object.entries(filters).every(([key, value]) => !value || item[key] === value))
+  .slice(0, 12);
+const productsToShow = matchedProducts.length ? matchedProducts : jewelryItems.slice(0, 12);
+---
+<BaseLayout title={page.title} description={page.description}>
+  <section class="seo-hero container">
+    <p class="seo-kicker">{page.kicker}</p>
+    <h1>{page.h1}</h1>
+    <p>{page.intro}</p>
+    <div class="seo-actions">
+      <a href="/collections/" class="btn">Browse Catalogue</a>
+      <a href="/contact/" class="btn btn-outline">Ask for Guidance</a>
+    </div>
+  </section>
+
+  <section class="container seo-grid-wrap">
+    <ComplianceNote />
+    <div class="seo-info-grid">
+      {page.sections.map(([title, text]) => (
+        <article>
+          <h2>{title}</h2>
+          <p>{text}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="container related-products" aria-labelledby="related-products-title">
+    <p class="seo-kicker">Relevant catalogue</p>
+    <h2 id="related-products-title">Pieces to start from</h2>
+    <div class="product-card-grid">
+      {productsToShow.map((item) => (
+        <article class="seo-product-card">
+          <a href={`/collections/${item.category}/${item.id}/`}>
+            <img src={item.mainImage} alt={item.name} loading="lazy" />
+            <div>
+              <p>{item.category} · {item.material}</p>
+              <h3>{item.name}</h3>
+              <strong>{item.price}</strong>
+            </div>
+          </a>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="container">
+    <ProductTreeNav />
+  </section>
+
+  <section class="container faq-section" aria-labelledby="faq-title">
+    <p class="seo-kicker">Questions buyers ask</p>
+    <h2 id="faq-title">FAQ</h2>
+    <div class="faq-grid">
+      {page.faqs.map(([question, answer]) => (
+        <article>
+          <h3>{question}</h3>
+          <p>{answer}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="container">
+    <LeadCapturePanel title="Share your budget and shortlist requirements" productName={page.h1} />
+  </section>
+</BaseLayout>
+
+<style>
+  .seo-hero { padding: clamp(3rem, 7vw, 5rem) 1rem; text-align: center; }
+  .seo-kicker { margin: 0 0 .45rem; color: #A0907C; font-size: .82rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; }
+  .seo-hero h1 { max-width: 900px; margin: 0 auto 1rem; font-size: clamp(2.4rem, 6vw, 5rem); color: #4b4038; line-height: 1; }
+  .seo-hero p { max-width: 780px; margin: 0 auto 1.5rem; color: #5f5b57; font-size: 1.12rem; line-height: 1.75; }
+  .seo-actions { display: flex; flex-wrap: wrap; gap: .85rem; justify-content: center; }
+  .seo-grid-wrap { display: grid; gap: 1.25rem; }
+  .seo-info-grid, .faq-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; }
+  .seo-info-grid article, .faq-grid article { background: #fff; border: 1px solid rgba(176,160,140,.2); border-radius: 18px; padding: 1.25rem; box-shadow: 0 8px 24px rgba(0,0,0,.04); }
+  .seo-info-grid h2, .faq-grid h3 { margin: 0 0 .55rem; color: #5d5149; }
+  .seo-info-grid p, .faq-grid p { margin: 0; color: #666; line-height: 1.7; }
+  .related-products h2 { text-align: center; }
+  .product-card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 1rem; }
+  .seo-product-card { background: #fff; border-radius: 16px; overflow: hidden; box-shadow: 0 8px 24px rgba(0,0,0,.06); }
+  .seo-product-card a { display: grid; color: inherit; text-decoration: none; height: 100%; }
+  .seo-product-card img { width: 100%; height: 210px; object-fit: cover; }
+  .seo-product-card div { padding: 1rem; }
+  .seo-product-card p { margin: 0 0 .35rem; color: #A0907C; font-size: .78rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+  .seo-product-card h3 { margin: 0 0 .75rem; font-size: 1.05rem; color: #514840; }
+  .seo-product-card strong { color: #8c795f; }
+</style>

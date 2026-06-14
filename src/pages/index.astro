@@ -1,85 +1,96 @@
 ---
-// src/pages/index.astro
 import BaseLayout from '../layouts/BaseLayout.astro';
-import Hero from '../components/Hero.astro';
-import TrustBar from '../components/TrustBar.astro';
-import FeaturedCollections from '../components/FeaturedCollections.astro';
-import WhyChooseUs from '../components/WhyChooseUs.astro';
-import ConsultationConfidence from '../components/ConsultationConfidence.astro';
-import { homepageContent } from '../data/homepageContent.js';
+import ComplianceNote from '../components/ComplianceNote.astro';
+import LeadCapturePanel from '../components/LeadCapturePanel.astro';
+import ProductTreeNav from '../components/ProductTreeNav.astro';
+import { trustPillars } from '../data/brandTrust.js';
+import { jewelryItems } from '../data/jewelry.js';
 
-const { finalCta } = homepageContent;
+const featured = jewelryItems.slice().sort((a, b) => (b.popularityScore || 0) - (a.popularityScore || 0)).slice(0, 8);
 ---
-<BaseLayout title="Home" description="Exquisite diamond jewelry for every occasion. Discover rings, necklaces, earrings, and more.">
-  <Hero />
-  <TrustBar />
-  <FeaturedCollections />
-  <WhyChooseUs />
-  <ConsultationConfidence />
+<BaseLayout title="Certified Laboratory-Grown Diamond Jewellery" description="Dazzle offers consultation-led laboratory-grown diamond rings, pendants, earrings, bracelets, and custom jewellery with certification and metal clarity.">
+  <section class="home-hero">
+    <div class="container home-hero-grid">
+      <div class="home-hero-copy">
+        <p class="hero-kicker">Certified laboratory-grown diamond jewellery</p>
+        <h1>Diamond jewellery with clear origin, certification guidance, and patient consultation.</h1>
+        <p>Browse rings, pendants, earrings, bracelets, and custom designs. Use the catalogue as a starting point, then confirm specifications, certification, metal purity, quote, and timeline before purchase.</p>
+        <div class="hero-actions">
+          <a href="/collections/" class="btn">Browse Catalogue</a>
+          <a href="/laboratory-grown-diamond-buying-guide/" class="btn btn-outline">Read Buying Guide</a>
+        </div>
+      </div>
+      <div class="hero-card-stack">
+        {featured.slice(0, 3).map((item) => (
+          <a class="mini-product-card" href={`/collections/${item.category}/${item.id}/`}>
+            <img src={item.mainImage} alt={item.name} loading="eager" />
+            <span>{item.name}</span>
+            <strong>{item.price}</strong>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
 
-  <section class="home-final-cta container mt-4 mb-4" aria-labelledby="home-final-cta-title">
-    <p class="cta-kicker">{finalCta.kicker}</p>
-    <h2 id="home-final-cta-title">{finalCta.title}</h2>
-    <p>{finalCta.description}</p>
-    <div class="cta-actions">
-      {finalCta.actions.map((action) => (
-        <a
-          href={action.href}
-          class={action.variant === 'primary' ? 'btn' : 'secondary-link'}
-        >{action.label}</a>
+  <section class="container mt-4">
+    <ComplianceNote />
+  </section>
+
+  <section class="container trust-grid-section">
+    <p class="section-kicker">Trust before transaction</p>
+    <h2>Built for high-consideration jewellery buying</h2>
+    <div class="trust-grid">
+      {trustPillars.map((pillar) => (
+        <article><h3>{pillar.title}</h3><p>{pillar.text}</p></article>
       ))}
     </div>
   </section>
+
+  <section class="container featured-section">
+    <p class="section-kicker">Featured catalogue</p>
+    <h2>A broader starting selection</h2>
+    <div class="featured-grid">
+      {featured.map((item) => (
+        <article class="featured-card">
+          <a href={`/collections/${item.category}/${item.id}/`}>
+            <img src={item.mainImage} alt={item.name} loading="lazy" />
+            <div><p>{item.category} · {item.material}</p><h3>{item.name}</h3><strong>{item.price}</strong></div>
+          </a>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="container"><ProductTreeNav /></section>
+  <section class="container"><LeadCapturePanel title="Planning a ring, pendant, earring, bracelet, or custom piece?" /></section>
 </BaseLayout>
 
 <style>
-  .home-final-cta {
-    padding: 2.5rem 1.5rem;
-    border-radius: 18px;
-    background: linear-gradient(135deg, #2b2624 0%, #4a4038 100%);
-    color: #fffaf4;
-    text-align: center;
-    box-shadow: 0 14px 36px rgba(0, 0, 0, 0.12);
-  }
-
-  .cta-kicker {
-    margin: 0 0 0.35rem;
-    color: #f4dfbd;
-    font-size: 0.78rem;
-    font-weight: 700;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-  }
-
-  .home-final-cta h2 {
-    max-width: 760px;
-    margin: 0 auto 0.85rem;
-    color: #fffaf4;
-    font-size: clamp(2rem, 5vw, 3rem);
-    line-height: 1.1;
-  }
-
-  .home-final-cta p:not(.cta-kicker) {
-    max-width: 720px;
-    margin: 0 auto 1.5rem;
-    color: rgba(255, 250, 244, 0.86);
-    line-height: 1.75;
-  }
-
-  .cta-actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
-    justify-content: center;
-    align-items: center;
-  }
-
-  .secondary-link {
-    color: #f4dfbd;
-    font-weight: 700;
-  }
-
-  .secondary-link:hover {
-    color: #fff;
-  }
+  .home-hero { background: radial-gradient(circle at 20% 20%, rgba(176,160,140,.22), transparent 34%), linear-gradient(135deg, #221f1f 0%, #3a3431 50%, #fffaf4 50%, #f7efe5 100%); color: #fff; overflow: hidden; }
+  .home-hero-grid { display: grid; grid-template-columns: minmax(0,1fr); gap: 2rem; align-items: center; min-height: 640px; padding-top: 4rem; padding-bottom: 4rem; }
+  .home-hero-copy { max-width: 780px; }
+  .hero-kicker, .section-kicker { margin: 0 0 .45rem; color: #d7c4aa; font-size: .82rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; }
+  .section-kicker { color: #A0907C; text-align: center; }
+  .home-hero h1 { margin: 0 0 1rem; color: #fff; font-size: clamp(2.5rem, 6vw, 5rem); line-height: .98; }
+  .home-hero-copy > p:not(.hero-kicker) { max-width: 700px; color: rgba(255,255,255,.88); font-size: 1.15rem; line-height: 1.75; margin: 0 0 1.5rem; }
+  .hero-actions { display: flex; flex-wrap: wrap; gap: .85rem; }
+  .home-hero .btn-outline { color: #fff; border-color: rgba(255,255,255,.5); }
+  .hero-card-stack { display: grid; gap: .9rem; }
+  .mini-product-card { display: grid; grid-template-columns: 88px 1fr; gap: .8rem; align-items: center; background: rgba(255,255,255,.92); border-radius: 16px; padding: .65rem; color: #3d3631; text-decoration: none; box-shadow: 0 18px 44px rgba(0,0,0,.18); }
+  .mini-product-card img { width: 88px; height: 76px; object-fit: cover; border-radius: 12px; grid-row: span 2; }
+  .mini-product-card span { font-weight: 700; }
+  .mini-product-card strong { color: #8c795f; }
+  .trust-grid-section, .featured-section { text-align: center; }
+  .trust-grid, .featured-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px,1fr)); gap: 1rem; margin-top: 1.25rem; text-align: left; }
+  .trust-grid article { background: #fff; border-radius: 18px; padding: 1.25rem; border: 1px solid rgba(176,160,140,.24); box-shadow: 0 8px 24px rgba(0,0,0,.04); }
+  .trust-grid h3 { color: #5d5149; }
+  .trust-grid p { color: #666; margin: 0; line-height: 1.65; }
+  .featured-card { overflow: hidden; background: #fff; border-radius: 16px; box-shadow: 0 8px 24px rgba(0,0,0,.06); }
+  .featured-card a { display: grid; color: inherit; text-decoration: none; height: 100%; }
+  .featured-card img { width: 100%; height: 220px; object-fit: cover; }
+  .featured-card div { padding: 1rem; }
+  .featured-card p { margin: 0 0 .35rem; color: #A0907C; font-size: .78rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+  .featured-card h3 { margin: 0 0 .75rem; font-size: 1.05rem; color: #514840; }
+  .featured-card strong { color: #8c795f; }
+  @media (min-width: 900px) { .home-hero-grid { grid-template-columns: minmax(0,1.05fr) minmax(340px,.75fr); } }
 </style>

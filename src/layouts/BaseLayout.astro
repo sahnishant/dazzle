@@ -1,102 +1,44 @@
 ---
-// src/layouts/BaseLayout.astro
 import SiteIdentityData from '../components/BusinessStructuredData.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import { siteConfig } from '../data/siteConfig.js';
 import '../styles/global.css';
 
-interface Props {
-  title: string;
-  description: string;
-  image?: string;
-  type?: string;
-}
-
-const {
-  title,
-  description,
-  image = '/images/logo-diamond.png',
-  type = 'website',
-} = Astro.props;
-
+interface Props { title: string; description: string; image?: string; type?: string; }
+const { title, description, image = '/images/logo-diamond.png', type = 'website' } = Astro.props;
 const siteName = siteConfig.name;
-const pageTitle = `${title} | ${siteName}`;
+const pageTitle = title === siteName ? siteName : `${title} | ${siteName}`;
 const baseUrl = siteConfig.url.replace(/\/$/, '');
-const canonicalUrl = `${baseUrl}${Astro.url.pathname}`;
+const canonicalPath = Astro.url.pathname.endsWith('/') ? Astro.url.pathname : `${Astro.url.pathname}/`;
+const canonicalUrl = `${baseUrl}${canonicalPath}`;
 const imageUrl = new URL(image, baseUrl).toString();
 ---
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-IN">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content={description} />
+  <meta name="robots" content="index,follow,max-image-preview:large" />
   <link rel="canonical" href={canonicalUrl} />
-
   <meta property="og:site_name" content={siteName} />
   <meta property="og:title" content={pageTitle} />
   <meta property="og:description" content={description} />
   <meta property="og:type" content={type} />
   <meta property="og:url" content={canonicalUrl} />
   <meta property="og:image" content={imageUrl} />
-
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content={pageTitle} />
   <meta name="twitter:description" content={description} />
   <meta name="twitter:image" content={imageUrl} />
-
   <SiteIdentityData />
   <title>{pageTitle}</title>
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 </head>
 <body>
   <Header />
-  <main>
-    <slot />
-  </main>
+  <main><slot /></main>
   <Footer />
 </body>
 </html>
-
-<style is:global>
-  /* Basic reset for better consistency */
-  html {
-    box-sizing: border-box;
-    font-size: 16px;
-  }
-  *, *::before, *::after {
-    box-sizing: inherit;
-    margin: 0;
-    padding: 0;
-  }
-  body {
-    font-family: 'Georgia', serif; /* Or your chosen elegant font */
-    color: #333;
-    line-height: 1.6;
-    background-color: #f8f8f8;
-  }
-  img {
-    max-width: 100%;
-    height: auto;
-    display: block; /* Removes extra space below images */
-  }
-  a {
-    color: #B0A08C; /* Example: a soft gold/bronze color */
-    text-decoration: none;
-  }
-  a:hover {
-    text-decoration: underline;
-  }
-  .container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 1rem;
-  }
-  h1, h2, h3, h4, h5, h6 {
-    font-family: 'Playfair Display', serif; /* Example: another elegant font */
-    margin-bottom: 0.5em;
-    color: #555;
-  }
-  /* More global styles will go in src/styles/global.css */
-</style>

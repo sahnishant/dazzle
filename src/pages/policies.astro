@@ -1,119 +1,21 @@
 ---
-// src/pages/policies.astro
-import { getEntry } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
-
-const policies = await getEntry('pages', 'policies');
-if (!policies) throw new Error('Missing src/content/pages/policies.md');
-const { Content } = await policies.render();
+import LeadCapturePanel from '../components/LeadCapturePanel.astro';
 ---
-<BaseLayout title={policies.data.title} description={policies.data.description}>
-  <section class="container page-section policies-page">
-    <div class="policy-hero">
-      <p class="policy-kicker">Confidence before commitment</p>
-      <h1>{policies.data.title}</h1>
-      <p>{policies.data.description}</p>
-    </div>
-
-    <div class="policy-content">
-      <Content />
-    </div>
-
-    <div class="policy-cta">
-      <p>Need help understanding which policy applies to your piece?</p>
-      <a href="/contact/" class="btn">Ask Before You Decide</a>
-    </div>
+<BaseLayout title="Policies" description="Dazzle policy overview for custom orders, certification, shipping, exchange, resizing, care, and consultation-led laboratory-grown diamond jewellery purchases.">
+  <section class="container page-section">
+    <h1>Dazzle Policies</h1>
+    <p class="large-text">These policy notes are written to help buyers understand the consultation-first process. Final order terms should be confirmed in writing before payment.</p>
+    <h2>Custom and made-to-order pieces</h2>
+    <p>Many laboratory-grown diamond pieces are made after design, metal, stone, and budget confirmation. Timelines depend on design complexity, certification availability, and metal work.</p>
+    <h2>Certification and disclosure</h2>
+    <p>Dazzle should disclose laboratory-grown diamond origin clearly and provide certificate details for eligible high-value pieces before confirmation.</p>
+    <h2>Gold hallmarking</h2>
+    <p>Gold jewellery should be discussed with BIS hallmarking and metal purity clarity. Ask for final metal details in the quote.</p>
+    <h2>Shipping and insurance</h2>
+    <p>Shipping route, insurance, identity verification, and handover process depend on product value and destination. Confirm these before dispatch.</p>
+    <h2>Exchange, resizing, and returns</h2>
+    <p>Custom pieces, engraved pieces, resized rings, and special-order stones may have limited returns. Confirm exchange and resizing terms before payment.</p>
   </section>
+  <section class="container"><LeadCapturePanel title="Clarify policy terms before ordering" /></section>
 </BaseLayout>
-
-<style>
-  .page-section {
-    padding: 3rem 1rem;
-    background-color: #fff;
-    border-radius: 16px;
-    box-shadow: 0 8px 26px rgba(0,0,0,0.06);
-    margin-top: 2rem;
-    margin-bottom: 2rem;
-  }
-
-  .policy-hero {
-    max-width: 820px;
-    margin: 0 auto 2.5rem;
-    text-align: center;
-  }
-
-  .policy-kicker {
-    margin: 0 0 0.35rem;
-    color: #A0907C;
-    font-size: 0.78rem;
-    font-weight: 700;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-  }
-
-  .policy-hero h1 {
-    margin: 0 0 0.85rem;
-    color: #555;
-    font-size: clamp(2.2rem, 5vw, 3.4rem);
-  }
-
-  .policy-hero p {
-    margin: 0;
-    color: #666;
-    font-size: 1.08rem;
-    line-height: 1.75;
-  }
-
-  .policy-content {
-    max-width: 900px;
-    margin: 0 auto;
-    color: #666;
-    font-size: 1.05rem;
-    line-height: 1.75;
-  }
-
-  .policy-content :global(h2) {
-    margin-top: 2.4rem;
-    margin-bottom: 1rem;
-    color: #B0A08C;
-    font-size: clamp(1.7rem, 3vw, 2.25rem);
-  }
-
-  .policy-content :global(h3) {
-    margin-top: 1.8rem;
-    margin-bottom: 0.65rem;
-    border-bottom: 1px solid #eee;
-    color: #555;
-    font-size: 1.35rem;
-    padding-bottom: 0.35rem;
-  }
-
-  .policy-content :global(p) {
-    margin-bottom: 1rem;
-  }
-
-  .policy-content :global(ul),
-  .policy-content :global(ol) {
-    margin-left: 1.5rem;
-    margin-bottom: 1.2rem;
-  }
-
-  .policy-content :global(li) {
-    margin-bottom: 0.45rem;
-  }
-
-  .policy-cta {
-    max-width: 760px;
-    margin: 2.5rem auto 0;
-    padding: 1.5rem;
-    border-radius: 14px;
-    background: #2b2624;
-    color: #fffaf4;
-    text-align: center;
-  }
-
-  .policy-cta p {
-    margin: 0 0 1rem;
-    color: rgba(255, 250, 244, 0.86);
-  }
-</style>

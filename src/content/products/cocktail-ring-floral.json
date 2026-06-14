@@ -1,29 +1,35 @@
 {
   "id": "cocktail-ring-floral",
-  "name": "Sparkling Floral Cocktail Ring",
+  "name": "Floral Laboratory-Grown Diamond Cocktail Ring",
   "category": "rings",
   "mainImage": "/images/products/cocktail-ring-1.png",
   "additionalImages": [
     "/images/products/cocktail-ring-2.png",
     "/images/products/cocktail-ring-3.png"
   ],
-  "description": "An exquisite cocktail ring featuring a captivating floral design adorned with brilliant diamonds, perfect for making a statement.",
+  "description": "A Dazzle floral laboratory-grown diamond cocktail ring with clear laboratory-grown diamond origin disclosure, certification guidance, and metal purity discussion before purchase.",
   "details": {
     "metal": "18K Rose Gold",
-    "mainStone": "2.00 Carat Total Weight Mixed Cut Diamonds",
-    "cut": "Very Good",
-    "color": "G-H",
-    "clarity": "VS2-SI1",
-    "certification": "IGI Certified"
+    "mainStone": "2.00 Carat Total Weight Laboratory-Grown Diamonds",
+    "cut": "Very Good to Excellent, confirm before purchase",
+    "color": "Confirm from certificate before purchase",
+    "clarity": "Confirm from certificate before purchase",
+    "certification": "IGI Certified where applicable",
+    "growthMethod": "CVD or HPHT to be confirmed before purchase",
+    "metalHallmark": "BIS hallmarking to be confirmed for gold settings"
   },
-  "price": "₹4,90,000",
-  "priceValue": 490000,
-  "material": "Rose Gold",
-  "stoneType": "Diamond",
+  "price": "\u20b92,95,000",
+  "priceValue": 295000,
+  "material": "18K Rose Gold",
+  "stoneType": "Laboratory-grown diamond",
   "style": "Cocktail",
-  "dimensions": "Top Surface: 20mm diameter, Weight: 9.8g",
-  "careInstructions": "Avoid harsh chemicals and impact. Professional cleaning recommended. Store in a separate compartment to avoid scratches.",
-  "uniqueFeatures": "Intricate floral motif, ideal for special occasions. Features a comfortable wide band design.",
-  "dateAdded": "2024-07-25T14:00:00Z",
-  "popularityScore": 9
+  "dimensions": "Final dimensions depend on selected stone, size, and setting. Confirm during consultation.",
+  "careInstructions": "Avoid harsh chemicals and impact. Store separately and request professional cleaning or inspection for prongs, clasps, and settings.",
+  "uniqueFeatures": "Updated for transparent buying: full laboratory-grown diamond language, certificate discussion, metal clarity, and consultation-first quoting.",
+  "dateAdded": "2026-06-14T12:00:00Z",
+  "popularityScore": 9,
+  "family": "diamond",
+  "subcategory": "rings",
+  "madeToOrder": false,
+  "leadTime": "7-21 days after design and payment confirmation"
 }

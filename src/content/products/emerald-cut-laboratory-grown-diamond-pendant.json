@@ -1,19 +1,19 @@
 {
-  "id": "emerald-cut-pendant",
-  "name": "Emerald Cut Laboratory-Grown Diamond Pendant Necklace",
+  "id": "emerald-cut-laboratory-grown-diamond-pendant",
+  "name": "Emerald Cut Laboratory-Grown Diamond Pendant",
   "category": "necklaces",
   "mainImage": "/images/products/emerald-pendant-1.png",
   "additionalImages": [
     "/images/products/emerald-pendant-2.png"
   ],
-  "description": "A Dazzle emerald cut laboratory-grown diamond pendant necklace with clear laboratory-grown diamond origin disclosure, certification guidance, and metal purity discussion before purchase.",
+  "description": "A consultation-led emerald cut laboratory-grown diamond pendant designed for buyers who want clear laboratory-grown diamond origin disclosure, certification guidance, and metal purity clarity before purchase.",
   "details": {
     "metal": "18K White Gold",
     "mainStone": "0.75 Carat Emerald Cut Laboratory-Grown Diamond",
-    "cut": "Very Good to Excellent, confirm before purchase",
-    "color": "Confirm from certificate before purchase",
-    "clarity": "Confirm from certificate before purchase",
-    "certification": "IGI Certified where applicable",
+    "cut": "Very Good",
+    "color": "F",
+    "clarity": "VVS2",
+    "certification": "IGI Certified",
     "growthMethod": "CVD or HPHT to be confirmed before purchase",
     "metalHallmark": "BIS hallmarking to be confirmed for gold settings"
   },
@@ -23,8 +23,8 @@
   "stoneType": "Laboratory-grown diamond",
   "style": "Pendant",
   "dimensions": "Final dimensions depend on selected stone, size, and setting. Confirm during consultation.",
-  "careInstructions": "Avoid harsh chemicals and impact. Store separately and request professional cleaning or inspection for prongs, clasps, and settings.",
-  "uniqueFeatures": "Updated for transparent buying: full laboratory-grown diamond language, certificate discussion, metal clarity, and consultation-first quoting.",
+  "careInstructions": "Avoid harsh chemicals, ultrasonic cleaning without guidance, and impact. Store separately and request professional inspection for prongs and clasps.",
+  "uniqueFeatures": "Made for transparent shortlisting: origin disclosure, certificate discussion, metal clarity, quote confirmation, and WhatsApp-led buying guidance.",
   "dateAdded": "2026-06-14T12:00:00Z",
   "popularityScore": 8,
   "family": "diamond",

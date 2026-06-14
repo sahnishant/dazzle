@@ -1,0 +1,33 @@
+---
+import { groupedProducts } from '../data/collectionTree.js';
+const groups = groupedProducts();
+const labels = { rings: 'Rings', necklaces: 'Pendants and Necklaces', earrings: 'Earrings', bracelets: 'Bracelets', custom: 'Custom Designs' };
+---
+<nav class="product-tree" aria-label="Dazzle jewellery tree">
+  <p class="tree-kicker">Catalogue tree</p>
+  <h2>Diamond → category → design</h2>
+  <div class="tree-grid">
+    {Object.entries(labels).map(([category, label]) => (
+      <section class="tree-branch">
+        <h3>Diamond → {label}</h3>
+        <ol>
+          {(groups[category] || []).slice(0, 8).map((item, index) => (
+            <li><a href={`/collections/${item.category}/${item.id}/`}>{label.replace(/s$/, '')} {index + 1}: {item.name}</a></li>
+          ))}
+        </ol>
+      </section>
+    ))}
+  </div>
+</nav>
+
+<style>
+  .product-tree { padding: 2rem; border-radius: 22px; background: #fff; box-shadow: 0 12px 34px rgba(0,0,0,.06); }
+  .tree-kicker { margin: 0 0 .35rem; color: #A0907C; font-size: .78rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; }
+  .product-tree h2 { margin: 0 0 1.25rem; }
+  .tree-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 1rem; }
+  .tree-branch { border: 1px solid rgba(176,160,140,.28); border-radius: 16px; padding: 1rem; background: #fffaf4; }
+  .tree-branch h3 { margin: 0 0 .75rem; font-size: 1.05rem; color: #6a5a4b; }
+  .tree-branch ol { margin: 0; padding-left: 1.25rem; }
+  .tree-branch li { margin-bottom: .45rem; }
+  .tree-branch a { color: #5f5247; font-weight: 700; }
+</style>

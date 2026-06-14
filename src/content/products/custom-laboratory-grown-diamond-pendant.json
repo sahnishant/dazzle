@@ -1,0 +1,34 @@
+{
+  "id": "custom-laboratory-grown-diamond-pendant",
+  "name": "Custom Laboratory-Grown Diamond Pendant",
+  "category": "custom",
+  "mainImage": "/images/products/solitaire-round-1.png",
+  "additionalImages": [
+    "/images/products/solitaire-round-2.png"
+  ],
+  "description": "A consultation-led custom laboratory-grown diamond pendant designed for buyers who want clear laboratory-grown diamond origin disclosure, certification guidance, and metal purity clarity before purchase.",
+  "details": {
+    "metal": "Customizable: 14K or 18K Gold",
+    "mainStone": "Client-selected Laboratory-Grown Diamond",
+    "cut": "Client Choice",
+    "color": "Client Choice",
+    "clarity": "Client Choice",
+    "certification": "IGI Certified where applicable",
+    "growthMethod": "CVD or HPHT to be confirmed before purchase",
+    "metalHallmark": "BIS hallmarking to be confirmed for gold settings"
+  },
+  "price": "Price Upon Request",
+  "priceValue": 0,
+  "material": "Customizable: 14K or 18K Gold",
+  "stoneType": "Laboratory-grown diamond",
+  "style": "Custom Pendant",
+  "dimensions": "Final dimensions depend on selected stone, size, and setting. Confirm during consultation.",
+  "careInstructions": "Avoid harsh chemicals, ultrasonic cleaning without guidance, and impact. Store separately and request professional inspection for prongs and clasps.",
+  "uniqueFeatures": "Made for transparent shortlisting: origin disclosure, certificate discussion, metal clarity, quote confirmation, and WhatsApp-led buying guidance.",
+  "dateAdded": "2026-06-14T12:00:00Z",
+  "popularityScore": 7,
+  "family": "diamond",
+  "subcategory": "custom",
+  "madeToOrder": true,
+  "leadTime": "7-21 days after design and payment confirmation"
+}

@@ -1,0 +1,35 @@
+{
+  "id": "radiant-cathedral-laboratory-grown-diamond-ring",
+  "name": "Radiant Cathedral Laboratory-Grown Diamond Ring",
+  "category": "rings",
+  "mainImage": "/images/products/solitaire-round-1.png",
+  "additionalImages": [
+    "/images/products/solitaire-round-2.png",
+    "/images/products/solitaire-round-3.png"
+  ],
+  "description": "A consultation-led radiant cathedral laboratory-grown diamond ring designed for buyers who want clear laboratory-grown diamond origin disclosure, certification guidance, and metal purity clarity before purchase.",
+  "details": {
+    "metal": "Platinum",
+    "mainStone": "1.40 Carat Radiant Laboratory-Grown Diamond",
+    "cut": "Excellent",
+    "color": "F",
+    "clarity": "VS1",
+    "certification": "IGI Certified",
+    "growthMethod": "CVD or HPHT to be confirmed before purchase",
+    "metalHallmark": "BIS hallmarking to be confirmed for gold settings"
+  },
+  "price": "\u20b92,80,000",
+  "priceValue": 280000,
+  "material": "Platinum",
+  "stoneType": "Laboratory-grown diamond",
+  "style": "Cathedral",
+  "dimensions": "Final dimensions depend on selected stone, size, and setting. Confirm during consultation.",
+  "careInstructions": "Avoid harsh chemicals, ultrasonic cleaning without guidance, and impact. Store separately and request professional inspection for prongs and clasps.",
+  "uniqueFeatures": "Made for transparent shortlisting: origin disclosure, certificate discussion, metal clarity, quote confirmation, and WhatsApp-led buying guidance.",
+  "dateAdded": "2026-06-14T12:00:00Z",
+  "popularityScore": 6,
+  "family": "diamond",
+  "subcategory": "rings",
+  "madeToOrder": false,
+  "leadTime": "7-21 days after design and payment confirmation"
+}

@@ -1,7 +1,8 @@
 {
-  "name": "irregular-inclination",
+  "name": "dazzle",
   "type": "module",
-  "version": "0.0.1",
+  "version": "0.1.0",
+  "private": true,
   "scripts": {
     "dev": "astro dev",
     "build": "npm run sync:content && astro build",
@@ -15,9 +16,13 @@
     "check:generated-content": "node scripts/check-generated-content.mjs",
     "check:product-media": "npm run sync:content && node scripts/check-product-media.mjs",
     "check:product-media:strict": "npm run sync:content && node scripts/check-product-media.mjs --strict",
-    "check:release": "node scripts/check-release.mjs"
+    "check:release": "node scripts/check-release.mjs",
+    "check:seo": "npm run sync:content && astro check",
+    "check:all": "npm run check:generated-content && npm run check:launch && npm run check:product-media && npm run build"
   },
   "dependencies": {
+    "@astrojs/sitemap": "^3.4.2",
     "astro": "^5.8.0"
-  }
+  },
+  "devDependencies": {}
 }

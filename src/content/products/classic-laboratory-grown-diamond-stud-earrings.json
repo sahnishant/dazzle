@@ -1,0 +1,34 @@
+{
+  "id": "classic-laboratory-grown-diamond-stud-earrings",
+  "name": "Classic Laboratory-Grown Diamond Stud Earrings",
+  "category": "earrings",
+  "mainImage": "/images/products/solitaire-round-1.png",
+  "additionalImages": [
+    "/images/products/solitaire-round-2.png"
+  ],
+  "description": "A consultation-led classic laboratory-grown diamond stud earrings designed for buyers who want clear laboratory-grown diamond origin disclosure, certification guidance, and metal purity clarity before purchase.",
+  "details": {
+    "metal": "18K White Gold",
+    "mainStone": "1.00 Carat Total Weight Round Laboratory-Grown Diamonds",
+    "cut": "Excellent",
+    "color": "F-G",
+    "clarity": "VS1-VS2",
+    "certification": "IGI Certified",
+    "growthMethod": "CVD or HPHT to be confirmed before purchase",
+    "metalHallmark": "BIS hallmarking to be confirmed for gold settings"
+  },
+  "price": "\u20b91,45,000",
+  "priceValue": 145000,
+  "material": "18K White Gold",
+  "stoneType": "Laboratory-grown diamond",
+  "style": "Stud",
+  "dimensions": "Final dimensions depend on selected stone, size, and setting. Confirm during consultation.",
+  "careInstructions": "Avoid harsh chemicals, ultrasonic cleaning without guidance, and impact. Store separately and request professional inspection for prongs and clasps.",
+  "uniqueFeatures": "Made for transparent shortlisting: origin disclosure, certificate discussion, metal clarity, quote confirmation, and WhatsApp-led buying guidance.",
+  "dateAdded": "2026-06-14T12:00:00Z",
+  "popularityScore": 10,
+  "family": "diamond",
+  "subcategory": "earrings",
+  "madeToOrder": false,
+  "leadTime": "7-21 days after design and payment confirmation"
+}

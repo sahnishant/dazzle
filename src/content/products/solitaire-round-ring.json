@@ -1,6 +1,6 @@
 {
   "id": "solitaire-round-ring",
-  "name": "Classic Solitaire Round Diamond Ring",
+  "name": "Classic Round Laboratory-Grown Diamond Solitaire Ring",
   "category": "rings",
   "mainImage": "/images/products/solitaire-round-1.png",
   "additionalImages": [
@@ -8,23 +8,29 @@
     "/images/products/solitaire-round-3.png",
     "/images/products/solitaire-round-4.png"
   ],
-  "description": "A timeless solitaire ring featuring a brilliant round-cut diamond set in a classic four-prong platinum band. Perfect for an engagement or a cherished gift.",
+  "description": "A Dazzle classic round laboratory-grown diamond solitaire ring with clear laboratory-grown diamond origin disclosure, certification guidance, and metal purity discussion before purchase.",
   "details": {
     "metal": "Platinum",
-    "mainStone": "1.00 Carat Round Brilliant Diamond",
-    "cut": "Excellent",
-    "color": "D",
-    "clarity": "VS1",
-    "certification": "GIA Certified"
+    "mainStone": "1.00 Carat Round Laboratory-Grown Diamond",
+    "cut": "Very Good to Excellent, confirm before purchase",
+    "color": "Confirm from certificate before purchase",
+    "clarity": "Confirm from certificate before purchase",
+    "certification": "IGI Certified where applicable",
+    "growthMethod": "CVD or HPHT to be confirmed before purchase",
+    "metalHallmark": "BIS hallmarking to be confirmed for gold settings"
   },
-  "price": "₹5,50,000",
-  "priceValue": 550000,
+  "price": "\u20b91,85,000",
+  "priceValue": 185000,
   "material": "Platinum",
-  "stoneType": "Diamond",
+  "stoneType": "Laboratory-grown diamond",
   "style": "Solitaire",
-  "dimensions": "Diamond: 6.5mm, Band Width: 2mm, Weight: 4.5g",
-  "careInstructions": "Clean with mild soap and soft brush. Store separately to prevent scratches. Avoid harsh chemicals and extreme temperatures.",
-  "uniqueFeatures": "Ethically sourced, GIA certified diamond. Hand-polished to a brilliant shine. Comes with a complimentary luxury velvet box.",
-  "dateAdded": "2024-07-01T10:00:00Z",
-  "popularityScore": 5
+  "dimensions": "Final dimensions depend on selected stone, size, and setting. Confirm during consultation.",
+  "careInstructions": "Avoid harsh chemicals and impact. Store separately and request professional cleaning or inspection for prongs, clasps, and settings.",
+  "uniqueFeatures": "Updated for transparent buying: full laboratory-grown diamond language, certificate discussion, metal clarity, and consultation-first quoting.",
+  "dateAdded": "2026-06-14T12:00:00Z",
+  "popularityScore": 8,
+  "family": "diamond",
+  "subcategory": "rings",
+  "madeToOrder": false,
+  "leadTime": "7-21 days after design and payment confirmation"
 }

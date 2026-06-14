@@ -1,29 +1,35 @@
 {
   "id": "diamond-stud-earrings",
-  "name": "Classic Diamond Stud Earrings",
+  "name": "Classic Laboratory-Grown Diamond Stud Earrings",
   "category": "earrings",
   "mainImage": "/images/products/solitaire-round-1.png",
   "additionalImages": [
     "/images/products/solitaire-round-2.png",
     "/images/products/solitaire-round-3.png"
   ],
-  "description": "Timeless diamond stud earrings, a versatile staple for every jewelry collection. Available in various carat weights.",
+  "description": "A Dazzle classic laboratory-grown diamond stud earrings with clear laboratory-grown diamond origin disclosure, certification guidance, and metal purity discussion before purchase.",
   "details": {
     "metal": "14K Yellow Gold",
-    "mainStone": "0.50 Carat Total Weight Round Diamonds",
-    "cut": "Excellent",
-    "color": "G",
-    "clarity": "VS2",
-    "certification": "GIA Certified"
+    "mainStone": "0.50 Carat Total Weight Laboratory-Grown Diamonds",
+    "cut": "Very Good to Excellent, confirm before purchase",
+    "color": "Confirm from certificate before purchase",
+    "clarity": "Confirm from certificate before purchase",
+    "certification": "IGI Certified where applicable",
+    "growthMethod": "CVD or HPHT to be confirmed before purchase",
+    "metalHallmark": "BIS hallmarking to be confirmed for gold settings"
   },
-  "price": "₹1,50,000",
-  "priceValue": 150000,
-  "material": "Yellow Gold",
-  "stoneType": "Diamond",
+  "price": "\u20b985,000",
+  "priceValue": 85000,
+  "material": "14K Yellow Gold",
+  "stoneType": "Laboratory-grown diamond",
   "style": "Stud",
-  "dimensions": "Each Diamond: 4.5mm diameter, Weight: 2.1g (pair)",
-  "careInstructions": "Clean regularly with a mild jewelry cleaner. Ensure backs are secure before wearing. Store in a padded box.",
-  "uniqueFeatures": "Perfect for daily wear or formal occasions, available with secure screw-back or push-back options. Hypoallergenic posts.",
-  "dateAdded": "2024-07-10T13:00:00Z",
-  "popularityScore": 8
+  "dimensions": "Final dimensions depend on selected stone, size, and setting. Confirm during consultation.",
+  "careInstructions": "Avoid harsh chemicals and impact. Store separately and request professional cleaning or inspection for prongs, clasps, and settings.",
+  "uniqueFeatures": "Updated for transparent buying: full laboratory-grown diamond language, certificate discussion, metal clarity, and consultation-first quoting.",
+  "dateAdded": "2026-06-14T12:00:00Z",
+  "popularityScore": 9,
+  "family": "diamond",
+  "subcategory": "earrings",
+  "madeToOrder": false,
+  "leadTime": "7-21 days after design and payment confirmation"
 }
